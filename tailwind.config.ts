@@ -8,6 +8,15 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      colors: {
+        "gray-saathi": {
+          1: "#EFEFEF",
+          2: "#717171",
+        },
+        "red-saathi": {
+          DEFAULT: "#DC493A",
+        },
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
