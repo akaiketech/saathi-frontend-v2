@@ -182,12 +182,12 @@ const ChatPage = () => {
           SAATHI
         </h2>
         {isFeedbackDialogOpen && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <div className="bg-white p-8 rounded-lg w-96">
-              <h3 className="text-xl mb-4 text-center">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="p-8 bg-white rounded-lg w-96">
+              <h3 className="mb-4 text-xl text-center">
                 We'd love your feedback!
               </h3>
-              <div className="flex my-6 justify-center">
+              <div className="flex justify-center my-6">
                 {[1, 2, 3, 4, 5].map((rating) => (
                   <button
                     key={rating}
@@ -201,13 +201,13 @@ const ChatPage = () => {
                 ))}
               </div>
               {/* <textarea
-                className="border rounded p-2 w-full mb-4"
+                className="w-full p-2 mb-4 border rounded"
                 rows={4}
                 placeholder="Share your feedback..."
               ></textarea> */}
               <div className="flex justify-evenly">
                 <button
-                  className="bg-red-500 text-white p-2 rounded mr-2"
+                  className="p-2 mr-2 text-white bg-red-500 rounded"
                   onClick={() => {
                     setStarRating(0);
                     setIsFeedbackDialogOpen(false);
@@ -216,7 +216,7 @@ const ChatPage = () => {
                   Cancel
                 </button>
                 <button
-                  className="bg-blue-500 text-white p-2 rounded"
+                  className="p-2 text-white bg-blue-500 rounded"
                   onClick={async () => {
                     if (starRating === 0) {
                       toast.info(
@@ -248,7 +248,7 @@ const ChatPage = () => {
       >
         {messages.length ? (
           messages.map((messageObj, index) => (
-            <div key={index} className="w-full p-8 flex flex-col">
+            <div key={index} className="flex flex-col w-full p-8">
               <div className="flex items-end ml-auto w-fit max-w-[50%]">
                 <div className=" p-3 rounded-[30px_30px_0px_30px] bg-[#ff725e] ">
                   <div className="text-white text-[18px] not-italic font-semibold leading-[normal]  text-right">
@@ -295,7 +295,7 @@ const ChatPage = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="mt-1 ml-8 w-1/2 flex justify-end ">
+                    <div className="flex justify-end w-1/2 mt-1 ml-8 ">
                       <button
                         className="flex items-center"
                         onClick={() => {
@@ -329,13 +329,12 @@ const ChatPage = () => {
             </div>
           ))
         ) : (
-          <div className="text-black bg-red flex justify-center flex-col items-center h-full text-2xl">
-          </div>
+          <div className="flex flex-col items-center justify-center h-full text-2xl text-black bg-red"></div>
         )}
       </div>
 
       <footer>
-        <div className="flex justify-center items-center mt-8">
+        <div className="flex items-center justify-center mt-8">
           {isRecording ? (
             <div>
               <Lottie options={defaultOptions} height={150} width={150} />

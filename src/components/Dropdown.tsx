@@ -34,7 +34,7 @@ const Dropdown = ({
       <div className="max-w-96 min-w-40">
         <a
           onClick={() => setIsOpen(!isOpen)}
-          className="flex justify-between items-center px-3 text-gray-saathi-2 py-2 md:px-6 md:py-4 w-40 md:w-96 min-h-10 font-bold bg-gray-saathi-1 md:text-4xl text-sm rounded-xl md:rounded-2xl hover:bg-gray-200 focus:outline-none"
+          className="flex items-center justify-between w-40 px-3 py-2 text-sm font-bold text-gray-saathi-2 md:px-6 md:py-4 md:w-96 min-h-10 bg-gray-saathi-1 md:text-4xl rounded-xl md:rounded-2xl hover:bg-gray-200 focus:outline-none"
         >
           {isChanged ? (
             <>
@@ -57,7 +57,7 @@ const Dropdown = ({
               <li
                 key={option}
                 onClick={() => handleSelect(option)}
-                className="px-4 py-2 hover:text-white hover:bg-red-saathi text-gray-saathi-2 md:text-2xl cursor-pointer"
+                className="px-4 py-2 cursor-pointer hover:text-white hover:bg-red-saathi text-gray-saathi-2 md:text-2xl"
               >
                 {option}
               </li>

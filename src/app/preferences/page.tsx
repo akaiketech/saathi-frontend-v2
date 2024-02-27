@@ -28,19 +28,18 @@ const page = () => {
   ) => {};
 
   return (
-    <main className="flex min-h-screen justify-between flex-col items-center">
+    <main className="flex flex-col items-center justify-between min-h-screen">
       <Navbar />
       <Formik
         initialValues={initVals}
         onSubmit={(values, actions) => {
           console.log({ values, actions });
-          alert(JSON.stringify(values, null, 2));
           actions.setSubmitting(false);
         }}
       >
         {({ values, setFieldValue }) => (
-          <Form className="flex flex-col justify-center items-center gap-10">
-            <div className="flex flex-col md:flex-row items-center gap-10 md:mb-20 md:mt-32">
+          <Form className="flex flex-col items-center justify-center gap-10">
+            <div className="flex flex-col items-center gap-10 md:flex-row md:mb-20 md:mt-32">
               <Dropdown
                 label="Select Language"
                 options={["Hindi", "English", "Kannada", "Tamil"]}

@@ -2,6 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import illustration from "../assets/svgs/illustration.svg";
+import illustrationMobile from "../assets/svgs/illustrationMobile.svg";
 import akaikaLogo from "../assets/images/akaikeLogo.png";
 import iisc from "../assets/images/iicsLogo.webp";
 import Navbar from "../components/Navbar";
@@ -20,27 +21,49 @@ export default function Home() {
   }, [user]);
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between">
-      <Navbar isStart />
-      <div className="my-10">
-        <Headings />
-      </div>
-      <GetStarted />
-      <div className="flex flex-col items-center gap-2">
-        <Image className="w-[80%]" src={illustration} alt="illustration" />
-        <PoweredBy />
-      </div>
-    </main>
+    <>
+      <main className="flex flex-col items-center justify-between min-h-screen md:hidden">
+        <Navbar isStart />
+        <div className="my-10">
+          <Headings />
+        </div>
+        <GetStarted />
+        <div className="flex flex-col items-center gap-2">
+          <Image
+            className="w-[80%]"
+            src={illustrationMobile}
+            alt="illustration"
+          />
+          <PoweredBy />
+        </div>
+      </main>
+      <main className="flex-row items-center justify-between hidden min-h-screen md:flex">
+        <div className="flex flex-col items-center justify-between w-1/2 h-screen home-bg">
+          <div className="absolute text-6xl font-bold text-red-saathi top-10 left-10">
+            SAATHI
+          </div>
+          <div></div>
+          <Headings />
+          <Image src={illustration} alt="illustration" />
+        </div>
+        <div className="flex flex-col items-center justify-between w-1/2">
+          <GetStarted />
+          <div className="absolute bottom-5">
+            <PoweredBy />
+          </div>
+        </div>
+      </main>
+    </>
   );
 }
 
 const Headings = () => {
   return (
     <div className="max-w-72 md:max-w-[490px] text-center">
-      <div className="text-2xl md:text-[40px] font-medium text-red-saathi">
+      <div className="text-2xl md:text-[30px] font-medium text-red-saathi">
         Welcome to SAATHI
       </div>
-      <div className="text-[16px] md:text-[32px] text-center mt-2">
+      <div className="text-[16px] md:text-[32px] font-medium text-center mt-2">
         Learn all about the government schemes today
       </div>
     </div>
@@ -63,7 +86,7 @@ const GetStarted = () => {
 
 const PoweredBy = () => {
   return (
-    <div className="text-center my-4 text-sm md:text-lg text-gray-saathi-2">
+    <div className="my-4 text-sm text-center md:text-lg text-gray-saathi-2">
       <div>Powered By</div>
       <div className="flex items-center gap-12">
         <Image
@@ -71,7 +94,7 @@ const PoweredBy = () => {
           src={akaikaLogo}
           alt="akaika logo"
         />
-        <Image className="w-10 md:w-20 h-auto" src={iisc} alt="iisc logo" />
+        <Image className="w-10 h-auto md:w-20" src={iisc} alt="iisc logo" />
       </div>
     </div>
   );
