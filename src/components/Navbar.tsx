@@ -1,0 +1,61 @@
+"use client";
+
+import Link from "next/link";
+
+type Props = {
+  isStart?: boolean;
+};
+
+type Tab = {
+  name: string;
+  link: string;
+};
+
+const tabs: Tab[] = [
+  {
+    name: "Scheme",
+    link: "/",
+  },
+  {
+    name: "Access",
+    link: "/",
+  },
+  {
+    name: "Attention",
+    link: "/",
+  },
+  {
+    name: "Training",
+    link: "/",
+  },
+  {
+    name: "Help",
+    link: "/",
+  },
+  {
+    name: "Inclusion",
+    link: "/",
+  },
+];
+
+const Navbar = ({ isStart }: Props) => {
+  return (
+    <nav className="flex flex-col w-full text-3xl font-bold px-[25px] pt-[25px] text-red-saathi">
+      <div className={`${!isStart ? "text-center" : ""}`}>SAATHI</div>
+      {!isStart && (
+        <div className="flex text-black font-medium w-full text-[12px]">
+          {tabs.map((tab, index) => (
+            <div key={index}>
+              <Link href={tab.link}>
+                {tab.name}
+              </Link>
+              {tabs.length - 1 > index && <span className="mx-1">|</span>}
+            </div>
+          ))}
+        </div>
+      )}
+    </nav>
+  );
+};
+
+export default Navbar;
