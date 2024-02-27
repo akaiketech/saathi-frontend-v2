@@ -57,7 +57,7 @@ const Dropdown = ({
               <li
                 key={option}
                 onClick={() => handleSelect(option)}
-                className="px-4 py-2 hover:text-red-saathi text-gray-saathi-2 cursor-pointer"
+                className="px-4 py-2 hover:text-white hover:bg-red-saathi text-gray-saathi-2 md:text-2xl cursor-pointer"
               >
                 {option}
               </li>

@@ -7,6 +7,8 @@ import { CiChat1 } from "react-icons/ci";
 import Image from "next/image";
 import hamOpen from "../assets/svgs/sidebarOpen.svg";
 import hamClose from "../assets/svgs/sidebarClose.svg";
+import logout from "../assets/svgs/logout.svg";
+import { useRouter } from "next/navigation";
 import "../styles/sidebar.css";
 
 interface ListItem {
@@ -17,27 +19,21 @@ interface ListItem {
 }
 
 const fetchData = (page: number, pageSize: number) => {
-  // Implement your data fetching logic here (e.g., fetch from an API)
-  // Return a promise that resolves to an array of items for the specified page and pageSize
-  // For simplicity, this example returns dummy data
-  // const response = await fetch(
-  //   `https://api.example.com/data?page=${page}&pageSize=${pageSize}`,
-  // );
   const data = {
     items: [
       {
         id: 1,
-        name: "Item 1dwdwd wwwdwwddwd wlkj djwa djwdj wkjwak kwa",
-        location: "Location 1",
+        name: "Tell me about yourself",
+        location: "Karnataka",
       },
-      { id: 2, name: "Item 2", location: "Location 2" },
+      { id: 2, name: "What is your name", location: "Tamil Nadu" },
     ],
   };
   return data.items;
 };
 
 function Sidebar() {
-  const [sidebar, setSidebar] = useState(true);
+  const [sidebar, setSidebar] = useState(false);
 
   const showSidebar = () => setSidebar(!sidebar);
 
@@ -48,7 +44,7 @@ function Sidebar() {
       </div>
       <div className={sidebar ? "newChat active" : "newChat"}>
         <FaPlus size={20} color="#7b7b7b" />
-        <div className={sidebar ? "" : "hidden"}>New Chat</div>
+        <span className={sidebar ? "" : "hidden"}>New Chat</span>
       </div>
       <nav className={sidebar ? "sidebar active" : "sidebar"}>
         <div className="flex flex-col justify-center items-center">
@@ -61,9 +57,14 @@ function Sidebar() {
           >
             <Pagination pageSize={5} />
           </div>
-          <div></div>
         </div>
       </nav>
+      <div
+        onClick={() => (window.location.href = "/api/auth/logout")}
+        className="absolute z-50 bottom-20 left-6"
+      >
+        <Image src={logout} alt="logout" />
+      </div>
     </>
   );
 }
@@ -96,7 +97,7 @@ const Pagination: React.FC<PaginationProps> = ({ pageSize }) => {
     items.length > 0 && (
       <div className="mx-6">
         <div className="text-lg mb-4 font-bold text-[#565656]">Recent</div>
-        <ul className=" max-h-[550px] overflow-auto">
+        <ul className=" max-h-[400px] overflow-auto">
           {items.map((item) => (
             <li
               className="flex relative items-center max-w-48 mb-2 text-[#455a64] py-2 px-6 gap-4 chat-bg rounded-[40px]"
@@ -106,7 +107,7 @@ const Pagination: React.FC<PaginationProps> = ({ pageSize }) => {
               <div className="mb-1 w-full overflow-ellipsis whitespace-nowrap overflow-hidden break-keep">
                 {item.name}
               </div>
-              <div className="absolute top-6 right-3 text-[11px]">
+              <div className="absolute top-7 right-3 text-[11px]">
                 {item.location}
               </div>
             </li>

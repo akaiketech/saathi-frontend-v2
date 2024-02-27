@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { createContext, useContext, useState } from "react";
 
@@ -9,6 +9,8 @@ type GlobalContextProps = {
   setVoice: React.Dispatch<React.SetStateAction<string>>;
   sessionId: string;
   setSessionId: React.Dispatch<React.SetStateAction<string>>;
+  location: string;
+  setLocation: React.Dispatch<React.SetStateAction<string>>;
 };
 
 const GlobalContext = createContext<GlobalContextProps | undefined>(undefined);
@@ -26,11 +28,11 @@ interface GlobalProviderProps {
 }
 
 export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
-
   // initial values
   const [language, setLanguage] = useState<string>("hindi");
   const [voice, setVoice] = useState<string>("female");
   const [sessionId, setSessionId] = useState<string>("");
+  const [location, setLocation] = useState<string>("");
 
   return (
     <GlobalContext.Provider
@@ -41,6 +43,8 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
         setVoice,
         sessionId,
         setSessionId,
+        location,
+        setLocation,
       }}
     >
       {children}

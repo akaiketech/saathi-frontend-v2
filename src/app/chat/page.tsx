@@ -11,6 +11,7 @@ import {
 } from "microsoft-cognitiveservices-speech-sdk";
 import Lottie from "react-lottie";
 import * as sdk from "microsoft-cognitiveservices-speech-sdk";
+import chatMicrophone from "../../assets/svgs/chatMicrophone.svg";
 
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { feedBackApi, queryApi, textToSpeech } from "./util";
@@ -20,7 +21,6 @@ import { useGlobalContext } from "../../hooks/context";
 import animationData from "./mike-animation.json";
 import loadingData from "./loading.json";
 import Sidebar from "../../components/Sidebar";
-
 
 export interface Question {
   hindiText: string;
@@ -178,23 +178,9 @@ const ChatPage = () => {
     <main className="pt-6 pl-6 pr-6">
       <Sidebar />
       <header className="flex">
-        <h2 className="text-[#DC493A] text-[64px] not-italic font-bold leading-[normal] ">
+        <h2 className="text-[#DC493A] text-[24px] not-italic ml-20 z-50 font-bold leading-[normal]">
           SAATHI
         </h2>
-
-        <button
-          className="ml-auto text-2xl flex items-center"
-          onClick={handleEndConversation}
-        >
-          End
-          <Image
-            src={"../logout.svg"}
-            height={26}
-            width={26}
-            alt="logout.svg"
-            className="ml-2"
-          />
-        </button>
         {isFeedbackDialogOpen && (
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
             <div className="bg-white p-8 rounded-lg w-96">
@@ -257,7 +243,7 @@ const ChatPage = () => {
         )}
       </header>
       <div
-        className="bg-[#f9f6f6] rounded-[40px] h-[800px] mt-6 overflow-y-scroll"
+        className="bg-[#f9f6f6] rounded-[40px] h-[700px] mt-6 overflow-y-scroll"
         ref={messagesEndRef}
       >
         {messages.length ? (
@@ -344,25 +330,6 @@ const ChatPage = () => {
           ))
         ) : (
           <div className="text-black bg-red flex justify-center flex-col items-center h-full text-2xl">
-            Please click on mic{" "}
-            <Image
-              height={30}
-              width={30}
-              src="/microphone.svg"
-              alt="microphone.svg"
-              priority
-              onClick={() => {
-                toast.info(
-                  "😅 you fell in our trap. kindly click on the bigger microphone 😂",
-                  {
-                    autoClose: 5000,
-                    position: "top-right",
-                  },
-                );
-              }}
-              className="my-3"
-            />
-            to start
           </div>
         )}
       </div>
@@ -383,7 +350,7 @@ const ChatPage = () => {
               }}
             >
               <Image
-                src={"../chatMicrophone.svg"}
+                src={chatMicrophone}
                 height={150}
                 width={150}
                 alt="chatMicrophone.svg"

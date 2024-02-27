@@ -40,15 +40,13 @@ const tabs: Tab[] = [
 
 const Navbar = ({ isStart }: Props) => {
   return (
-    <nav className="flex flex-col w-full text-3xl font-bold px-[25px] pt-[25px] text-red-saathi">
-      <div className={`${!isStart ? "text-center" : ""}`}>SAATHI</div>
+    <nav className="flex flex-col w-full text-[24px] font-bold px-[25px] pt-[25px] text-red-saathi">
+      <div className={`${!isStart ? "text-center" : ""} md:text-8xl`}>SAATHI</div>
       {!isStart && (
-        <div className="flex text-black font-medium w-full text-[12px]">
+        <div className="flex text-black justify-center font-medium w-full text-[12px] md:text-[36px]">
           {tabs.map((tab, index) => (
             <div key={index}>
-              <Link href={tab.link}>
-                {tab.name}
-              </Link>
+              <Link href={tab.link}>{tab.name}</Link>
               {tabs.length - 1 > index && <span className="mx-1">|</span>}
             </div>
           ))}

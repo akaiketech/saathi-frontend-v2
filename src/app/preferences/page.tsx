@@ -6,6 +6,7 @@ import { useGlobalContext } from "../../hooks/context";
 import Dropdown from "../../components/Dropdown";
 import Navbar from "../../components/Navbar";
 import maleIllustration from "../../assets/svgs/male_illustration.svg";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 
 type FormValues = {
@@ -14,7 +15,8 @@ type FormValues = {
 };
 
 const page = () => {
-  const { language, setLanguage } = useGlobalContext();
+  const { language, setLanguage, setLocation } = useGlobalContext();
+  const router = useRouter();
 
   const initVals: FormValues = {
     language: language,
@@ -24,6 +26,7 @@ const page = () => {
     values: typeof initVals,
     actions: FormikHelpers<typeof initVals>,
   ) => {};
+
   return (
     <main className="flex min-h-screen justify-between flex-col items-center">
       <Navbar />
@@ -37,23 +40,28 @@ const page = () => {
       >
         {({ values, setFieldValue }) => (
           <Form className="flex flex-col justify-center items-center gap-10">
-            <Dropdown
-              label="Select Language"
-              options={["hindi", "english"]}
-              value={values.language}
-              onChange={(val) => {
-                setFieldValue("language", val);
-                setLanguage(val);
-              }}
-            />
-            <Dropdown
-              label="Select Location"
-              options={["hindi", "english"]}
-              value={values.state}
-              onChange={(val) => setFieldValue("state", val)}
-              type="location"
-            />
-            <Start language={language} />
+            <div className="flex flex-col md:flex-row items-center gap-10 md:mb-20 md:mt-32">
+              <Dropdown
+                label="Select Language"
+                options={["Hindi", "English", "Kannada", "Tamil"]}
+                value={values.language}
+                onChange={(val) => {
+                  setFieldValue("language", val);
+                  setLanguage(val);
+                }}
+              />
+              <Dropdown
+                label="Select Location"
+                options={["Karnataka", "Madhya Pradesh", "Tamil Nadu"]}
+                value={values.state}
+                onChange={(val) => {
+                  setFieldValue("state", val);
+                  setLocation(val);
+                }}
+                type="location"
+              />
+            </div>
+            <Start language={language} onClick={() => router.push("/chat")} />
           </Form>
         )}
       </Formik>
@@ -76,7 +84,7 @@ const Start = ({
         onClick={onClick}
         className="flex justify-center items-center shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] rounded-[50px] md:rounded-[60px] bg-[#ff725e] text-white text-2xl md:text-[32px] font-medium px-6 py-3 md:py-4 md:px-8"
       >
-        {language === "hindi" ? "शुरू करें" : "START"}
+        {language === "Hindi" ? "शुरू करें" : "START"}
         <span className="w-8 ml-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
