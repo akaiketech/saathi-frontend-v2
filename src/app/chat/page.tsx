@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { useState, useEffect, useRef } from "react";
 import { toast } from "react-toastify";
@@ -12,14 +12,33 @@ import {
 import Lottie from "react-lottie";
 import * as sdk from "microsoft-cognitiveservices-speech-sdk";
 
+import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { feedBackApi, queryApi, textToSpeech } from "./util";
-import { Message } from "../types";
 import Image from "next/image";
 import { useGlobalContext } from "../../hooks/context";
 
 import animationData from "./mike-animation.json";
 import loadingData from "./loading.json";
 import Sidebar from "../../components/Sidebar";
+
+
+export interface Question {
+  hindiText: string;
+  englishText: string;
+  audio: string;
+}
+
+export interface Answer {
+  hindiText: string;
+  englishText: string;
+  audio: string;
+}
+
+export interface Message {
+  question: Question;
+  answer: Answer;
+  isLoading: boolean;
+}
 
 const ChatPage = () => {
   const router = useRouter();
@@ -45,7 +64,7 @@ const ChatPage = () => {
 
     const translationConfig = sdk.SpeechTranslationConfig.fromSubscription(
       speechKey ?? "",
-      serviceRegion ?? ""
+      serviceRegion ?? "",
     );
 
     translationConfig.speechRecognitionLanguage =
@@ -64,7 +83,7 @@ const ChatPage = () => {
 
     const recognizer = new sdk.TranslationRecognizer(
       translationConfig,
-      audioConfig
+      audioConfig,
     );
 
     console.log("Say something...");
@@ -79,7 +98,7 @@ const ChatPage = () => {
       new Promise((resolve, reject) => {
         recognizer.recognizeOnceAsync(
           (result) => resolve(result as sdk.TranslationRecognitionResult),
-          reject
+          reject,
         );
       });
 
@@ -124,7 +143,7 @@ const ChatPage = () => {
         language,
         voice,
         () => setIsAudioPlaying(true),
-        () => setIsAudioPlaying(false)
+        () => setIsAudioPlaying(false),
       );
     }
   };
@@ -157,7 +176,7 @@ const ChatPage = () => {
 
   return (
     <main className="pt-6 pl-6 pr-6">
-      <Sidebar/>
+      <Sidebar />
       <header className="flex">
         <h2 className="text-[#DC493A] text-[64px] not-italic font-bold leading-[normal] ">
           SAATHI
@@ -219,7 +238,7 @@ const ChatPage = () => {
                         {
                           autoClose: 5000,
                           position: "top-right",
-                        }
+                        },
                       );
                       return;
                     }
@@ -304,7 +323,7 @@ const ChatPage = () => {
                               language,
                               voice,
                               () => setIsAudioPlaying(true),
-                              () => setIsAudioPlaying(false)
+                              () => setIsAudioPlaying(false),
                             );
                         }}
                       >
@@ -338,7 +357,7 @@ const ChatPage = () => {
                   {
                     autoClose: 5000,
                     position: "top-right",
-                  }
+                  },
                 );
               }}
               className="my-3"
@@ -377,4 +396,4 @@ const ChatPage = () => {
   );
 };
 
-export default ChatPage;
+export default withPageAuthRequired(ChatPage);
