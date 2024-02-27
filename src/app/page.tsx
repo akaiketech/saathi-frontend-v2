@@ -42,7 +42,7 @@ const GetStarted = () => {
     <div className="text-center">
       <div className="text-[20px] md:text-[40px] mb-3">Get Started</div>
       <Link
-        href="/api/auth"
+        href="/preferences"
         className="shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] rounded-3xl md:rounded-[60px] bg-[#ff725e] text-white text-[16px] md:text-[32px] font-medium  px-5 py-2 md:py-4 md:px-8"
       >
         Log in
