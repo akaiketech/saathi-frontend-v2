@@ -11,6 +11,8 @@ type GlobalContextProps = {
   setSessionId: React.Dispatch<React.SetStateAction<string>>;
   location: string;
   setLocation: React.Dispatch<React.SetStateAction<string>>;
+  sideBarOpen: boolean;
+  setSideBarOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const GlobalContext = createContext<GlobalContextProps | undefined>(undefined);
@@ -33,6 +35,7 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
   const [voice, setVoice] = useState<string>("female");
   const [sessionId, setSessionId] = useState<string>("");
   const [location, setLocation] = useState<string>("");
+  const [sideBarOpen, setSideBarOpen] = useState<boolean>(false);
 
   return (
     <GlobalContext.Provider
@@ -45,6 +48,8 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
         setSessionId,
         location,
         setLocation,
+        sideBarOpen,
+        setSideBarOpen
       }}
     >
       {children}

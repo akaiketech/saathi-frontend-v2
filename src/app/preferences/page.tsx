@@ -8,6 +8,10 @@ import Navbar from "../../components/Navbar";
 import maleIllustration from "../../assets/svgs/male_illustration.svg";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { toast } from "react-toastify";
+
+const LANGUAGES = ["Hindi", "English", "Kannada", "Tamil"];
+const LOCATIONS = ["Karnataka", "Madhya Pradesh", "Tamil Nadu"];
 
 type FormValues = {
   language: string;
@@ -27,6 +31,13 @@ const page = () => {
     actions: FormikHelpers<typeof initVals>,
   ) => {};
 
+  const validateInputs = (lang: string, location: string): boolean => {
+    if (LANGUAGES.includes(lang) && LOCATIONS.includes(location)) {
+      return true;
+    }
+    return false;
+  };
+
   return (
     <main className="flex flex-col items-center justify-between min-h-screen">
       <Navbar />
@@ -39,10 +50,10 @@ const page = () => {
       >
         {({ values, setFieldValue }) => (
           <Form className="flex flex-col items-center justify-center gap-10">
-            <div className="flex flex-col items-center gap-10 md:flex-row md:mb-20 md:mt-32">
+            <div className="flex flex-col items-center gap-10 md:gap-20 md:flex-row md:mb-20 md:mt-32">
               <Dropdown
                 label="Select Language"
-                options={["Hindi", "English", "Kannada", "Tamil"]}
+                options={LANGUAGES}
                 value={values.language}
                 onChange={(val) => {
                   setFieldValue("language", val);
@@ -51,7 +62,7 @@ const page = () => {
               />
               <Dropdown
                 label="Select Location"
-                options={["Karnataka", "Madhya Pradesh", "Tamil Nadu"]}
+                options={LOCATIONS}
                 value={values.state}
                 onChange={(val) => {
                   setFieldValue("state", val);
@@ -60,7 +71,16 @@ const page = () => {
                 type="location"
               />
             </div>
-            <Start language={language} onClick={() => router.push("/chat")} />
+            <Start
+              language={language}
+              onClick={() => {
+                if (validateInputs(values.language, values.state)) {
+                  router.push("/chat");
+                } else {
+                  toast.error("Please select a valid language and location");
+                }
+              }}
+            />
           </Form>
         )}
       </Formik>
@@ -81,10 +101,10 @@ const Start = ({
       <button
         type="submit"
         onClick={onClick}
-        className="flex justify-center items-center shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] rounded-[50px] md:rounded-[60px] bg-[#ff725e] text-white text-2xl md:text-[32px] font-medium px-6 py-3 md:py-4 md:px-8"
+        className="flex justify-center items-center shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] rounded-[50px] md:rounded-[60px] bg-[#ff725e] text-white text-2xl md:text-[64px] font-medium px-6 py-3 md:py-8 md:px-8"
       >
         {language === "Hindi" ? "शुरू करें" : "START"}
-        <span className="w-8 ml-2">
+        <span className="w-8 md:w-16 ml-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 70 70"

@@ -59,8 +59,8 @@ export default function Home() {
 
 const Headings = () => {
   return (
-    <div className="max-w-72 md:max-w-[490px] text-center">
-      <div className="text-2xl md:text-[30px] font-medium text-red-saathi">
+    <div className="max-w-72 md:max-w-[490px] md:mt-56 text-center">
+      <div className="text-2xl md:text-[40px] font-medium text-red-saathi">d
         Welcome to SAATHI
       </div>
       <div className="text-[16px] md:text-[32px] font-medium text-center mt-2">
