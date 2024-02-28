@@ -1,6 +1,8 @@
 export interface Question {
   hindiText: string;
   englishText: string;
+  kannadaText: string;
+  tamilText: string;
   audio: string;
 }
 

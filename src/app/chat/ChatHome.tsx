@@ -9,9 +9,15 @@ import chatMicrophone from "../../assets/svgs/chatMicrophone.svg";
 import chatBot from "../../assets/svgs/chatBot.png";
 import avatar from "../../assets/svgs/avatar.svg";
 import replaySvg from "../../assets/svgs/replay.svg";
+import submitBtn from "../../assets/svgs/submitBtn.svg";
 
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
-import { feedBackApi, textToSpeech, translationOnceFromMic } from "./util";
+import {
+  feedBackApi,
+  textToSpeech,
+  translateFromInput,
+  translationOnceFromMic,
+} from "./util";
 import Image from "next/image";
 import { useGlobalContext } from "../../hooks/context";
 
@@ -19,6 +25,7 @@ import animationData from "./mike-animation.json";
 import loadingData from "./loading.json";
 import Sidebar from "../../components/Sidebar";
 import { useChatContext } from "./context/ChatContext";
+import { Message } from "../../types";
 
 const ChatPage = () => {
   const router = useRouter();
@@ -39,6 +46,7 @@ const ChatPage = () => {
   const [isFeedbackDialogOpen, setIsFeedbackDialogOpen] = useState(false);
   const [starRating, setStarRating] = useState(0);
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
+  const [isTyping, setIsTyping] = useState(false);
   const [recognizer, setRecognizer] = useState<TranslationRecognizer>();
 
   useEffect(() => {
@@ -67,6 +75,49 @@ const ChatPage = () => {
 
   const handleRatingClick = (rating: number) => {
     setStarRating(rating);
+  };
+
+  const showQuestion = (messageObj: Message) => {
+    let question = "";
+    const lowerCaseLang = language.toLowerCase();
+
+    switch (lowerCaseLang) {
+      case "hindi":
+        question = messageObj.question.hindiText;
+        break;
+
+      case "tamil":
+        question = messageObj.question.tamilText;
+        break;
+
+      case "kannada":
+        question = messageObj.question.kannadaText;
+
+        break;
+
+      default:
+        question = messageObj.question.englishText;
+    }
+    return question;
+  };
+
+  const handleSubmit = async () => {
+    const inputRef = document.getElementById("question") as HTMLInputElement;
+    // get input value
+    const inputValue = inputRef.value;
+
+    translateFromInput({
+      text: inputValue,
+      language,
+      location,
+      sessionId,
+      setIsAudioPlaying,
+      setMessages,
+      setIsLoading,
+    });
+
+    setIsTyping(false);
+    inputRef.value = "";
   };
 
   return (
@@ -148,9 +199,7 @@ const ChatPage = () => {
               <div className="flex items-end ml-auto w-fit max-w-[50%]">
                 <div className=" p-3 rounded-[30px_30px_0px_30px] bg-[#ff725e] ">
                   <div className="text-white text-[18px] not-italic font-semibold leading-[normal]  text-right">
-                    {language.toLowerCase() === "hindi"
-                      ? messageObj.question.hindiText
-                      : messageObj.question.englishText}
+                    {showQuestion(messageObj)}
                   </div>
                 </div>
                 <div className="ml-1">
@@ -227,14 +276,14 @@ const ChatPage = () => {
       </div>
 
       <footer>
-        <div className="flex items-center justify-center mt-8">
+        <div className="flex flex-col items-center justify-center">
           {isRecording ? (
-            <div>
+            <div className="z-10">
               <Lottie options={defaultOptions} height={150} width={150} />
             </div>
           ) : (
             <div
-              className={`flex flex-col items-center gap-4 ${
+              className={`flex flex-col z-10 items-center gap-4 ${
                 isAudioPlaying ? "opacity-50" : ""
               }`}
               onClick={() => {
@@ -257,17 +306,41 @@ const ChatPage = () => {
                 setRecognizer(rec);
               }}
             >
-              <Image
-                src={chatMicrophone}
-                height={150}
-                width={150}
-                alt="chatMicrophone.svg"
-              />
-              <div className="text-xl text-[#717171]">
-                Ask your question here
+              <div className="flex items-center cursor-pointer z-10 p-4 bg-[#f1f1f1] rounded-full">
+                <Image
+                  src={chatMicrophone}
+                  height={100}
+                  width={100}
+                  alt="chatMicrophone.svg"
+                />
               </div>
             </div>
           )}
+          <div className="relative flex justify-center items-center gap-2 w-full max-w-[640px] pl-12 pr-6 pt-9 pb-4 -mt-9 bg-[#f1f1f1] rounded-[20px]">
+            <input
+              id="question"
+              type="text"
+              onChange={() => {
+                setIsTyping(true);
+              }}
+              className="rounded-[20px] h-[60px] w-full text-sm md:text-2xl bg-[#e9e9e9] py-2 px-3"
+            />
+            <div
+              onClick={() => {
+                if (isLoading) return;
+                handleSubmit();
+              }}
+            >
+              <Image src={submitBtn} alt="submitBtn" height={30} width={30} />
+            </div>
+            <div
+              className={`absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-20%] text-xl text-[#717171] ${
+                isTyping && "hidden"
+              }`}
+            >
+              Ask your question here
+            </div>
+          </div>
         </div>
       </footer>
     </main>

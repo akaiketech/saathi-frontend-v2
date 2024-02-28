@@ -28,11 +28,9 @@ export const queryApi = async ({
     english_query,
     conversation_location,
     conversation_language,
-    user_audio: uint8ArrayToBase64(user_audio),
+    user_audio: user_audio !== "" ? uint8ArrayToBase64(user_audio) : "",
     language_query,
   };
-
-  console.log(reqData);
 
   try {
     // const response = await axios.post(`${process.env.BACKEND_BASE_URL}/api/v1/user_query/`, reqData);
@@ -214,6 +212,8 @@ export const translationOnceFromMic = ({
     serviceRegion,
   );
 
+  language = language.toLowerCase();
+
   switch (language) {
     case "hindi":
       translationConfig.speechRecognitionLanguage = "hi-IN";
@@ -229,13 +229,10 @@ export const translationOnceFromMic = ({
       translationConfig.speechRecognitionLanguage = "ta-IN";
       translationConfig.addTargetLanguage("ta");
       break;
-
-    default:
-      translationConfig.speechRecognitionLanguage = "en-US";
-      translationConfig.addTargetLanguage("en");
-      break;
   }
 
+  translationConfig.speechRecognitionLanguage = "en-US";
+  translationConfig.addTargetLanguage("en");
   // Set silence timeout in milliseconds
   // translationConfig.setProperty(
   //   sdk.PropertyId[
@@ -248,10 +245,14 @@ export const translationOnceFromMic = ({
 
   const recognizer = new TranslationRecognizer(translationConfig, audioConfig);
 
-  console.log("Say something...");
-
   const message: Message = {
-    question: { englishText: "", hindiText: "", audio: "" },
+    question: {
+      englishText: "",
+      hindiText: "",
+      audio: "",
+      kannadaText: "",
+      tamilText: "",
+    },
     answer: "",
     isLoading: false,
   };
@@ -289,33 +290,40 @@ export const translationOnceFromMic = ({
           byteCount += wavFragments[i].byteLength;
         }
 
-        if (language.toLowerCase() === "hindi") {
-          message.question.hindiText = result.text;
-          message.question.englishText = result.translations.get("en");
-        } else {
-          message.question.englishText = result.text;
-          message.question.hindiText = result.translations.get("hi");
-        }
-        message.isLoading = true;
-
-        setMessages((prevMsgs) => [...prevMsgs, message]);
-        setIsRecording(false);
-
         const reqBody = {
           conversation_id: sessionId,
           query_id: uuidv4(),
-          english_query: "",
+          english_query: result.translations.get("en"),
           conversation_location: location,
           conversation_language: language,
           user_audio: sentAudio,
           language_query: "",
         };
 
-        if (language.toLowerCase() !== "english") {
-          reqBody.language_query = message.question.hindiText;
-        } else {
-          reqBody.english_query = message.question.englishText;
+        // Get question text based on language
+        switch (language) {
+          case "hindi":
+            message.question.hindiText = result.translations.get("hi");
+            reqBody.language_query = result.translations.get("hi");
+            break;
+
+          case "kannada":
+            message.question.kannadaText = result.translations.get("kn");
+            reqBody.language_query = result.translations.get("kn");
+            break;
+
+          case "tamil":
+            message.question.tamilText = result.translations.get("ta");
+            reqBody.language_query = result.translations.get("ta");
+            break;
         }
+
+        // always get english text
+        message.question.englishText = result.translations.get("en");
+        message.isLoading = true;
+
+        setMessages((prevMsgs) => [...prevMsgs, message]);
+        setIsRecording(false);
 
         const data = await queryApi(reqBody);
         if (data) {
@@ -353,4 +361,92 @@ export const translationOnceFromMic = ({
   recognizeOnceAsync();
 
   return recognizer;
+};
+
+interface TranslationFromInputProps {
+  text: string;
+  language: string;
+  location: string;
+  sessionId: string;
+  setIsAudioPlaying: Dispatch<SetStateAction<boolean>>;
+  setMessages: Dispatch<SetStateAction<Message[]>>;
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+}
+
+export const translateFromInput = async ({
+  text,
+  language,
+  location,
+  sessionId,
+  setIsAudioPlaying,
+  setMessages,
+  setIsLoading,
+}: TranslationFromInputProps) => {
+  // disable recording
+  setIsAudioPlaying(true);
+
+  const message: Message = {
+    question: {
+      englishText: "",
+      hindiText: "",
+      audio: "",
+      kannadaText: "",
+      tamilText: "",
+    },
+    answer: "",
+    isLoading: false,
+  };
+
+  switch (language) {
+    case "hindi":
+      message.question.hindiText = text;
+      break;
+
+    case "kannada":
+      message.question.kannadaText = text;
+      break;
+
+    case "tamil":
+      message.question.tamilText = text;
+      break;
+
+    default:
+      message.question.englishText = text;
+      break;
+  }
+
+  const reqBody = {
+    conversation_id: sessionId,
+    query_id: uuidv4(),
+    english_query: text,
+    conversation_location: location,
+    conversation_language: language,
+    user_audio: "",
+    language_query: text,
+  };
+
+  try {
+    setIsLoading(true);
+
+    const data = await queryApi(reqBody);
+    if (data) {
+      message.answer = data.answer;
+    }
+    setMessages((prevMsgs) => [...prevMsgs, message]);
+
+    setIsLoading(false);
+    setIsAudioPlaying(false);
+
+    setMessages((prevMsgs) => {
+      const index = prevMsgs.length - 1;
+      const newMsgs = [...prevMsgs];
+      newMsgs[index] = { ...message };
+      return newMsgs;
+    });
+  } catch (error) {
+    console.error("Error:", error);
+  } finally {
+    setIsAudioPlaying(false);
+    setIsLoading(false);
+  }
 };

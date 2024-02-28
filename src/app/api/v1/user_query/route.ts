@@ -1,10 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export const POST = async (req: NextRequest) => {
-  console.log("api called");
   try {
-    console.log("api called");
-    console.log(req.json());
     const { hindiQuery, englishQuery, sessionId } = await req.json();
     console.log(hindiQuery, englishQuery, sessionId);
 

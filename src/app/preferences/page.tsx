@@ -44,7 +44,6 @@ const page = () => {
       <Formik
         initialValues={initVals}
         onSubmit={(values, actions) => {
-          console.log({ values, actions });
           actions.setSubmitting(false);
         }}
       >
