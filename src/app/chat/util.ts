@@ -38,19 +38,19 @@ export const queryApi = async ({
     // const response = await axios.post(`${process.env.BACKEND_BASE_URL}/api/v1/user_query/`, reqData);
     // const data = response.data;
     const mockData = {
-      answer: "Hello world!",
+      answer: "This is a mock answer",
     };
 
     return mockData;
 
-    if (data.error) {
-      toast.error(data.error, {
-        autoClose: 5000,
-        position: "top-right",
-      });
-    } else {
-      return data;
-    }
+    // if (data.error) {
+    //   toast.error(data.error, {
+    //     autoClose: 5000,
+    //     position: "top-right",
+    //   });
+    // } else {
+    //   return data;
+    // }
   } catch (error: any) {
     console.error("Error:", error.response.data || error.message);
   }
@@ -177,7 +177,7 @@ export const feedBackApi = async (sessionId: string, rating: number) => {
 
 interface TranslationOnceFromMicProps {
   language: string;
-  location:string;
+  location: string;
   sessionId: string;
   voice: string;
   isAudioPlaying: boolean;
