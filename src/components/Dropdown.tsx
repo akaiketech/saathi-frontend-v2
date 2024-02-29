@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { IoLanguage } from "react-icons/io5";
@@ -24,6 +24,12 @@ const Dropdown = ({
   const [isOpen, setIsOpen] = useState(false);
   const [isChanged, setIsChanged] = useState(false);
 
+  useEffect(() => {
+    if (value !== "") {
+      setIsChanged(true);
+    }
+  }, [value]);
+
   const handleSelect = (option: string) => {
     onChange(option);
     setIsChanged(true);
@@ -34,7 +40,7 @@ const Dropdown = ({
       <div className="max-w-96 min-w-40">
         <a
           onClick={() => setIsOpen(!isOpen)}
-          className="flex items-center justify-between w-48 px-3 py-2 text-sm font-bold text-gray-saathi-2 md:px-6 md:py-4 md:w-[420px] min-h-10 bg-gray-saathi-1 md:text-4xl rounded-xl md:rounded-2xl hover:bg-gray-200 focus:outline-none"
+          className="flex items-center cursor-pointer justify-between w-48 px-3 py-2 text-sm font-bold text-gray-saathi-2 md:px-6 md:py-4 md:w-[420px] min-h-10 bg-gray-saathi-1 md:text-4xl rounded-xl md:rounded-2xl hover:bg-gray-200 focus:outline-none"
         >
           {isChanged ? (
             <>
@@ -60,7 +66,9 @@ const Dropdown = ({
               <li
                 key={option}
                 onClick={() => handleSelect(option)}
-                className="px-4 py-2 cursor-pointer hover:text-white hover:bg-red-saathi text-gray-saathi-2 md:text-2xl"
+                className={`px-4 py-2 cursor-pointer hover:text-white hover:bg-red-saathi text-gray-saathi-2 md:text-2xl ${
+                  option === value ? "bg-red-saathi text-white" : ""
+                }`}
               >
                 {option}
               </li>

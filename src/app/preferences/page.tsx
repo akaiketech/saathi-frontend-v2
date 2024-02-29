@@ -1,7 +1,5 @@
 "use client";
 import { Formik, FormikHelpers, Form } from "formik";
-import Link from "next/link";
-
 import { useGlobalContext } from "../../hooks/context";
 import Dropdown from "../../components/Dropdown";
 import Navbar from "../../components/Navbar";
@@ -23,9 +21,16 @@ const page = () => {
   const router = useRouter();
 
   const initVals: FormValues = {
-    language: language,
+    language: "",
     state: "",
   };
+
+  const loc2lang: { [key: string]: string } = {
+    Karnataka: "Kannada",
+    "Madhya Pradesh": "Hindi",
+    "Tamil Nadu": "Tamil",
+  };
+
   const onSubmit = (
     values: typeof initVals,
     actions: FormikHelpers<typeof initVals>,
@@ -51,6 +56,18 @@ const page = () => {
           <Form className="flex flex-col items-center justify-center gap-10">
             <div className="flex flex-col items-center gap-10 md:gap-20 md:flex-row md:mb-20 md:mt-32">
               <Dropdown
+                label="Select Location"
+                options={LOCATIONS}
+                value={values.state}
+                onChange={(val) => {
+                  setFieldValue("state", val);
+                  setFieldValue("language", loc2lang[val]);
+                  setLocation(val);
+                  setLanguage(loc2lang[val]);
+                }}
+                type="location"
+              />
+              <Dropdown
                 label="Select Language"
                 options={LANGUAGES}
                 value={values.language}
@@ -58,16 +75,6 @@ const page = () => {
                   setFieldValue("language", val);
                   setLanguage(val);
                 }}
-              />
-              <Dropdown
-                label="Select Location"
-                options={LOCATIONS}
-                value={values.state}
-                onChange={(val) => {
-                  setFieldValue("state", val);
-                  setLocation(val);
-                }}
-                type="location"
               />
             </div>
             <Start
