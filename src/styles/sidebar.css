@@ -7,6 +7,7 @@
   top: 0;
   left: -155px;
   transition: 350ms;
+  z-index: 40;
 }
 
 .sidebar.active {
@@ -45,4 +46,30 @@
   background-color: rgba(255, 114, 94, 0.7);
 }
 
+@media screen and (max-width: 768px) {
+  .sidebar {
+    left: -250px;
+  }
 
+  .newChat {
+    display: none;
+    top: 8rem;
+  }
+
+  .newChat span {
+    font-size: 14px;
+  }
+
+  .newChat.active {
+    display: flex;
+    width: 120px;
+  }
+
+  .logout {
+    display: none;
+  }
+
+  .logout.active {
+    display: flex;
+  }
+}

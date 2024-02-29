@@ -36,7 +36,7 @@ function Sidebar() {
 
   return (
     <>
-      <div onClick={showSidebar} className="absolute z-50 top-6 left-6">
+      <div onClick={showSidebar} className="z-50 absolute top-6 left-6">
         <Image src={sideBarOpen ? hamClose : hamOpen} alt="hamburger" />
       </div>
       <div className={sideBarOpen ? "newChat active" : "newChat"}>
@@ -58,7 +58,9 @@ function Sidebar() {
       </nav>
       <div
         onClick={() => (window.location.href = "/api/auth/logout")}
-        className="absolute z-50 cursor-pointer bottom-20 left-6"
+        className={`absolute z-50 cursor-pointer bottom-20 left-6 ${
+          
+          sideBarOpen ? "logout active" : "logout"}`}
       >
         <Image src={logout} alt="logout" />
       </div>
@@ -94,7 +96,7 @@ const Pagination: React.FC<PaginationProps> = ({ pageSize }) => {
     items.length > 0 && (
       <div className="mx-6">
         <div className="text-lg mb-4 font-bold text-[#565656]">Recent</div>
-        <ul className=" max-h-[400px] overflow-auto">
+        <ul className="max-h-[400px] md:max-h-[700px] overflow-auto">
           {items.map((item, index) => (
             <li
               className="flex relative items-center max-w-48 mb-2 text-[#455a64] py-2 px-6 gap-2 chat-bg rounded-[40px]"

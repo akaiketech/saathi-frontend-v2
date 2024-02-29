@@ -29,7 +29,7 @@ import { Message } from "../../types";
 
 const ChatPage = () => {
   const router = useRouter();
-  const { language, location, sessionId, voice, sideBarOpen, setSessionId } =
+  const { language, location, sessionId, voice, sideBarOpen } =
     useGlobalContext();
   const {
     messages,
@@ -46,7 +46,6 @@ const ChatPage = () => {
   const [isFeedbackDialogOpen, setIsFeedbackDialogOpen] = useState(false);
   const [starRating, setStarRating] = useState(0);
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
-  const [isTyping, setIsTyping] = useState(false);
   const [recognizer, setRecognizer] = useState<TranslationRecognizer>();
 
   useEffect(() => {
@@ -115,8 +114,6 @@ const ChatPage = () => {
       setMessages,
       setIsLoading,
     });
-
-    setIsTyping(false);
     inputRef.value = "";
   };
 
@@ -125,8 +122,8 @@ const ChatPage = () => {
       <Sidebar />
       <header className="flex">
         <h2
-          className={`text-red-saathi text-[24px] md:text-[48px] not-italic ml-20 z-50 font-bold leading-[normal] transition-all duration-500 ease-in-out ${
-            sideBarOpen && "ml-[240px]"
+          className={`text-red-saathi text-[24px] mt-2 md:mt-0 md:text-[48px] not-italic ml-20 z-50 font-bold leading-[normal] transition-all duration-500 ease-in-out ${
+            sideBarOpen && "md:ml-[240px]"
           }`}
         >
           SAATHI
@@ -188,21 +185,24 @@ const ChatPage = () => {
         )}
       </header>
       <div
-        className={`h-[1000px] ml-20 mt-10 overflow-auto transition-all duration-500 ${
-          sideBarOpen && "ml-[240px] w-[calc(100%-240px)]"
-        } ${!sideBarOpen && "w-[90%]"}`}
+        // className={`h-[calc(100vh-300px)] md:h-[calc(100vh-350px)] md:ml-20 mt-20 md:mt-10 overflow-auto transition-all duration-500 ${
+        //   sideBarOpen && "ml-[240px] w-[calc(100%-240px)]"
+        // }`}
+        className={`h-[calc(100vh-280px)] md:h-[calc(100vh-350px)] ml-0 mt-10 overflow-auto transition-all duration-500 ${
+          sideBarOpen ? "md:ml-[240px]" : "md:ml-20"
+        }`}
         ref={messagesEndRef}
       >
         {messages.length ? (
           messages.map((messageObj, index) => (
-            <div key={index} className="flex flex-col w-full p-8">
+            <div key={index} className="flex flex-col w-full py-4 md:p-8">
               <div className="flex items-end ml-auto w-fit max-w-[50%]">
-                <div className=" p-3 rounded-[30px_30px_0px_30px] bg-[#ff725e] ">
-                  <div className="text-white text-[18px] not-italic font-semibold leading-[normal]  text-right">
+                <div className="p-3 rounded-[30px_30px_0px_30px] bg-[#ff725e]">
+                  <div className="text-white text-sm md:text-2xl not-italic font-medium leading-[normal] text-right">
                     {showQuestion(messageObj)}
                   </div>
                 </div>
-                <div className="ml-1">
+                <div className="hidden ml-1 md:block">
                   <Image src={avatar} alt="avatar" height={36} width={36} />
                 </div>
               </div>
@@ -218,7 +218,7 @@ const ChatPage = () => {
                 messageObj.answer && (
                   <>
                     <div className="flex items-end">
-                      <div className="mr-1">
+                      <div className="hidden mr-1 md:block">
                         <Image
                           src={chatBot}
                           alt="chatBot"
@@ -227,17 +227,16 @@ const ChatPage = () => {
                         />
                       </div>
                       <div className="w-1/2 p-3 rounded-[30px_30px_30px_0px] bg-[#FFCBC366] text-gray-700">
-                        <div className="text-[18px] not-italic font-semibold leading-[normal]">
+                        <div className="text-sm md:text-2xl not-italic font-medium leading-[normal]">
                           {messageObj.answer}
                         </div>
                       </div>
                     </div>
-                    <div className="flex justify-end w-1/2 mt-1 ml-8 ">
+                    <div className="flex justify-end w-1/2 mt-1 md:ml-8">
                       <button
-                        className="flex items-center"
+                        className="flex items-center text-sm md:text-lg"
                         onClick={() => {
                           const currentMesssage = messages[index];
-
                           isAudioPlaying ||
                             textToSpeech(
                               currentMesssage.answer,
@@ -251,9 +250,7 @@ const ChatPage = () => {
                         <Image
                           src={replaySvg}
                           alt="avatar"
-                          height={16}
-                          width={16}
-                          className="mr-1"
+                          className="mr-1 w-4 h-4"
                         />
                         Replay
                       </button>
@@ -264,7 +261,7 @@ const ChatPage = () => {
             </div>
           ))
         ) : (
-          <div className="flex flex-col ml-10 h-full text-2xl text-black bg-red">
+          <div className="flex flex-col md:ml-10 h-full text-2xl text-black bg-red">
             <h1 className="chat-heading text-[24px] md:text-[46px]">
               Hello, Welcome back!
             </h1>
@@ -276,7 +273,11 @@ const ChatPage = () => {
       </div>
 
       <footer>
-        <div className="flex flex-col items-center justify-center">
+        <div
+          className={`flex flex-col items-center z-10 justify-center transition-all duration-500 ease-in-out ${
+            sideBarOpen && "md:ml-[240px]"
+          }`}
+        >
           {isRecording ? (
             <div className="z-10">
               <Lottie options={defaultOptions} height={150} width={150} />
@@ -308,22 +309,19 @@ const ChatPage = () => {
             >
               <div className="flex items-center cursor-pointer z-10 p-4 bg-[#f1f1f1] rounded-full">
                 <Image
+                  className="h-16 w-16 md:h-24 md:w-24"
                   src={chatMicrophone}
-                  height={100}
-                  width={100}
                   alt="chatMicrophone.svg"
                 />
               </div>
             </div>
           )}
-          <div className="relative flex justify-center items-center gap-2 w-full max-w-[640px] pl-12 pr-6 pt-9 pb-4 -mt-9 bg-[#f1f1f1] rounded-[20px]">
+          <div className="relative flex justify-center items-center gap-2 w-full max-w-[740px] pl-4 md:pl-12 pr-2 md:pr-6 pt-6 md:pt-9 pb-4 -mt-9 bg-[#f1f1f1] rounded-[20px]">
             <input
               id="question"
               type="text"
-              onChange={() => {
-                setIsTyping(true);
-              }}
-              className="rounded-[20px] h-[60px] w-full text-sm md:text-2xl bg-[#e9e9e9] py-2 px-3"
+              placeholder="Ask any question here"
+              className="rounded-[20px] z-10 h-[40px] md:h-[60px] w-full text-sm md:text-2xl bg-[#e9e9e9] py-2 px-3"
             />
             <div
               onClick={() => {
@@ -332,13 +330,6 @@ const ChatPage = () => {
               }}
             >
               <Image src={submitBtn} alt="submitBtn" height={30} width={30} />
-            </div>
-            <div
-              className={`absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-20%] text-xl text-[#717171] ${
-                isTyping && "hidden"
-              }`}
-            >
-              Ask your question here
             </div>
           </div>
         </div>
