@@ -7,6 +7,8 @@ import maleIllustration from "../../assets/svgs/male_illustration.svg";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { toast } from "react-toastify";
+import { checkUserTnCStatus } from "../../services";
+import { useEffect, useState } from "react";
 
 const LANGUAGES = ["Hindi", "English", "Kannada", "Tamil"];
 const LOCATIONS = ["Karnataka", "Madhya Pradesh", "Tamil Nadu"];
@@ -18,6 +20,7 @@ type FormValues = {
 
 const page = () => {
   const { language, setLanguage, setLocation } = useGlobalContext();
+  const [nextRoute, setNextRoute] = useState("/terms");
   const router = useRouter();
 
   const initVals: FormValues = {
@@ -31,7 +34,16 @@ const page = () => {
     "Tamil Nadu": "Tamil",
   };
 
-  const onSubmit = (
+  useEffect(() => {
+    (async () => {
+      const res = await checkUserTnCStatus();
+      if (res.data.status) {
+        setNextRoute("/chat");
+      }
+    })();
+  }, []);
+
+  const onSubmit = async (
     values: typeof initVals,
     actions: FormikHelpers<typeof initVals>,
   ) => {};
@@ -81,7 +93,7 @@ const page = () => {
               language={language}
               onClick={() => {
                 if (validateInputs(values.language, values.state)) {
-                  router.push("/chat");
+                  router.push(nextRoute);
                 } else {
                   toast.error("Please select a valid language and location");
                 }
