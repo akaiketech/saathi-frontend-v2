@@ -12,3 +12,12 @@ export interface Message {
   isLoading: boolean;
 }
 
+export type QueryReqBody = {
+  conversation_id: string;
+  query_id: string;
+  english_query: string;
+  conversation_location: string;
+  conversation_language: string;
+  user_audio?: string;
+  language_query?: string;
+};
