@@ -33,22 +33,32 @@ export const queryApi = async ({
   };
 
   try {
-    // const response = await axios.post(`${process.env.BACKEND_BASE_URL}/api/v1/user_query/`, reqData);
-    // const data = response.data;
-    const mockData = {
-      answer: "This is a mock answer",
-    };
+    const res = await axios.post("/api/v1/user_query/", reqData);
 
-    return mockData;
+    if (res.data.error) {
+      toast.error(res.data.error, {
+        autoClose: 5000,
+        position: "top-right",
+      });
 
-    // if (data.error) {
-    //   toast.error(data.error, {
-    //     autoClose: 5000,
-    //     position: "top-right",
-    //   });
-    // } else {
-    //   return data;
-    // }
+      return {
+        error: res.data.error,
+        data: null,
+      };
+    }
+
+    if (res.status !== 200) {
+      toast.error(res.data.error, {
+        autoClose: 5000,
+        position: "top-right",
+      });
+      return {
+        error: res.data.error,
+        data: null,
+      };
+    } else {
+      return res.data;
+    }
   } catch (error: any) {
     console.error("Error:", error.response.data || error.message);
   }
@@ -397,7 +407,7 @@ export const translateFromInput = async ({
     isLoading: false,
   };
 
-  switch (language) {
+  switch (language.toLowerCase()) {
     case "hindi":
       message.question.hindiText = text;
       break;
