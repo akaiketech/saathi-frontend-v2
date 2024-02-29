@@ -1,68 +1,38 @@
+import { NextApiRequest, NextApiResponse } from "next";
 import { NextRequest, NextResponse } from "next/server";
+import axiosInstance from "../../../../client/client";
+import { getAccessToken } from "@auth0/nextjs-auth0";
 
-export const POST = async (req: NextRequest) => {
+export async function POST(req: NextRequest, res: NextApiResponse) {
+  const reqBody = await req.json();
+  // const { accessToken } = await getAccessToken({});
+  // console.log(accessToken);
+
   try {
-    const { hindiQuery, englishQuery, sessionId } = await req.json();
-    console.log(hindiQuery, englishQuery, sessionId);
-
-    const reqBody = {
-      hindi_query: hindiQuery,
-      english_query: englishQuery,
-      session_id: sessionId,
+    const mockData = {
+      answer: "Hello",
     };
 
-    const response = await fetch(
-      `${process.env.BACKEND_BASE_URL}/api/v1/user_query/`,
-      {
-        body: JSON.stringify(reqBody),
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        method: "POST",
-      },
-    );
+    return NextResponse.json(mockData);
 
-    const responseData = await response.json();
-
-    if (!response.ok) {
-      const errorText = `Failed to fetch the result: ${response.status} ${response.statusText}`;
-      return NextResponse.json(
-        { error: errorText },
-        { status: response.status },
-      );
-    }
-
-    if (responseData.error) {
-      if (responseData.error === "Session already exists") {
-        return NextResponse.json(
-          { error: "Session already exists" },
-          { status: 400 },
-        );
-      } else {
-        return NextResponse.json(
-          { error: "Unknown error occurred" },
-          { status: 500 },
-        );
-      }
-    } else {
-      return NextResponse.json({ ...responseData, sessionId });
-    }
-  } catch (error) {
-    console.error("Error:", error);
-
-    if (error instanceof SyntaxError) {
-      return NextResponse.json({ error: "Invalid JSON data" }, { status: 400 });
+    // const response = await axiosInstance.post("/api/v1/user_query", reqBody, {
+    //   headers: {
+    //     Authorization: `Bearer ${accessToken}`,
+    //   },
+    // });
+    //
+    // if (response.status === 200) {
+    //   return NextResponse.json(response.data);
+    // }
+  } catch (error: any) {
+    if (error.response) {
+      const errorText = `Failed to fetch the result.`;
+      return NextResponse.json({ error: errorText });
     } else {
       return NextResponse.json(
-        { error: "Internal Server Error" },
+        { error: "Unknown error occurred" },
         { status: 500 },
       );
     }
   }
-};
-
-export const GET = async (req: NextRequest) => {
-  console.log("api called");
-  return NextResponse.json({ message: "Hello, Next.js!" });
-};
+}
