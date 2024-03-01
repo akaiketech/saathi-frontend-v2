@@ -10,6 +10,7 @@ import chatBot from "../../assets/svgs/chatBot.png";
 import avatar from "../../assets/svgs/avatar.svg";
 import replaySvg from "../../assets/svgs/replay.svg";
 import submitBtn from "../../assets/svgs/submitBtn.svg";
+import { IoMdThumbsDown, IoMdThumbsUp } from "react-icons/io";
 
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import {
@@ -17,6 +18,7 @@ import {
   textToSpeech,
   translateFromInput,
   translationOnceFromMic,
+  voteApi,
 } from "./util";
 import Image from "next/image";
 import { useGlobalContext } from "../../hooks/context";
@@ -26,10 +28,11 @@ import loadingData from "./loading.json";
 import Sidebar from "../../components/Sidebar";
 import { useChatContext } from "./context/ChatContext";
 import { Message } from "../../types";
+import { generateSessionId } from "../../utils/utils";
 
 const ChatPage = () => {
   const router = useRouter();
-  const { language, location, sessionId, voice, sideBarOpen } =
+  const { language, location, sessionId, voice, sideBarOpen, setSessionId } =
     useGlobalContext();
   const {
     messages,
@@ -47,6 +50,11 @@ const ChatPage = () => {
   const [starRating, setStarRating] = useState(0);
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
   const [_, setRecognizer] = useState<TranslationRecognizer>();
+
+  useEffect(() => {
+    const newSessionId = generateSessionId();
+    setSessionId(newSessionId);
+  }, []);
 
   useEffect(() => {
     if (messagesEndRef.current) {
@@ -117,14 +125,35 @@ const ChatPage = () => {
     inputRef.value = "";
   };
 
+  const handleUpVote = () => {
+    setMessages((prevMsgs) => {
+      const index = prevMsgs.length - 1;
+      const newMsgs = [...prevMsgs];
+      const currentMsg = newMsgs[index];
+      voteApi(sessionId, currentMsg.id, 1);
+      currentMsg.vote = 1;
+      return newMsgs;
+    });
+  };
+
+  const handleDownVote = () => {
+    setMessages((prevMsgs) => {
+      const index = prevMsgs.length - 1;
+      const newMsgs = [...prevMsgs];
+      const currentMsg = newMsgs[index];
+      voteApi(sessionId, currentMsg.id, -1);
+      currentMsg.vote = -1;
+      return newMsgs;
+    });
+  };
+
   return (
     <main className="flex flex-col justify-end pt-6 pl-6 pr-6">
       <Sidebar />
       <header className="flex">
         <h2
-          className={`text-red-saathi text-[24px] mt-2 md:mt-0 md:text-[48px] not-italic ml-20 z-50 font-bold leading-[normal] transition-all duration-500 ease-in-out ${
-            sideBarOpen && "md:ml-[240px]"
-          }`}
+          className={`text-red-saathi text-[24px] mt-2 md:mt-0 md:text-[48px] not-italic ml-20 z-50 font-bold leading-[normal] transition-all duration-500 ease-in-out ${sideBarOpen && "md:ml-[240px]"
+            }`}
         >
           SAATHI
         </h2>
@@ -138,9 +167,8 @@ const ChatPage = () => {
                 {[1, 2, 3, 4, 5].map((rating) => (
                   <button
                     key={rating}
-                    className={`p-2 text-4xl  ${
-                      starRating >= rating ? "text-yellow-500" : "text-gray-300"
-                    }`}
+                    className={`p-2 text-4xl  ${starRating >= rating ? "text-yellow-500" : "text-gray-300"
+                      }`}
                     onClick={() => handleRatingClick(rating)}
                   >
                     ★
@@ -185,9 +213,8 @@ const ChatPage = () => {
         )}
       </header>
       <div
-        className={`h-[calc(100vh-280px)] md:h-[calc(100vh-350px)] ml-0 mt-10 overflow-auto transition-all duration-500 ${
-          sideBarOpen ? "md:ml-[240px]" : "md:ml-20"
-        }`}
+        className={`h-[calc(100vh-280px)] md:h-[calc(100vh-350px)] ml-0 mt-10 overflow-auto transition-all duration-500 ${sideBarOpen ? "md:ml-[240px]" : "md:ml-20"
+          }`}
         ref={messagesEndRef}
       >
         {messages.length ? (
@@ -230,6 +257,13 @@ const ChatPage = () => {
                       </div>
                     </div>
                     <div className="flex justify-end w-1/2 mt-1 md:ml-8">
+                      {messageObj.vote === 0 && (
+                        <div className="flex gap-3 text-red-saathi text-sm md:text-2xl mr-4 items-center">
+                          <IoMdThumbsUp onClick={() => handleUpVote()} />
+                          <IoMdThumbsDown onClick={() => handleDownVote()} />
+                        </div>
+                      )}
+
                       <button
                         className="flex items-center text-sm md:text-lg"
                         onClick={() => {
@@ -271,9 +305,8 @@ const ChatPage = () => {
 
       <footer>
         <div
-          className={`flex flex-col items-center z-10 md:ml-20 justify-center transition-all duration-500 ease-in-out ${
-            sideBarOpen && "md:ml-[240px]"
-          }`}
+          className={`flex flex-col items-center z-10 md:ml-20 justify-center transition-all duration-500 ease-in-out ${sideBarOpen && "md:ml-[240px]"
+            }`}
         >
           {isRecording ? (
             <div className="z-10">
@@ -281,9 +314,8 @@ const ChatPage = () => {
             </div>
           ) : (
             <div
-              className={`flex flex-col z-10 items-center gap-4 ${
-                isAudioPlaying ? "opacity-50" : ""
-              }`}
+              className={`flex flex-col z-10 items-center gap-4 ${isAudioPlaying ? "opacity-50" : ""
+                }`}
               onClick={() => {
                 if (isAudioPlaying || isLoading) return;
                 setIsRecording(true);

@@ -7,9 +7,11 @@ export interface Question {
 }
 
 export interface Message {
+  id: string;
   question: Question;
   answer: string;
   isLoading: boolean;
+  vote: 1 | 0 | -1;
 }
 
 export type QueryReqBody = {

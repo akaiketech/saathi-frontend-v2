@@ -10,7 +10,9 @@ export async function POST(req: NextRequest, res: NextApiResponse) {
       scope: process.env.AUTH0_SCOPE,
     },
   });
+
   console.log("Called POST /api/v1/terms-status");
+
   try {
     const res = await axiosInstance.post(
       "/api/v1/users/terms-and-conditions/status",

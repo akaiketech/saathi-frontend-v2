@@ -1,10 +1,8 @@
-import { NextApiRequest, NextApiResponse } from "next";
 import { NextRequest, NextResponse } from "next/server";
 import axiosInstance from "../../../../client/client";
 import { getAccessToken } from "@auth0/nextjs-auth0";
 
-export async function POST(req: NextRequest, res: NextApiResponse) {
-  const reqBody = await req.json();
+export const PUT = async (req: NextRequest) => {
   const { accessToken } = await getAccessToken({
     authorizationParams: {
       audience: process.env.AUTH0_AUDIENCE,
@@ -12,15 +10,21 @@ export async function POST(req: NextRequest, res: NextApiResponse) {
     },
   });
 
-  try {
-    const response = await axiosInstance.post("/api/v1/query", reqBody, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
+  console.log("\nEntering PUT /api/v1/feedback");
 
-    if (response.status === 200) {
-      return NextResponse.json(response.data);
+  try {
+    const reqBody = await req.json();
+    const res = await axiosInstance.put(
+      "/api/v1/user/conversation/message/feedback",
+      reqBody,
+      { headers: { Authorization: `Bearer ${accessToken}` } },
+    );
+
+    if (res.status === 200) {
+      return NextResponse.json(res.data);
+    } else {
+      const errorText = `Failed to fetch the result.`;
+      return NextResponse.json({ error: errorText });
     }
   } catch (error: any) {
     if (error.response) {
@@ -33,4 +37,4 @@ export async function POST(req: NextRequest, res: NextApiResponse) {
       );
     }
   }
-}
+};

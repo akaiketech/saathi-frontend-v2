@@ -256,6 +256,7 @@ export const translationOnceFromMic = ({
   const recognizer = new TranslationRecognizer(translationConfig, audioConfig);
 
   const message: Message = {
+    id: uuidv4(),
     question: {
       englishText: "",
       hindiText: "",
@@ -265,6 +266,7 @@ export const translationOnceFromMic = ({
     },
     answer: "",
     isLoading: false,
+    vote: 0,
   };
 
   const wavFragments: { [id: number]: ArrayBuffer } = {};
@@ -302,7 +304,7 @@ export const translationOnceFromMic = ({
 
         const reqBody = {
           conversation_id: sessionId,
-          query_id: uuidv4(),
+          query_id: message.id,
           english_query: result.translations.get("en"),
           conversation_location: location,
           conversation_language: language,
@@ -396,6 +398,7 @@ export const translateFromInput = async ({
   setIsAudioPlaying(true);
 
   const message: Message = {
+    id: uuidv4(),
     question: {
       englishText: "",
       hindiText: "",
@@ -405,6 +408,7 @@ export const translateFromInput = async ({
     },
     answer: "",
     isLoading: false,
+    vote: 0,
   };
 
   switch (language.toLowerCase()) {
@@ -427,7 +431,7 @@ export const translateFromInput = async ({
 
   const reqBody = {
     conversation_id: sessionId,
-    query_id: uuidv4(),
+    query_id: message.id,
     english_query: text,
     conversation_location: location,
     conversation_language: language,
@@ -459,5 +463,60 @@ export const translateFromInput = async ({
   } finally {
     setIsAudioPlaying(false);
     setIsLoading(false);
+  }
+};
+
+export const voteApi = async (
+  conversation_id: string,
+  query_id: string,
+  feedback: number,
+) => {
+  const reqBody = {
+    conversation_id,
+    query_id,
+    feedback,
+  };
+
+  try {
+    const res = await axios.put("/api/v1/feedback", reqBody);
+
+    if (res.data.error) {
+      toast.error(res.data.error, {
+        autoClose: 5000,
+        position: "top-right",
+      });
+
+      return {
+        error: res.data.error,
+        data: null,
+      };
+    }
+
+    if (res.status !== 200) {
+      toast.error(res.data.error, {
+        autoClose: 5000,
+        position: "top-right",
+      });
+      return {
+        error: res.data.error,
+        data: null,
+      };
+    } else {
+      return {
+        error: null,
+        data: res.data,
+      };
+    }
+  } catch (error: any) {
+    const errorText = `Failed to vote.`;
+    toast.error(errorText, {
+      autoClose: 5000,
+      position: "top-right",
+    });
+    console.error("Error:", error.response.data || error.message);
+    return {
+      error: null,
+      data: null,
+    };
   }
 };
