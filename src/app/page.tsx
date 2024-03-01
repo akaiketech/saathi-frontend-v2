@@ -60,10 +60,10 @@ export default function Home() {
 const Headings = () => {
   return (
     <div className="max-w-72 md:max-w-[490px] md:mt-56 text-center">
-      <div className="text-2xl md:text-[40px] font-medium text-red-saathi">
+      <div className="text-3xl md:text-[40px] font-medium text-red-saathi">
         Welcome to SAATHI
       </div>
-      <div className="text-[16px] md:text-[32px] font-medium text-center mt-2">
+      <div className="text-[18px] md:text-[32px] font-medium text-center mt-2">
         Learn all about the government schemes today
       </div>
     </div>
@@ -73,10 +73,10 @@ const Headings = () => {
 const GetStarted = () => {
   return (
     <div className="text-center">
-      <div className="text-[20px] md:text-[40px] mb-3">Get Started</div>
+      <div className="text-[24px] md:text-[40px] mb-3 font-medium">Get Started</div>
       <Link
         href="/api/auth/login"
-        className="shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] rounded-3xl md:rounded-[60px] bg-[#ff725e] text-white text-[16px] md:text-[32px] font-medium  px-5 py-2 md:py-4 md:px-8"
+        className="shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] rounded-3xl md:rounded-[60px] bg-[#ff725e] text-white text-[20px] md:text-[32px] font-medium  px-6 py-3 md:py-4 md:px-8"
       >
         Log in
       </Link>

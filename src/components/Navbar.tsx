@@ -40,7 +40,7 @@ const tabs: Tab[] = [
 
 const Navbar = ({ isStart }: Props) => {
   return (
-    <nav className="flex flex-col w-full text-[24px] font-bold px-[25px] pt-4 md:pt-[25px] text-red-saathi">
+    <nav className="flex flex-col w-full text-[36px] font-bold px-[25px] pt-4 md:pt-[25px] text-red-saathi">
       <div className={`${!isStart ? "text-center" : ""} md:text-8xl my-4`}>
         SAATHI
       </div>
