@@ -143,43 +143,26 @@ const Terms = () => {
       <footer className="mt-8 flex justify-evenly items-center w-full">
         <div
           onClick={handleAccept}
-          className={`${
-            loading ? "opacity-50 pointer-events-none" : "" // Disable button when loading
-          } shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] rounded-[60px] bg-[#ff725e] text-white text-xl md:text-[50px] not-italic font-bold leading-[normal] flex justify-between items-center w-[40%] md:py-4`}
+          className={`${loading ? "opacity-50 pointer-events-none" : "" // Disable button when loading
+            } shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] rounded-[60px] bg-[#ff725e] text-white text-xl md:text-[50px] not-italic font-bold leading-[normal] flex justify-center gap-4 items-center w-[40%] py-4 px-2`}
         >
-          <div className="flex items-center">
-            <div className="ml-8">{optionLang.accept}</div>
-            {!loading && (
-              <Image
-                src={checkSvg}
-                alt="avatar"
-                className="ml-8 w-5 h-5 md:w-10 md:h-10"
-              />
-            )}
-          </div>
-          {!loading && (
-            <span className="pl-4">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="46"
-                height="46"
-                viewBox="0 0 46 46"
-                fill="none"
-              ></svg>
-            </span>
-          )}
+          <div>{optionLang.accept}</div>
+          <Image
+            src={checkSvg}
+            alt="avatar"
+            className="w-5 h-5 md:w-10 md:h-10"
+          />
         </div>
         <div
           onClick={handleDecline}
-          className={`${
-            loading ? "opacity-50 pointer-events-none" : "" // Disable button when loading
-          } border shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] rounded-[60px] border-solid border-[#D6D6D6] cursor-pointer text-[#302B27] text-xl md:text-[50px] not-italic font-bold leading-[normal] px-3 py-2 md:px-8 md:py-4 flex justify-between items-center`}
+          className={`${loading ? "opacity-50 pointer-events-none" : "" // Disable button when loading
+            } border shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] rounded-[60px] border-solid border-[#D6D6D6] cursor-pointer text-[#302B27] text-xl md:text-[50px] not-italic font-bold leading-[normal] px-3 py-4 flex justify-center items-center w-[40%] gap-4`}
         >
-          {optionLang.decline}
+          <div>{optionLang.decline}</div>
           <Image
             src={crossSvg}
             alt="avatar"
-            className="ml-8 w-5 h-5 md:w-10 md:h-10"
+            className="w-5 h-5 md:w-10 md:h-10"
           />
         </div>
       </footer>
