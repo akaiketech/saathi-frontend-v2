@@ -58,9 +58,8 @@ function Sidebar() {
       </nav>
       <div
         onClick={() => (window.location.href = "/api/auth/logout")}
-        className={`absolute z-50 cursor-pointer bottom-20 left-6 ${
-          
-          sideBarOpen ? "logout active" : "logout"}`}
+        className={`absolute z-50 cursor-pointer bottom-10 left-6 ${sideBarOpen ? "logout active" : "logout"
+          }`}
       >
         <Image src={logout} alt="logout" />
       </div>

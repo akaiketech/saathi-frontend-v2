@@ -45,7 +45,7 @@ const Navbar = ({ isStart }: Props) => {
         SAATHI
       </div>
       {!isStart && (
-        <div className="flex text-black justify-center font-medium w-full text-[12px] md:text-[28px]">
+        <div className="flex text-black justify-center font-medium w-full text-[14px] md:text-[28px]">
           {tabs.map((tab, index) => (
             <div key={index}>
               <Link href={tab.link}>{tab.name}</Link>
