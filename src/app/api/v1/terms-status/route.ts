@@ -1,25 +1,22 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextApiResponse } from "next";
 import { NextRequest, NextResponse } from "next/server";
 import axiosInstance from "../../../../client/client";
 import { getAccessToken } from "@auth0/nextjs-auth0";
 
 export async function POST(req: NextRequest, res: NextApiResponse) {
-  // const { accessToken } = await getAccessToken({
-  //   authorizationParams: {
-  //     audience: process.env.AUTH0_AUDIENCE,
-  //     scope: process.env.AUTH0_SCOPE,
-  //   },
-  // });
-
+  const { accessToken } = await getAccessToken({
+    authorizationParams: {
+      audience: process.env.AUTH0_AUDIENCE,
+      scope: process.env.AUTH0_SCOPE,
+    },
+  });
   console.log("Called POST /api/v1/terms-status");
   try {
-    // const res = await axiosInstance.post(
-    //   "/api/v1/terms-and-conditions/status",
-    //   {},
-    //   { headers: { Authorization: `Bearer ${accessToken}` } },
-    // );
-
-    const res = { status: 200, data: { status: false } };
+    const res = await axiosInstance.post(
+      "/api/v1/users/terms-and-conditions/status",
+      {},
+      { headers: { Authorization: `Bearer ${accessToken}` } },
+    );
 
     if (res.status === 200) {
       return NextResponse.json(res.data);

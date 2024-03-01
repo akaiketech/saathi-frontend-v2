@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { IoLanguage } from "react-icons/io5";
 import { IoLocationOutline } from "react-icons/io5";
@@ -40,7 +39,7 @@ const Dropdown = ({
       <div className="max-w-96 min-w-40">
         <a
           onClick={() => setIsOpen(!isOpen)}
-          className="flex items-center cursor-pointer justify-between w-48 px-3 py-2 text-sm font-bold text-gray-saathi-2 md:px-6 md:py-4 md:w-[420px] min-h-10 bg-gray-saathi-1 md:text-4xl rounded-xl md:rounded-2xl hover:bg-gray-200 focus:outline-none"
+          className="flex items-center cursor-pointer justify-between w-48 px-3 py-2 text-sm font-bold text-gray-saathi-2 md:px-6 md:py-4 md:w-[380px] min-h-10 bg-gray-saathi-1 md:text-3xl rounded-xl md:rounded-2xl hover:bg-gray-200 focus:outline-none"
         >
           {isChanged ? (
             <>
@@ -48,7 +47,7 @@ const Dropdown = ({
                 {type === "language" ? <IoLanguage /> : <IoLocationOutline />}
               </div>
               <div className="text-red-saathi">{value}</div>
-              <IoMdArrowDropdown className="text-sm md:text-3xl" />
+              <IoMdArrowDropdown className="text-sm md:text-2xl" />
             </>
           ) : (
             <>
@@ -56,12 +55,12 @@ const Dropdown = ({
                 {type === "language" ? <IoLanguage /> : <IoLocationOutline />}
               </div>
               {label}
-              <IoMdArrowDropdown className="text-sm md:text-3xl" />
+              <IoMdArrowDropdown className="text-sm md:text-2xl" />
             </>
           )}
         </a>
         {isOpen && (
-          <ul className="absolute z-50 bg-gray-saathi-1 rounded-2xl w-48 md:w-[420px] overflow-hidden mt-1 shadow-[inset_0px_0px_3px_0px_#00000024]">
+          <ul className="absolute z-50 bg-gray-saathi-1 rounded-2xl w-48 md:w-[380px] overflow-hidden mt-1 shadow-[inset_0px_0px_3px_0px_#00000024]">
             {options.map((option) => (
               <li
                 key={option}

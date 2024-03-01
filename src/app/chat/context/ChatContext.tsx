@@ -11,7 +11,6 @@ import {
 } from "react";
 import * as sdk from "microsoft-cognitiveservices-speech-sdk";
 
-
 import { textToSpeech } from "../util";
 import { Message } from "../../../types";
 

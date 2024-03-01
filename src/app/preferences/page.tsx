@@ -9,6 +9,7 @@ import Image from "next/image";
 import { toast } from "react-toastify";
 import { checkUserTnCStatus } from "../../services";
 import { useEffect, useState } from "react";
+import { generateSessionId } from "../../utils/utils";
 
 const LANGUAGES = ["Hindi", "English", "Kannada", "Tamil"];
 const LOCATIONS = ["Karnataka", "Madhya Pradesh", "Tamil Nadu"];
@@ -19,7 +20,8 @@ type FormValues = {
 };
 
 const page = () => {
-  const { language, setLanguage, setLocation } = useGlobalContext();
+  const { language, setLanguage, setLocation, setSessionId } =
+    useGlobalContext();
   const [nextRoute, setNextRoute] = useState("/terms");
   const router = useRouter();
 
@@ -37,16 +39,16 @@ const page = () => {
   useEffect(() => {
     (async () => {
       const res = await checkUserTnCStatus();
-      if (res.data.status) {
+      if (res.data.terms_and_conditions_status) {
         setNextRoute("/chat");
       }
     })();
   }, []);
 
-  const onSubmit = async (
-    values: typeof initVals,
-    actions: FormikHelpers<typeof initVals>,
-  ) => {};
+  // const onSubmit = async (
+  //   values: typeof initVals,
+  //   actions: FormikHelpers<typeof initVals>,
+  // ) => {};
 
   const validateInputs = (lang: string, location: string): boolean => {
     if (LANGUAGES.includes(lang) && LOCATIONS.includes(location)) {
@@ -65,8 +67,8 @@ const page = () => {
         }}
       >
         {({ values, setFieldValue }) => (
-          <Form className="flex flex-col items-center justify-center gap-10">
-            <div className="flex flex-col items-center gap-10 md:gap-20 md:flex-row md:mb-20 md:mt-32">
+          <Form className="flex flex-col items-center justify-center gap-10 md:gap-0">
+            <div className="flex flex-col items-center gap-10 md:gap-5 md:flex-row md:mb-20 md:mt-24">
               <Dropdown
                 label="Select Location"
                 options={LOCATIONS}
@@ -93,6 +95,8 @@ const page = () => {
               language={language}
               onClick={() => {
                 if (validateInputs(values.language, values.state)) {
+                  const newSessionId = generateSessionId();
+                  setSessionId(newSessionId);
                   router.push(nextRoute);
                 } else {
                   toast.error("Please select a valid language and location");

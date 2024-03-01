@@ -46,7 +46,7 @@ const ChatPage = () => {
   const [isFeedbackDialogOpen, setIsFeedbackDialogOpen] = useState(false);
   const [starRating, setStarRating] = useState(0);
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
-  const [recognizer, setRecognizer] = useState<TranslationRecognizer>();
+  const [_, setRecognizer] = useState<TranslationRecognizer>();
 
   useEffect(() => {
     if (messagesEndRef.current) {
@@ -185,9 +185,6 @@ const ChatPage = () => {
         )}
       </header>
       <div
-        // className={`h-[calc(100vh-300px)] md:h-[calc(100vh-350px)] md:ml-20 mt-20 md:mt-10 overflow-auto transition-all duration-500 ${
-        //   sideBarOpen && "ml-[240px] w-[calc(100%-240px)]"
-        // }`}
         className={`h-[calc(100vh-280px)] md:h-[calc(100vh-350px)] ml-0 mt-10 overflow-auto transition-all duration-500 ${
           sideBarOpen ? "md:ml-[240px]" : "md:ml-20"
         }`}
@@ -274,7 +271,7 @@ const ChatPage = () => {
 
       <footer>
         <div
-          className={`flex flex-col items-center z-10 justify-center transition-all duration-500 ease-in-out ${
+          className={`flex flex-col items-center z-10 md:ml-20 justify-center transition-all duration-500 ease-in-out ${
             sideBarOpen && "md:ml-[240px]"
           }`}
         >
@@ -316,12 +313,12 @@ const ChatPage = () => {
               </div>
             </div>
           )}
-          <div className="relative flex justify-center items-center gap-2 w-full max-w-[740px] pl-4 md:pl-12 pr-2 md:pr-6 pt-6 md:pt-9 pb-4 -mt-9 bg-[#f1f1f1] rounded-[20px]">
+          <div className="relative flex justify-center items-center gap-2 w-full max-w-[740px] pl-4 md:pl-8 pr-2 md:pr-6 pt-6 md:pt-9 pb-4 -mt-9 bg-[#f1f1f1] rounded-[20px]">
             <input
               id="question"
               type="text"
               placeholder="Ask any question here"
-              className="rounded-[20px] z-10 h-[40px] md:h-[60px] w-full text-sm md:text-2xl bg-[#e9e9e9] py-2 px-3"
+              className="rounded-[20px] z-10 h-[40px] md:h-[60px] w-full focus:outline-[#7b7b7b] text-sm md:text-2xl bg-[#e9e9e9] py-2 px-3"
             />
             <div
               onClick={() => {

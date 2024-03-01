@@ -438,11 +438,12 @@ export const translateFromInput = async ({
   try {
     setIsLoading(true);
 
+    setMessages((prevMsgs) => [...prevMsgs, message]);
+
     const data = await queryApi(reqBody);
     if (data) {
       message.answer = data.answer;
     }
-    setMessages((prevMsgs) => [...prevMsgs, message]);
 
     setIsLoading(false);
     setIsAudioPlaying(false);

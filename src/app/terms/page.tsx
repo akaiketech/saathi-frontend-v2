@@ -12,8 +12,7 @@ import checkSvg from "../../assets/svgs/check.svg";
 import crossSvg from "../../assets/svgs/cross.svg";
 import { acceptUserTnC, checkUserTnCStatus } from "../../services";
 import { toast } from "react-toastify";
-
-const tabs = ["Scheme", "Access", "Attention", "Training", "Help", "Inclusion"];
+import { generateSessionId } from "../../utils/utils";
 
 const Terms = () => {
   const router = useRouter();
@@ -23,9 +22,14 @@ const Terms = () => {
 
   useEffect(() => {
     (async () => {
+      setLoading(true);
       const res = await checkUserTnCStatus();
-      if (res.data.status) {
+      if (res.data.terms_and_conditions_status) {
+        const newSessionId = generateSessionId();
+        setSessionId(newSessionId);
         router.replace("/chat");
+      } else {
+        setLoading(false);
       }
     })();
   }, []);
@@ -37,18 +41,17 @@ const Terms = () => {
     });
   }, [language]);
 
-
   const handleAccept = async () => {
     setLoading(true);
     const res = await acceptUserTnC();
 
     if (res.error) {
       toast.error(res.error);
-    } else if (res.data.updated) {
+    } else if (res.data.message === "Terms and conditions accepted") {
+      const newSessionId = generateSessionId();
+      setSessionId(newSessionId);
       router.replace("/chat");
     }
-
-    console.log(res);
   };
   const handleDecline = () => {
     router.replace("/");
@@ -58,16 +61,15 @@ const Terms = () => {
     <main className="flex flex-col items-center mt-2">
       <Navbar />
       <section className=" bg-[#F1F1F1] mt-2 rounded-[40px] p-8   w-[95%]">
-        <h2 className="text-[#302B27] text-[48px] not-italic font-bold leading-[normal]">
+        <h2 className="text-[#302B27] text-2xl md:text-[48px] not-italic font-bold leading-[normal]">
           {language.toLowerCase() === "hindi"
             ? "नियम और शर्तें"
             : "Terms & Conditions"}
         </h2>
-        <div className="mt-2 h-[600px] overflow-y-scroll text-[#6D6D6D] text-xl not-italic font-normal leading-[normal]">
+        <div className="mt-2 max-h-[500px] overflow-y-scroll text-[#6D6D6D] md:text-xl not-italic font-normal leading-[normal]">
           {language.toLowerCase() === "hindi" ? (
             <div>
               <div>
-                <div className="my-4">नियम और शर्तें</div>
                 <ul>
                   <li className="my-2">
                     ● SAATHI का उद्देश्य आपके प्रश्नों के लिए आपको उत्तर प्रदान
@@ -143,17 +145,15 @@ const Terms = () => {
           onClick={handleAccept}
           className={`${
             loading ? "opacity-50 pointer-events-none" : "" // Disable button when loading
-          } shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] rounded-[60px] bg-[#ff725e] text-white text-[50px] not-italic font-bold leading-[normal]  flex justify-between items-center w-[40%] py-4`}
+          } shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] rounded-[60px] bg-[#ff725e] text-white text-xl md:text-[50px] not-italic font-bold leading-[normal] flex justify-between items-center w-[40%] md:py-4`}
         >
-          <div className="flex justify-between ">
+          <div className="flex items-center">
             <div className="ml-8">{optionLang.accept}</div>
             {!loading && (
               <Image
                 src={checkSvg}
                 alt="avatar"
-                height={40}
-                width={40}
-                className="ml-8"
+                className="ml-8 w-5 h-5 md:w-10 md:h-10"
               />
             )}
           </div>
@@ -173,15 +173,13 @@ const Terms = () => {
           onClick={handleDecline}
           className={`${
             loading ? "opacity-50 pointer-events-none" : "" // Disable button when loading
-          } border shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] rounded-[60px] border-solid border-[#D6D6D6] cursor-pointer text-[#302B27] text-[50px] not-italic font-bold leading-[normal] px-8 py-4 flex justify-between items-center`}
+          } border shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] rounded-[60px] border-solid border-[#D6D6D6] cursor-pointer text-[#302B27] text-xl md:text-[50px] not-italic font-bold leading-[normal] px-3 py-2 md:px-8 md:py-4 flex justify-between items-center`}
         >
           {optionLang.decline}
           <Image
             src={crossSvg}
             alt="avatar"
-            height={32}
-            width={32}
-            className="ml-8"
+            className="ml-8 w-5 h-5 md:w-10 md:h-10"
           />
         </div>
       </footer>
