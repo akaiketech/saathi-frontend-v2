@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 type GlobalContextProps = {
   language: string;
@@ -37,6 +37,18 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
   const [location, setLocation] = useState<string>("");
   const [sideBarOpen, setSideBarOpen] = useState<boolean>(false);
 
+  useEffect(() => {
+    // get the language from localstorage
+    const storedLanguage = localStorage.getItem("language");
+    if (storedLanguage) {
+      setLanguage(storedLanguage);
+    }
+    const storedLocation = localStorage.getItem("location");
+    if (storedLocation) {
+      setLocation(storedLocation);
+    }
+  }, []);
+
   return (
     <GlobalContext.Provider
       value={{
@@ -49,7 +61,7 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
         location,
         setLocation,
         sideBarOpen,
-        setSideBarOpen
+        setSideBarOpen,
       }}
     >
       {children}

@@ -50,6 +50,20 @@ const page = () => {
   //   actions: FormikHelpers<typeof initVals>,
   // ) => {};
 
+  const onLocationChange = (val: string) => {
+    // save to local storage
+    localStorage.setItem("location", val);
+    localStorage.setItem("language", loc2lang[val]);
+    setLocation(val);
+    setLanguage(loc2lang[val]);
+  };
+
+  const onLanguageChange = (val: string) => {
+    // save to local storage
+    localStorage.setItem("language", val);
+    setLanguage(val);
+  };
+
   const validateInputs = (lang: string, location: string): boolean => {
     if (LANGUAGES.includes(lang) && LOCATIONS.includes(location)) {
       return true;
@@ -76,8 +90,7 @@ const page = () => {
                 onChange={(val) => {
                   setFieldValue("state", val);
                   setFieldValue("language", loc2lang[val]);
-                  setLocation(val);
-                  setLanguage(loc2lang[val]);
+                  onLocationChange(val);
                 }}
                 type="location"
               />
@@ -87,7 +100,7 @@ const page = () => {
                 value={values.language}
                 onChange={(val) => {
                   setFieldValue("language", val);
-                  setLanguage(val);
+                  onLanguageChange(val);
                 }}
               />
             </div>
