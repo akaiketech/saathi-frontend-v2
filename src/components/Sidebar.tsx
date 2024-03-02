@@ -7,26 +7,41 @@ import hamClose from "../assets/svgs/sidebarClose.svg";
 import logout from "../assets/svgs/logout.svg";
 import "../styles/sidebar.css";
 import { useGlobalContext } from "../hooks/context";
+import { getConversations } from "../services";
+import { toast } from "react-toastify";
 
-interface ListItem {
-  id: number;
-  name: string;
-  location: string;
+interface Conversation {
+  conversation_id: number;
+  conversation_title: string;
+  conversation_location: string;
+  conversation_language: string;
   // Add other properties as needed
 }
 
-const fetchData = (page: number, pageSize: number) => {
-  const data = {
-    items: [
-      {
-        id: 1,
-        name: "Tell me about yourself",
-        location: "Karnataka",
-      },
-      { id: 2, name: "What is your name", location: "Tamil Nadu" },
-    ],
-  };
-  return data.items;
+const fetchData = async (page: number, page_size: number) => {
+  const conversations = await getConversations({ page, page_size });
+
+  console.log(conversations);
+  if (conversations.error) {
+    toast.error(conversations.error, {
+      autoClose: 5000,
+      position: "top-right",
+    });
+
+    return {
+      error: conversations.error,
+      data: null,
+    };
+  } else {
+    return {
+      error: null,
+      data: conversations.data,
+    };
+  }
+};
+
+const handleNewChat = () => {
+  window.location.href = "/chat";
 };
 
 function Sidebar() {
@@ -39,12 +54,15 @@ function Sidebar() {
       <div onClick={showSidebar} className="z-50 absolute top-6 left-6">
         <Image src={sideBarOpen ? hamClose : hamOpen} alt="hamburger" />
       </div>
-      <div className={sideBarOpen ? "newChat active" : "newChat"}>
+      <div
+        onClick={handleNewChat}
+        className={sideBarOpen ? "newChat active" : "newChat"}
+      >
         <FaPlus size={20} color="#7b7b7b" />
         <span className={sideBarOpen ? "" : "hidden"}>New Chat</span>
       </div>
       <nav className={sideBarOpen ? "sidebar active" : "sidebar"}>
-        <div className="flex flex-col items-center justify-center">
+        <div className="flex flex-col items-center mt-48 md:mt-64">
           <div
             className={
               sideBarOpen
@@ -58,10 +76,14 @@ function Sidebar() {
       </nav>
       <div
         onClick={() => (window.location.href = "/api/auth/logout")}
-        className={`absolute z-50 cursor-pointer bottom-10 left-6 ${sideBarOpen ? "logout active" : "logout"
-          }`}
+        className={`absolute flex gap-3 items-center z-50 cursor-pointer bottom-10 left-6 ${
+          sideBarOpen ? "logout active" : "logout"
+        }`}
       >
-        <Image src={logout} alt="logout" />
+        <Image className="w-auto h-12" src={logout} alt="logout" />
+        <span className="flex md:hidden text-[16px] text-[#7b7b7b] font-medium">
+          Logout
+        </span>
       </div>
     </>
   );
@@ -72,54 +94,65 @@ interface PaginationProps {
 }
 
 const Pagination: React.FC<PaginationProps> = ({ pageSize }) => {
-  const [items, setItems] = useState<ListItem[]>([]);
+  const [conv, setConv] = useState<Conversation[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [allFetched, setAllFetched] = useState(false);
 
   useEffect(() => {
     const fetchDataAndUpdateState = async () => {
-      setLoading(true);
-      const data = fetchData(currentPage, pageSize);
-      setItems((prevItems) => [...prevItems, ...data]);
-      setLoading(false);
+      try {
+        setLoading(true);
+        const data = await fetchData(currentPage, pageSize);
+        if (data.data.conversations.length === 0) {
+          setAllFetched(true);
+        }
+        setConv([...conv, ...(data.data.conversations as Conversation[])]);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchDataAndUpdateState();
   }, [currentPage, pageSize]);
 
+  console.log(conv);
   const handleLoadMore = () => {
     setCurrentPage((prevPage) => prevPage + 1);
   };
 
   return (
-    items.length > 0 && (
+    conv?.length > 0 && (
       <div className="mx-6">
         <div className="text-lg mb-4 font-bold text-[#565656]">Recent</div>
-        <ul className="max-h-[400px] md:max-h-[700px] overflow-auto">
-          {items.map((item, index) => (
+        <ul className="max-h-[calc(100vh-500px)] md:max-h-[calc(100vh-600px)] overflow-auto">
+          {conv.map((item, index) => (
             <li
-              className="flex relative items-center max-w-48 mb-2 text-[#455a64] py-2 px-6 gap-2 chat-bg rounded-[40px]"
+              className="flex relative items-center max-w-52 mb-2 text-[#455a64] py-2 px-6 gap-2 chat-bg rounded-[40px]"
               key={index}
             >
               <CiChat1 size={24} color="#455a64" />
               <div className="w-full mb-1 overflow-hidden overflow-ellipsis whitespace-nowrap break-keep">
-                {item.name}
+                {item.conversation_title}
               </div>
               <div className="absolute top-7 right-3 text-[11px]">
-                {item.location}
+                {item.conversation_location}
               </div>
             </li>
-            // Render other properties as needed
           ))}
         </ul>
         {loading && <p>Loading...</p>}
         {!loading && (
           <button
-            className="text-red-saathi font-bold py-2 px-4 bg-[#dbdbdb] rounded-[40px] my-2"
+            className={`text-red-saathi font-medium py-2 px-4 bg-[#dbdbdb] rounded-[40px] my-2 ${
+              allFetched ? "pointer-events-none opacity-50" : ""
+            }`}
             onClick={handleLoadMore}
-            disabled={loading}
+            disabled={loading || allFetched}
           >
-            Load More
+            {allFetched ? "All Fetched" : "Load More"}
           </button>
         )}
       </div>
