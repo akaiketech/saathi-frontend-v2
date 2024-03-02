@@ -7,11 +7,13 @@ import hamClose from "../assets/svgs/sidebarClose.svg";
 import logout from "../assets/svgs/logout.svg";
 import "../styles/sidebar.css";
 import { useGlobalContext } from "../hooks/context";
-import { getConversations } from "../services";
+import { getConversationMsgs, getConversations } from "../services";
 import { toast } from "react-toastify";
+import { useChatContext } from "../app/chat/context/ChatContext";
+import { Message } from "../types";
 
 interface Conversation {
-  conversation_id: number;
+  conversation_id: string;
   conversation_title: string;
   conversation_location: string;
   conversation_language: string;
@@ -21,7 +23,6 @@ interface Conversation {
 const fetchData = async (page: number, page_size: number) => {
   const conversations = await getConversations({ page, page_size });
 
-  console.log(conversations);
   if (conversations.error) {
     toast.error(conversations.error, {
       autoClose: 5000,
@@ -76,9 +77,8 @@ function Sidebar() {
       </nav>
       <div
         onClick={() => (window.location.href = "/api/auth/logout")}
-        className={`absolute flex gap-3 items-center z-50 cursor-pointer bottom-10 left-6 ${
-          sideBarOpen ? "logout active" : "logout"
-        }`}
+        className={`absolute flex gap-3 items-center z-50 cursor-pointer bottom-10 left-6 ${sideBarOpen ? "logout active" : "logout"
+          }`}
       >
         <Image className="w-auto h-12" src={logout} alt="logout" />
         <span className="flex md:hidden text-[16px] text-[#7b7b7b] font-medium">
@@ -98,6 +98,72 @@ const Pagination: React.FC<PaginationProps> = ({ pageSize }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [allFetched, setAllFetched] = useState(false);
+  const { setSessionId, setSideBarOpen, setLocation, setLanguage } =
+    useGlobalContext();
+  const { setMessages } = useChatContext();
+
+  const setMessageResponse = (messsageObjList: any[]) => {
+    const newMessages = messsageObjList.map((messageObj) => {
+      const {
+        query_id,
+        english_query,
+        // english_response,
+        // language_query,
+        feedback,
+        language_response,
+      } = messageObj;
+      return {
+        id: query_id,
+        question: {
+          englishText: english_query,
+          hindiText: english_query,
+          kannadaText: "",
+          tamilText: "",
+          audio: "",
+        },
+        answer: language_response,
+        isLoading: false,
+        vote: feedback,
+      };
+    });
+
+    return newMessages;
+  };
+
+  const openConversation = async (
+    conversation_id: string,
+    conversationLocation: string,
+    conversationLanguage: string,
+  ) => {
+    try {
+      const res = await getConversationMsgs({
+        conversation_id,
+        page: 1,
+        page_size: 10,
+      });
+
+      setSideBarOpen(false);
+      setSessionId(conversation_id);
+      setLocation(conversationLocation);
+      setLanguage(conversationLanguage);
+
+      if (res.error) {
+        toast.error(res.error, {
+          autoClose: 5000,
+          position: "top-right",
+        });
+        return;
+      }
+
+      if (res.data.paginated_messages) {
+        console.log(res.data.paginated_messages);
+        const newMsg = setMessageResponse(res.data.paginated_messages);
+        setMessages(newMsg as Message[]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     const fetchDataAndUpdateState = async () => {
@@ -118,7 +184,6 @@ const Pagination: React.FC<PaginationProps> = ({ pageSize }) => {
     fetchDataAndUpdateState();
   }, [currentPage, pageSize]);
 
-  console.log(conv);
   const handleLoadMore = () => {
     setCurrentPage((prevPage) => prevPage + 1);
   };
@@ -127,9 +192,16 @@ const Pagination: React.FC<PaginationProps> = ({ pageSize }) => {
     conv?.length > 0 && (
       <div className="mx-6">
         <div className="text-lg mb-4 font-bold text-[#565656]">Recent</div>
-        <ul className="max-h-[calc(100vh-500px)] md:max-h-[calc(100vh-600px)] overflow-auto">
+        <ul className="max-h-[calc(100vh-440px)] md:max-h-[calc(100vh-400px)] overflow-auto">
           {conv.map((item, index) => (
             <li
+              onClick={() =>
+                openConversation(
+                  item.conversation_id,
+                  item.conversation_location,
+                  item.conversation_language,
+                )
+              }
               className="flex relative items-center max-w-52 mb-2 text-[#455a64] py-2 px-6 gap-2 chat-bg rounded-[40px]"
               key={index}
             >
@@ -146,9 +218,8 @@ const Pagination: React.FC<PaginationProps> = ({ pageSize }) => {
         {loading && <p>Loading...</p>}
         {!loading && (
           <button
-            className={`text-red-saathi font-medium py-2 px-4 bg-[#dbdbdb] rounded-[40px] my-2 ${
-              allFetched ? "pointer-events-none opacity-50" : ""
-            }`}
+            className={`text-red-saathi font-medium py-2 px-4 bg-[#dbdbdb] rounded-[40px] my-2 ${allFetched ? "pointer-events-none opacity-50" : ""
+              }`}
             onClick={handleLoadMore}
             disabled={loading || allFetched}
           >

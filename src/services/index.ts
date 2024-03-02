@@ -74,3 +74,25 @@ export const createUser = async () => {
     return { data: null, error: errorText };
   }
 };
+
+export const getConversationMsgs = async ({
+  conversation_id,
+  page,
+  page_size,
+}: any) => {
+  const res = await fetch("/api/v1/get-conv-msgs", {
+    method: "POST",
+    body: JSON.stringify({ conversation_id, page, page_size }),
+  });
+
+  if (!res.ok) {
+    const errorText = `Failed to fetch the result.`;
+    return { data: null, error: errorText };
+  }
+  if (res.status === 200) {
+    const data = await res.json();
+    console.log(data)
+    return { data, error: null };
+  }
+  return { data: null, error: "Unknown error occurred" };
+};
