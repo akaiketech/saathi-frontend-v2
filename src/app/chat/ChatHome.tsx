@@ -231,8 +231,8 @@ const ChatPage = () => {
       >
         {messages.length ? (
           messages.map((messageObj, index) => (
-            <div key={index} className="flex flex-col w-full py-4 md:p-8">
-              <div className="flex items-end ml-auto mb-2 max-w-[80%] md:max-w-[70%]">
+            <div key={index} className="flex flex-col w-full py-4">
+              <div className="flex items-end ml-auto mb-4 max-w-[80%] md:max-w-[70%]">
                 <div className="p-3 rounded-[30px_30px_0px_30px] bg-[#ff725e]">
                   <div className="text-white text-sm md:text-2xl not-italic font-medium leading-[normal]">
                     {showQuestion(messageObj)}
