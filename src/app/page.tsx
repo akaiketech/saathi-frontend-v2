@@ -10,15 +10,25 @@ import { useUser } from "@auth0/nextjs-auth0/client";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { createUser } from "../services";
+import { toast } from "react-toastify";
+import { useGlobalContext } from "../hooks/context";
 
 export default function Home() {
   const { user } = useUser();
+  const { setNewUser } = useGlobalContext();
   const router = useRouter();
 
   useEffect(() => {
     if (user) {
       (async () => {
-        await createUser();
+        const res = await createUser();
+        if (res.error) {
+          toast.error(res.error);
+          return;
+        }
+        if (res.data.message === "New user created.") {
+          setNewUser(true);
+        }
       })();
       router.push("/preferences"); // Redirect if user exists
     }

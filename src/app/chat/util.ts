@@ -441,6 +441,7 @@ export const translateFromInput = async ({
 
   try {
     setIsLoading(true);
+    message.isLoading = true;
 
     setMessages((prevMsgs) => [...prevMsgs, message]);
 
@@ -449,6 +450,7 @@ export const translateFromInput = async ({
       message.answer = data.answer;
     }
 
+    message.isLoading = false;
     setIsLoading(false);
     setIsAudioPlaying(false);
 

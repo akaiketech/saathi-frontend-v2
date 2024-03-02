@@ -16,6 +16,7 @@ import { toast } from "react-toastify";
 import { generateSessionId } from "../../utils/utils";
 import { textToSpeech } from "../chat/util";
 import { SpeakerAudioDestination } from "microsoft-cognitiveservices-speech-sdk";
+import { useChatContext } from "../chat/context/ChatContext";
 
 const TERMS_AND_CONDITIONS = {
   hindi: [
@@ -45,6 +46,7 @@ const Terms = () => {
   const [loading, setLoading] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [ttsController, setTtsController] = useState<SpeakerAudioDestination>();
+  const { replayAudio, isAudioPlaying, setIsAudioPlaying, stopPlayingAudio } = useChatContext();
 
   useEffect(() => {
     (async () => {
@@ -83,6 +85,18 @@ const Terms = () => {
     router.replace("/");
   };
 
+  const handleStopReplay = () => {
+    console.log(ttsController)
+    ttsController?.pause();
+
+    ttsController?.close(() => {
+      setIsAudioPlaying(false);
+    });
+  };
+
+  const handleReplayClick = (index: number) =>
+    replayAudio(index, language, voice);
+
   const termsAndConditions = () => {
     switch (language.toLowerCase()) {
       case "hindi":
@@ -112,24 +126,24 @@ const Terms = () => {
           {!isPlaying ? (
             <Image
               onClick={() => {
-                const { player } = textToSpeech(
+                const controller = textToSpeech(
                   getTnCText(termsAndConditions()),
                   language,
                   voice,
                   () => setIsPlaying(true),
                   () => setIsPlaying(false),
                 );
-                setTtsController(player);
+                setTtsController(controller.player);
               }}
               src={speakerSvg}
               alt="avatar"
-              className={`ml-2 w-8 h-8 ${loading ? "opacity-50 pointer-events-none" : ""} `}
+              className={`ml-2 w-8 h-8 ${
+                loading ? "opacity-50 pointer-events-none" : ""
+              } `}
             />
           ) : (
             <Image
-              onClick={() => {
-                ttsController?.pause();
-              }}
+              onClick={handleStopReplay}
               src={stopSvg}
               alt="avatar"
               className="ml-2 w-8 h-8"
@@ -151,8 +165,9 @@ const Terms = () => {
       <footer className="mt-8 flex justify-evenly items-center w-full">
         <div
           onClick={handleAccept}
-          className={`${loading ? "opacity-50 pointer-events-none" : "" // Disable button when loading
-            } shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] rounded-[60px] bg-[#ff725e] text-white text-xl md:text-[50px] not-italic font-bold leading-[normal] flex justify-center gap-4 items-center w-[40%] py-4 px-2`}
+          className={`${
+            loading ? "opacity-50 pointer-events-none" : "" // Disable button when loading
+          } shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] rounded-[60px] bg-[#ff725e] text-white text-xl md:text-[50px] not-italic font-bold leading-[normal] flex justify-center gap-4 items-center w-[40%] py-4 px-2`}
         >
           <div>{optionLang.accept}</div>
           <Image
@@ -163,8 +178,9 @@ const Terms = () => {
         </div>
         <div
           onClick={handleDecline}
-          className={`${loading ? "opacity-50 pointer-events-none" : "" // Disable button when loading
-            } border shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] rounded-[60px] border-solid border-[#D6D6D6] cursor-pointer text-[#302B27] text-xl md:text-[50px] not-italic font-bold leading-[normal] px-3 py-4 flex justify-center items-center w-[40%] gap-4`}
+          className={`${
+            loading ? "opacity-50 pointer-events-none" : "" // Disable button when loading
+          } border shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] rounded-[60px] border-solid border-[#D6D6D6] cursor-pointer text-[#302B27] text-xl md:text-[50px] not-italic font-bold leading-[normal] px-3 py-4 flex justify-center items-center w-[40%] gap-4`}
         >
           <div>{optionLang.decline}</div>
           <Image

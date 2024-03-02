@@ -32,19 +32,26 @@ import { generateSessionId } from "../../utils/utils";
 
 const ChatPage = () => {
   const router = useRouter();
-  const { language, location, sessionId, voice, sideBarOpen, setSessionId } =
-    useGlobalContext();
+  const {
+    language,
+    location,
+    sessionId,
+    voice,
+    sideBarOpen,
+    isNewUser,
+    setSessionId,
+  } = useGlobalContext();
   const {
     messages,
-    setMessages,
+    isLoading,
     isRecording,
     isAudioPlaying,
-    isLoading,
-    setIsRecording,
-    setCurrentPlayingIndex,
-    setIsAudioPlaying,
-    setTtsController,
+    setMessages,
     setIsLoading,
+    setIsRecording,
+    setTtsController,
+    setIsAudioPlaying,
+    setCurrentPlayingIndex,
   } = useChatContext();
   const [isFeedbackDialogOpen, setIsFeedbackDialogOpen] = useState(false);
   const [starRating, setStarRating] = useState(0);
@@ -112,6 +119,11 @@ const ChatPage = () => {
     const inputRef = document.getElementById("question") as HTMLInputElement;
     // get input value
     const inputValue = inputRef.value;
+
+    if (inputValue.trim() === "") {
+      toast.error("Please enter a valid question");
+      return;
+    }
 
     translateFromInput({
       text: inputValue,
@@ -213,21 +225,27 @@ const ChatPage = () => {
         )}
       </header>
       <div
-        className={`h-[calc(100vh-280px)] md:h-[calc(100vh-350px)] ml-0 mt-10 overflow-auto transition-all duration-500 ${sideBarOpen ? "md:ml-[240px]" : "md:ml-20"
+        className={`h-[calc(100vh-280px)] md:h-[calc(100vh-400px)] ml-0 mt-10 overflow-auto transition-all duration-500 ${sideBarOpen ? "md:ml-[240px]" : "md:ml-20"
           }`}
         ref={messagesEndRef}
       >
         {messages.length ? (
           messages.map((messageObj, index) => (
             <div key={index} className="flex flex-col w-full py-4 md:p-8">
-              <div className="flex items-end ml-auto w-fit max-w-[50%]">
+              <div className="flex items-end ml-auto mb-2 max-w-[80%] md:max-w-[70%]">
                 <div className="p-3 rounded-[30px_30px_0px_30px] bg-[#ff725e]">
-                  <div className="text-white text-sm md:text-2xl not-italic font-medium leading-[normal] text-right">
+                  <div className="text-white text-sm md:text-2xl not-italic font-medium leading-[normal]">
                     {showQuestion(messageObj)}
                   </div>
                 </div>
                 <div className="hidden ml-1 md:block">
-                  <Image src={avatar} alt="avatar" height={36} width={36} />
+                  <Image
+                    src={avatar}
+                    className="min-w-10"
+                    alt="avatar"
+                    height={36}
+                    width={36}
+                  />
                 </div>
               </div>
               {messageObj.isLoading ? (
@@ -258,7 +276,7 @@ const ChatPage = () => {
                     </div>
                     <div className="flex justify-end w-1/2 mt-1 md:ml-8">
                       {messageObj.vote === 0 && (
-                        <div className="flex gap-3 text-red-saathi text-sm md:text-2xl mr-4 items-center">
+                        <div className="flex gap-3 text-red-saathi text-md md:text-2xl mr-4 items-center">
                           <IoMdThumbsUp onClick={() => handleUpVote()} />
                           <IoMdThumbsDown onClick={() => handleDownVote()} />
                         </div>
@@ -283,7 +301,7 @@ const ChatPage = () => {
                           alt="avatar"
                           className="mr-1 w-4 h-4"
                         />
-                        Replay
+                        {isAudioPlaying ? "playing" : "Replay"}
                       </button>
                     </div>
                   </>
@@ -294,7 +312,7 @@ const ChatPage = () => {
         ) : (
           <div className="flex flex-col md:ml-10 h-full text-2xl text-black bg-red">
             <h1 className="chat-heading text-[24px] md:text-[46px]">
-              Hello, Welcome back!
+              Namaste, {isNewUser ? "Welcome to SAATHI" : "How can I help you?"}
             </h1>
             <h3 className="text-[#b3b3b3] mt-4 font-medium text-xl md:text-4xl">
               How can I help you today?
@@ -309,7 +327,7 @@ const ChatPage = () => {
             }`}
         >
           {isRecording ? (
-            <div className="z-10">
+            <div onClick={() => setIsRecording(false)} className="z-10">
               <Lottie options={defaultOptions} height={150} width={150} />
             </div>
           ) : (

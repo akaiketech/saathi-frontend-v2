@@ -5,6 +5,8 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 type GlobalContextProps = {
   language: string;
   setLanguage: React.Dispatch<React.SetStateAction<string>>;
+  isNewUser: boolean;
+  setNewUser: React.Dispatch<React.SetStateAction<boolean>>;
   voice: string;
   setVoice: React.Dispatch<React.SetStateAction<string>>;
   sessionId: string;
@@ -36,6 +38,7 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
   const [sessionId, setSessionId] = useState<string>("");
   const [location, setLocation] = useState<string>("");
   const [sideBarOpen, setSideBarOpen] = useState<boolean>(false);
+  const [isNewUser, setNewUser] = useState<boolean>(false);
 
   useEffect(() => {
     // get the language from localstorage
@@ -54,6 +57,8 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
       value={{
         language,
         setLanguage,
+        isNewUser,
+        setNewUser,
         voice,
         setVoice,
         sessionId,
