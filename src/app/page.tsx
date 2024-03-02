@@ -9,6 +9,7 @@ import Navbar from "../components/Navbar";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { createUser } from "../services";
 
 export default function Home() {
   const { user } = useUser();
@@ -16,6 +17,9 @@ export default function Home() {
 
   useEffect(() => {
     if (user) {
+      (async () => {
+        await createUser();
+      })();
       router.push("/preferences"); // Redirect if user exists
     }
   }, [user]);
@@ -73,7 +77,9 @@ const Headings = () => {
 const GetStarted = () => {
   return (
     <div className="text-center">
-      <div className="text-[24px] md:text-[40px] mb-3 font-medium">Get Started</div>
+      <div className="text-[24px] md:text-[40px] mb-3 font-medium">
+        Get Started
+      </div>
       <Link
         href="/api/auth/login"
         className="shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] rounded-3xl md:rounded-[60px] bg-[#ff725e] text-white text-[20px] md:text-[32px] font-medium  px-6 py-3 md:py-4 md:px-8"

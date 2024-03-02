@@ -11,14 +11,14 @@ export async function POST(req: NextRequest, res: NextApiResponse) {
     },
   });
 
-  const reqBody = await req.json();
-
-  console.log("Called POST /api/v1/get-conv");
+  console.log("Called POST /api/v1/create-user");
   try {
     const res = await axiosInstance.post(
-      "/api/v1/user/conversations",
-      reqBody,
-      { headers: { Authorization: `Bearer ${accessToken}` } },
+      "/api/v1/user",
+      {},
+      {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      },
     );
 
     if (res.status === 200) {

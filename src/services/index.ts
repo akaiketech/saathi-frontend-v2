@@ -1,3 +1,5 @@
+import { toast } from "react-toastify";
+
 export const acceptUserTnC = async () => {
   const res = await fetch("/api/v1/terms-update", { method: "POST" });
 
@@ -51,4 +53,24 @@ export const getConversations = async ({
     return { data, error: null };
   }
   return { data: null, error: "Unknown error occurred" };
+};
+
+export const createUser = async () => {
+  try {
+    const res = await fetch("/api/v1/create-user", { method: "POST" });
+    if (!res.ok) {
+      const errorText = `Failed to fetch the result.`;
+      return { data: null, error: errorText };
+    }
+    if (res.status === 200) {
+      const data = await res.json();
+      return { data, error: null };
+    }
+    toast.error("Failed to create user.");
+    return { data: null, error: "Unknown error occurred" };
+  } catch (error) {
+    toast.error("Failed to create user.");
+    const errorText = `Failed to create user.`;
+    return { data: null, error: errorText };
+  }
 };
