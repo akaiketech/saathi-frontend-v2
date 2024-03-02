@@ -14,7 +14,6 @@ import stopSvg from "../../assets/svgs/stop_tnc.svg";
 import { acceptUserTnC, checkUserTnCStatus } from "../../services";
 import { toast } from "react-toastify";
 import { generateSessionId } from "../../utils/utils";
-import { useChatContext } from "../chat/context/ChatContext";
 import { textToSpeech } from "../chat/util";
 import { SpeakerAudioDestination } from "microsoft-cognitiveservices-speech-sdk";
 
@@ -42,7 +41,6 @@ const TERMS_AND_CONDITIONS = {
 const Terms = () => {
   const router = useRouter();
   const { language, voice, setSessionId } = useGlobalContext();
-  const { isAudioPlaying, setIsAudioPlaying } = useChatContext();
   const [optionLang, setOptionLang] = useState({ accept: "", decline: "" });
   const [loading, setLoading] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -119,14 +117,13 @@ const Terms = () => {
                   language,
                   voice,
                   () => setIsPlaying(true),
-                  () => setIsAudioPlaying(false),
+                  () => setIsPlaying(false),
                 );
-
                 setTtsController(player);
               }}
               src={speakerSvg}
               alt="avatar"
-              className="ml-2 w-8 h-8"
+              className={`ml-2 w-8 h-8 ${loading ? "opacity-50 pointer-events-none" : ""} `}
             />
           ) : (
             <Image
