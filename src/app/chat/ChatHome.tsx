@@ -327,8 +327,11 @@ const ChatPage = () => {
             }`}
         >
           {isRecording ? (
-            <div onClick={() => setIsRecording(false)} className="z-10">
-              <Lottie options={defaultOptions} height={150} width={150} />
+            <div
+              onClick={() => setIsRecording(false)}
+              className="h-16 w-16 md:h-28 md:w-28 z-10"
+            >
+              <Lottie options={defaultOptions} />
             </div>
           ) : (
             <div
