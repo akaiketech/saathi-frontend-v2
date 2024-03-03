@@ -77,8 +77,9 @@ function Sidebar() {
       </nav>
       <div
         onClick={() => (window.location.href = "/api/auth/logout")}
-        className={`absolute flex gap-3 items-center z-50 cursor-pointer bottom-10 left-6 ${sideBarOpen ? "logout active" : "logout"
-          }`}
+        className={`absolute flex gap-3 items-center z-50 cursor-pointer bottom-10 left-6 ${
+          sideBarOpen ? "logout active" : "logout"
+        }`}
       >
         <Image className="w-auto h-12" src={logout} alt="logout" />
         <span className="flex md:hidden text-[16px] text-[#7b7b7b] font-medium">
@@ -98,30 +99,56 @@ const Pagination: React.FC<PaginationProps> = ({ pageSize }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [allFetched, setAllFetched] = useState(false);
-  const { setSessionId, setSideBarOpen, setLocation, setLanguage } =
+  const {location, language,sessionId, setSessionId, setSideBarOpen, setLocation, setLanguage } =
     useGlobalContext();
   const { setMessages } = useChatContext();
 
-  const setMessageResponse = (messsageObjList: any[]) => {
+  const setMessageResponse = (messsageObjList: any[], conversation_id: string) => {
     const newMessages = messsageObjList.map((messageObj) => {
       const {
         query_id,
         english_query,
-        // english_response,
-        // language_query,
+        english_response,
+        language_query,
         feedback,
         language_response,
       } = messageObj;
+
+      const mesgConv = conv.find((conv) => conv.conversation_id === conversation_id);
+
+      const questionObj = {
+        englishText: english_query,
+        hindiText: "",
+        kannadaText: "",
+        tamilText: "",
+        audio: "",
+      };
+
+      let answer = english_response;
+
+      if (mesgConv) {
+        switch (mesgConv?.conversation_language.toLowerCase()) {
+          case "hindi":
+            questionObj.hindiText = language_query;
+            answer = language_response;
+            break;
+
+          case "kannada":
+            questionObj.kannadaText = language_query;
+            answer = language_response;
+            break;
+
+          case "tamil":
+            questionObj.tamilText = language_query;
+            answer = language_response;
+            break;
+        }
+      }
+
       return {
         id: query_id,
-        question: {
-          englishText: english_query,
-          hindiText: english_query,
-          kannadaText: "",
-          tamilText: "",
-          audio: "",
-        },
-        answer: language_response,
+        question: questionObj,
+        answer,
         isLoading: false,
         vote: feedback,
       };
@@ -156,8 +183,7 @@ const Pagination: React.FC<PaginationProps> = ({ pageSize }) => {
       }
 
       if (res.data.paginated_messages) {
-        console.log(res.data.paginated_messages);
-        const newMsg = setMessageResponse(res.data.paginated_messages);
+        const newMsg = setMessageResponse(res.data.paginated_messages, conversation_id);
         setMessages(newMsg as Message[]);
       }
     } catch (error) {
@@ -218,8 +244,9 @@ const Pagination: React.FC<PaginationProps> = ({ pageSize }) => {
         {loading && <p>Loading...</p>}
         {!loading && (
           <button
-            className={`text-red-saathi font-medium py-2 px-4 bg-[#dbdbdb] rounded-[40px] my-2 ${allFetched ? "pointer-events-none opacity-50" : ""
-              }`}
+            className={`text-red-saathi font-medium py-2 px-4 bg-[#dbdbdb] rounded-[40px] my-2 ${
+              allFetched ? "pointer-events-none opacity-50" : ""
+            }`}
             onClick={handleLoadMore}
             disabled={loading || allFetched}
           >

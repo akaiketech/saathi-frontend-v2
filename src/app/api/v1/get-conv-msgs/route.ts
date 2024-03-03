@@ -13,7 +13,6 @@ export async function POST(req: NextRequest, res: NextApiResponse) {
 
   const reqBody = await req.json();
 
-  console.log(reqBody)
   console.log("Called POST /api/v1/get-conv-msgs");
   try {
     const res = await axiosInstance.post(

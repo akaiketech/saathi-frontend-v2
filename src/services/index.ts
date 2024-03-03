@@ -39,7 +39,6 @@ export const getConversations = async ({
   page: number;
   page_size: number;
 }) => {
-  console.log(page, page_size);
   const res = await fetch("/api/v1/get-conv", {
     method: "POST",
     body: JSON.stringify({ page, page_size }),
@@ -91,7 +90,6 @@ export const getConversationMsgs = async ({
   }
   if (res.status === 200) {
     const data = await res.json();
-    console.log(data)
     return { data, error: null };
   }
   return { data: null, error: "Unknown error occurred" };

@@ -86,7 +86,6 @@ const Terms = () => {
   };
 
   const handleStopReplay = () => {
-    console.log(ttsController)
     ttsController?.pause();
 
     ttsController?.close(() => {
