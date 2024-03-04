@@ -127,6 +127,27 @@ const Start = ({
   language: string;
   onClick?: () => void;
 }) => {
+  const [startNowLang, setStartNowLang] = useState("START");
+
+  useEffect(() => {
+    switch (language.toLowerCase()) {
+      case "hindi":
+        setStartNowLang("शुरू करें");
+        break;
+
+      case "kannada":
+        setStartNowLang("ಪ್ರಾರಂಭಿಸಿ");
+        break;
+
+      case "tamil":
+        setStartNowLang("தொடங்கு");
+        break;
+
+      default:
+        setStartNowLang("START");
+    }
+  }, [language]);
+
   return (
     <div>
       <button
@@ -134,7 +155,7 @@ const Start = ({
         onClick={onClick}
         className="flex justify-center items-center shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] rounded-[50px] md:rounded-[60px] bg-[#ff725e] text-white text-2xl md:text-[64px] font-medium px-6 py-3 md:py-8 md:px-8"
       >
-        {language === "Hindi" ? "शुरू करें" : "START"}
+        {startNowLang}
         <span className="w-8 md:w-16 ml-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
