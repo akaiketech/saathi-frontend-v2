@@ -24,7 +24,7 @@ type Props = {
 const PreferenceForm = ({ isModal }: Props) => {
   const router = useRouter();
   const [nextRoute, setNextRoute] = useState("/terms");
-  const { language, setLanguage, setLocation, setSessionId } =
+  const { language, location, setLanguage, setLocation, setSessionId } =
     useGlobalContext();
   const initVals: FormValues = {
     language: "",
@@ -80,7 +80,7 @@ const PreferenceForm = ({ isModal }: Props) => {
             <Dropdown
               label="Select Location"
               options={LOCATIONS}
-              value={values.state}
+              value={values.state === "" ? location : values.state}
               onChange={(val) => {
                 setFieldValue("state", val);
                 setFieldValue("language", loc2lang[val]);
@@ -91,7 +91,7 @@ const PreferenceForm = ({ isModal }: Props) => {
             <Dropdown
               label="Select Language"
               options={LANGUAGES}
-              value={values.language}
+              value={values.language === "" ? language : values.language}
               onChange={(val) => {
                 setFieldValue("language", val);
                 onLanguageChange(val);

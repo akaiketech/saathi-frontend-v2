@@ -11,6 +11,8 @@ import avatar from "../../assets/svgs/avatar.svg";
 import replaySvg from "../../assets/svgs/replay.svg";
 import submitBtn from "../../assets/svgs/submitBtn.svg";
 import { IoMdThumbsDown, IoMdThumbsUp } from "react-icons/io";
+import { IoLanguage } from "react-icons/io5";
+import { IoLocationOutline } from "react-icons/io5";
 
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import {
@@ -30,18 +32,21 @@ import { useChatContext } from "./context/ChatContext";
 import { Message } from "../../types";
 import { generateSessionId } from "../../utils/utils";
 import NewConv from "./components/NewConv";
+import { FaPlus } from "react-icons/fa6";
 
 const ChatPage = () => {
   const router = useRouter();
   const {
+    voice,
+    location,
     language,
     prefModal,
-    location,
     sessionId,
-    voice,
-    sideBarOpen,
     isNewUser,
+    sideBarOpen,
+    setPrefModal,
     setSessionId,
+    setSideBarOpen,
   } = useGlobalContext();
   const {
     conv,
@@ -162,17 +167,84 @@ const ChatPage = () => {
     });
   };
 
+  const getMobileValues = () => {
+    let language = "Hi";
+    let location = "MP";
+    switch (language.toLowerCase()) {
+      case "english":
+        language = "en";
+        break;
+
+      case "tamil":
+        language = "ta";
+        break;
+
+      case "kannada":
+        language = "kn";
+        break;
+    }
+
+    switch (location.toLowerCase()) {
+      case "Karnataka":
+        location = "KA";
+        break;
+
+      case "Tamil Nadu":
+        location = "TN";
+        break;
+    }
+    return {
+      language,
+      location,
+    };
+  };
+
+  const handleNewChat = () => {
+    setPrefModal(true);
+    setSideBarOpen(false);
+  };
+
   return (
-    <main className={`flex transition-all duration-300 ease-in-out flex-col justify-end pt-6 pl-6 pr-6 ${prefModal && "blur pointer-events-none"}`}>
+    <main
+      className={`flex transition-all duration-300 ease-in-out flex-col justify-end pt-6 pl-6 pr-6 ${
+        prefModal && "blur pointer-events-none"
+      }`}
+    >
       <Sidebar />
-      <header className="flex">
+      <header className="flex gap-2 md:justify-between">
         <h2
-          className={`text-red-saathi text-[24px] mt-2 md:mt-0 md:text-[48px] not-italic ml-20 z-50 font-bold leading-[normal] transition-all duration-500 ease-in-out ${
+          className={`text-red-saathi text-[24px] mt-2 md:mt-0 md:text-[48px] not-italic ml-12 md:ml-20 z-50 font-bold leading-[normal] transition-all duration-500 ease-in-out ${
             sideBarOpen && "md:ml-[240px]"
           }`}
         >
           SAATHI
         </h2>
+        {messages.length > 0 ? (
+          <div className="flex w-full justify-between md:justify-end">
+            <div className="flex flex-col text-sm text-[#455a64]">
+              <div className="flex gap-1 md:gap-2 items-center">
+                <IoLocationOutline
+                  color="#ff725e"
+                  className="text-sm md:text-2xl"
+                />
+
+                <p className="block md:hidden">{getMobileValues().location}</p>
+                <p className="hidden md:block">{location}</p>
+              </div>
+              <div className="flex gap-1 md:gap-2 items-center">
+                <IoLanguage color="#ff725e" className="text-sm md:text-2xl" />
+                <p className="block md:hidden">{getMobileValues().language}</p>
+                <p className="hidden md:block">{language}</p>
+              </div>
+            </div>
+            <div
+              onClick={handleNewChat}
+              className="flex md:hidden items-center justify-center bg-[#dbdbdb] h-8 w-8 rounded-full"
+            >
+              <FaPlus size={20} color="#7b7b7b" />
+            </div>
+          </div>
+        ) : null}
         {isFeedbackDialogOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
             <div className="p-8 bg-white rounded-lg w-96">

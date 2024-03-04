@@ -5,12 +5,15 @@ import Image from "next/image";
 import hamOpen from "../assets/svgs/sidebarOpen.svg";
 import hamClose from "../assets/svgs/sidebarClose.svg";
 import logout from "../assets/svgs/logout.svg";
+import homeBtn from "../assets/svgs/Homebutton.svg";
 import "../styles/sidebar.css";
 import { useGlobalContext } from "../hooks/context";
 import { getConversations } from "../services";
 import { toast } from "react-toastify";
 import { useChatContext } from "../app/chat/context/ChatContext";
 import { Conversation } from "../types";
+
+import { useRouter } from "next/navigation";
 
 const fetchData = async (page: number, page_size: number) => {
   const conversations = await getConversations({ page, page_size });
@@ -51,6 +54,7 @@ const scrollToTop = (containerRef: any, options = {} as any) => {
 };
 
 function Sidebar() {
+  const router = useRouter();
   const { sideBarOpen, setPrefModal, setSideBarOpen } = useGlobalContext();
   const handleNewChat = () => {
     setPrefModal(true);
@@ -61,15 +65,24 @@ function Sidebar() {
 
   return (
     <>
-      <div onClick={showSidebar} className="z-50 absolute top-6 left-6">
+      <div
+        onClick={showSidebar}
+        className="z-50 absolute top-6 md:top-8 left-6"
+      >
         <Image src={sideBarOpen ? hamClose : hamOpen} alt="hamburger" />
+      </div>
+      <div
+        onClick={() => router.replace("/preferences")}
+        className="z-50 absolute top-24 left-6 hidden md:block"
+      >
+        <Image src={homeBtn} alt="homeBtn" />
       </div>
       <div
         onClick={handleNewChat}
         className={sideBarOpen ? "newChat active" : "newChat"}
       >
         <FaPlus size={20} color="#7b7b7b" />
-        <span className={sideBarOpen ? "" : "hidden"}>New Chat</span>
+        <span className={`overflow-ellipsis whitespace-nowrap overflow-x-hidden ${sideBarOpen ? "block" : "hidden"}`}>New Chat</span>
       </div>
       <nav className={sideBarOpen ? "sidebar active" : "sidebar"}>
         <div className="flex flex-col items-center mt-48 md:mt-64">

@@ -53,7 +53,7 @@ const NewConv = ({ isNewUser, conversations }: Props) => {
               <p className="text-[8px] md:text-[10px] text-end text-[#455a64]">
                 {moment(item.created_at).format("DD MMMM YYYY")}
               </p>
-              <h2 className="text-2xl overflow-x-hidden w-full text-[#ff725e] font-bold -mt-2 overflow-ellipsis whitespace-nowrap ">
+              <h2 className="text-2xl overflow-x-hidden w-full text-[#ff725e] font-bold -mt-2 overflow-ellipsis whitespace-nowrap">
                 {item.conversation_title}
               </h2>
 
