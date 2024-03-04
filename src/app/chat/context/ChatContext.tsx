@@ -12,13 +12,17 @@ import {
 import * as sdk from "microsoft-cognitiveservices-speech-sdk";
 
 import { textToSpeech } from "../util";
-import { Message } from "../../../types";
+import { Conversation, Message } from "../../../types";
+import { useGlobalContext } from "../../../hooks/context";
+import { getConversationMsgs } from "../../../services";
+import { toast } from "react-toastify";
 
 interface ChatContextType {
   isLoading: boolean;
   isRecording: boolean;
   isAudioPlaying: boolean;
   messages: Message[];
+  conv: Conversation[];
   currentPlayingIndex: number | undefined;
   ttsController: sdk.SpeakerAudioDestination | null;
   defaultMsgIsPlaying: boolean;
@@ -26,6 +30,7 @@ interface ChatContextType {
   isCancelled: boolean;
   replayAudio: (index: number, language: string, voice: string) => void;
   stopPlayingAudio: () => void;
+  setConv: Dispatch<SetStateAction<Conversation[]>>;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   setIsAudioPlaying: Dispatch<SetStateAction<boolean>>;
   setIsRecording: Dispatch<SetStateAction<boolean>>;
@@ -39,6 +44,11 @@ interface ChatContextType {
     SetStateAction<sdk.SpeakerAudioDestination | null>
   >;
   setIsCancelled: Dispatch<SetStateAction<boolean>>;
+  openConversation: (
+    conversation_id: string,
+    conversationLocation: string,
+    conversationLanguage: string,
+  ) => Promise<void>;
 }
 
 const ChatContext = createContext<ChatContextType>({} as ChatContextType);
@@ -59,6 +69,9 @@ export const ChatProvider: FC<Props> = ({ children }) => {
   const [defaultMsgPlayer, setDefaultMsgPlayer] =
     useState<sdk.SpeakerAudioDestination | null>(null);
   const [isCancelled, setIsCancelled] = useState(false);
+  const [conv, setConv] = useState<Conversation[]>([]);
+  const { setLanguage, setLocation, setSideBarOpen, setSessionId } =
+    useGlobalContext();
 
   const replayAudio = (index: number, language: string, voice: string) => {
     if (currentPlayingIndex !== null || isAudioPlaying) {
@@ -97,6 +110,116 @@ export const ChatProvider: FC<Props> = ({ children }) => {
     setTtsController(null);
   };
 
+  const setMessageResponse = (
+    messsageObjList: any[],
+    conversation_id: string,
+  ) => {
+    const newMessages = messsageObjList.map((messageObj) => {
+      const {
+        query_id,
+        english_query,
+        english_response,
+        language_query,
+        feedback,
+        language_response,
+      } = messageObj;
+
+      const mesgConv = conv.find(
+        (conv) => conv.conversation_id === conversation_id,
+      );
+
+      const questionObj = {
+        englishText: english_query,
+        hindiText: "",
+        kannadaText: "",
+        tamilText: "",
+        audio: "",
+      };
+
+      let answer = english_response;
+
+      if (mesgConv) {
+        switch (mesgConv?.conversation_language.toLowerCase()) {
+          case "hindi":
+            questionObj.hindiText = language_query;
+            answer = language_response;
+            break;
+
+          case "kannada":
+            questionObj.kannadaText = language_query;
+            answer = language_response;
+            break;
+
+          case "tamil":
+            questionObj.tamilText = language_query;
+            answer = language_response;
+            break;
+        }
+      }
+
+      return {
+        id: query_id,
+        question: questionObj,
+        answer,
+        isLoading: false,
+        vote: feedback,
+      };
+    });
+
+    return newMessages;
+  };
+
+  const openConversation = async (
+    conversation_id: string,
+    conversationLocation: string,
+    conversationLanguage: string,
+  ) => {
+    try {
+      setIsLoading(true);
+      const res = await getConversationMsgs({
+        conversation_id,
+        page: 1,
+        page_size: 10,
+      });
+
+      setSideBarOpen(false);
+      setSessionId(conversation_id);
+      setLocation(conversationLocation);
+      setLanguage(conversationLanguage);
+      setIsLoading(false);
+
+      const selectedConv = conv.find(
+        (conv) => conv.conversation_id === conversation_id,
+      );
+
+      if (selectedConv) {
+        const filteredConv = conv.filter(
+          (conv) => conv.conversation_id !== conversation_id,
+        );
+
+        setConv([selectedConv, ...filteredConv]);
+      }
+
+      if (res.error) {
+        toast.error(res.error, {
+          autoClose: 5000,
+          position: "top-right",
+        });
+        return;
+      }
+
+      if (res.data.paginated_messages) {
+        const newMsg = setMessageResponse(
+          res.data.paginated_messages,
+          conversation_id,
+        );
+        setMessages(newMsg as Message[]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <ChatContext.Provider
       value={{
@@ -104,6 +227,7 @@ export const ChatProvider: FC<Props> = ({ children }) => {
         isAudioPlaying,
         isLoading,
         messages,
+        conv,
         currentPlayingIndex,
         ttsController,
         defaultMsgIsPlaying,
@@ -120,6 +244,8 @@ export const ChatProvider: FC<Props> = ({ children }) => {
         setDefaultMsgIsPlaying,
         setDefaultMsgPlayer,
         setIsCancelled,
+        setConv,
+        openConversation,
       }}
     >
       {children}

@@ -24,11 +24,12 @@ import Image from "next/image";
 import { useGlobalContext } from "../../hooks/context";
 
 import animationData from "./mike-animation.json";
-import loadingData from "./loading.json";
+import loadingData from "../../lottie/loading.json";
 import Sidebar from "../../components/Sidebar";
 import { useChatContext } from "./context/ChatContext";
 import { Message } from "../../types";
 import { generateSessionId } from "../../utils/utils";
+import NewConv from "./components/NewConv";
 
 const ChatPage = () => {
   const router = useRouter();
@@ -42,6 +43,7 @@ const ChatPage = () => {
     setSessionId,
   } = useGlobalContext();
   const {
+    conv,
     messages,
     isLoading,
     isRecording,
@@ -164,8 +166,9 @@ const ChatPage = () => {
       <Sidebar />
       <header className="flex">
         <h2
-          className={`text-red-saathi text-[24px] mt-2 md:mt-0 md:text-[48px] not-italic ml-20 z-50 font-bold leading-[normal] transition-all duration-500 ease-in-out ${sideBarOpen && "md:ml-[240px]"
-            }`}
+          className={`text-red-saathi text-[24px] mt-2 md:mt-0 md:text-[48px] not-italic ml-20 z-50 font-bold leading-[normal] transition-all duration-500 ease-in-out ${
+            sideBarOpen && "md:ml-[240px]"
+          }`}
         >
           SAATHI
         </h2>
@@ -179,8 +182,9 @@ const ChatPage = () => {
                 {[1, 2, 3, 4, 5].map((rating) => (
                   <button
                     key={rating}
-                    className={`p-2 text-4xl  ${starRating >= rating ? "text-yellow-500" : "text-gray-300"
-                      }`}
+                    className={`p-2 text-4xl  ${
+                      starRating >= rating ? "text-yellow-500" : "text-gray-300"
+                    }`}
                     onClick={() => handleRatingClick(rating)}
                   >
                     ★
@@ -225,8 +229,9 @@ const ChatPage = () => {
         )}
       </header>
       <div
-        className={`h-[calc(100vh-280px)] md:h-[calc(100vh-400px)] ml-0 mt-10 overflow-auto transition-all duration-500 ${sideBarOpen ? "md:ml-[240px]" : "md:ml-20"
-          }`}
+        className={`h-[calc(100vh-280px)] md:h-[calc(100vh-400px)] ml-0 mt-10 overflow-auto transition-all duration-500 ${
+          sideBarOpen ? "md:ml-[240px]" : "md:ml-20"
+        }`}
         ref={messagesEndRef}
       >
         {messages.length ? (
@@ -310,33 +315,28 @@ const ChatPage = () => {
             </div>
           ))
         ) : (
-          <div className="flex flex-col md:ml-10 h-full text-2xl text-black bg-red">
-            <h1 className="chat-heading text-[24px] md:text-[46px]">
-              Namaste, {isNewUser ? "Welcome to SAATHI" : "How can I help you?"}
-            </h1>
-            <h3 className="text-[#b3b3b3] mt-4 font-medium text-xl md:text-4xl">
-              How can I help you today?
-            </h3>
-          </div>
+          <NewConv isNewUser={isNewUser} conversations={conv.slice(0, 2)} />
         )}
       </div>
 
       <footer>
         <div
-          className={`flex flex-col items-center z-10 md:ml-20 justify-center transition-all duration-500 ease-in-out ${sideBarOpen && "md:ml-[240px]"
-            }`}
+          className={`flex flex-col items-center z-10 md:ml-20 justify-center transition-all duration-500 ease-in-out ${
+            sideBarOpen && "md:ml-[240px]"
+          }`}
         >
           {isRecording ? (
             <div
               onClick={() => setIsRecording(false)}
-              className="h-16 w-16 md:h-28 md:w-28 z-10"
+              className="h-24 w-24 md:h-28 md:w-28 z-20"
             >
               <Lottie options={defaultOptions} />
             </div>
           ) : (
             <div
-              className={`flex flex-col z-10 items-center gap-4 ${isAudioPlaying ? "opacity-50" : ""
-                }`}
+              className={`flex flex-col z-10 items-center gap-4 ${
+                isAudioPlaying ? "opacity-50" : ""
+              }`}
               onClick={() => {
                 if (isAudioPlaying || isLoading) return;
                 setIsRecording(true);
@@ -379,7 +379,13 @@ const ChatPage = () => {
                 handleSubmit();
               }}
             >
-              <Image src={submitBtn} alt="submitBtn" height={30} width={30} />
+              <Image
+                src={submitBtn}
+                className="cursor-pointer active:scale-90 transition-all duration-150"
+                alt="submitBtn"
+                height={30}
+                width={30}
+              />
             </div>
           </div>
         </div>

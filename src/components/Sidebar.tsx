@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FaPlus } from "react-icons/fa6";
 import { CiChat1 } from "react-icons/ci";
 import Image from "next/image";
@@ -10,15 +10,7 @@ import { useGlobalContext } from "../hooks/context";
 import { getConversationMsgs, getConversations } from "../services";
 import { toast } from "react-toastify";
 import { useChatContext } from "../app/chat/context/ChatContext";
-import { Message } from "../types";
-
-interface Conversation {
-  conversation_id: string;
-  conversation_title: string;
-  conversation_location: string;
-  conversation_language: string;
-  // Add other properties as needed
-}
+import { Conversation, Message } from "../types";
 
 const fetchData = async (page: number, page_size: number) => {
   const conversations = await getConversations({ page, page_size });
@@ -39,6 +31,23 @@ const fetchData = async (page: number, page_size: number) => {
       data: conversations.data,
     };
   }
+};
+
+const scrollToTop = (containerRef: any, options = {} as any) => {
+  // Check if the containerRef is valid
+  if (!containerRef.current) {
+    console.warn("Container reference not found", containerRef);
+    return;
+  }
+
+  // Options:
+  const behavior = options.behavior || "smooth"; // Default: smooth scrolling
+  const top = options.top || 0; // Default: scroll to the top
+
+  containerRef.current.scrollTo({
+    top,
+    behavior,
+  });
 };
 
 const handleNewChat = () => {
@@ -95,101 +104,18 @@ interface PaginationProps {
 }
 
 const Pagination: React.FC<PaginationProps> = ({ pageSize }) => {
-  const [conv, setConv] = useState<Conversation[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [allFetched, setAllFetched] = useState(false);
-  const {location, language,sessionId, setSessionId, setSideBarOpen, setLocation, setLanguage } =
+  const { sessionId, setSessionId, setSideBarOpen, setLocation, setLanguage } =
     useGlobalContext();
-  const { setMessages } = useChatContext();
+  const { conv, setConv, setMessages, openConversation } = useChatContext();
+  const [scroll, setScroll] = useState(false);
+  const containerRef = useRef(null);
 
-  const setMessageResponse = (messsageObjList: any[], conversation_id: string) => {
-    const newMessages = messsageObjList.map((messageObj) => {
-      const {
-        query_id,
-        english_query,
-        english_response,
-        language_query,
-        feedback,
-        language_response,
-      } = messageObj;
-
-      const mesgConv = conv.find((conv) => conv.conversation_id === conversation_id);
-
-      const questionObj = {
-        englishText: english_query,
-        hindiText: "",
-        kannadaText: "",
-        tamilText: "",
-        audio: "",
-      };
-
-      let answer = english_response;
-
-      if (mesgConv) {
-        switch (mesgConv?.conversation_language.toLowerCase()) {
-          case "hindi":
-            questionObj.hindiText = language_query;
-            answer = language_response;
-            break;
-
-          case "kannada":
-            questionObj.kannadaText = language_query;
-            answer = language_response;
-            break;
-
-          case "tamil":
-            questionObj.tamilText = language_query;
-            answer = language_response;
-            break;
-        }
-      }
-
-      return {
-        id: query_id,
-        question: questionObj,
-        answer,
-        isLoading: false,
-        vote: feedback,
-      };
-    });
-
-    return newMessages;
-  };
-
-  const openConversation = async (
-    conversation_id: string,
-    conversationLocation: string,
-    conversationLanguage: string,
-  ) => {
-    try {
-      const res = await getConversationMsgs({
-        conversation_id,
-        page: 1,
-        page_size: 10,
-      });
-
-      setSideBarOpen(false);
-      setSessionId(conversation_id);
-      setLocation(conversationLocation);
-      setLanguage(conversationLanguage);
-
-      if (res.error) {
-        toast.error(res.error, {
-          autoClose: 5000,
-          position: "top-right",
-        });
-        return;
-      }
-
-      if (res.data.paginated_messages) {
-        const newMsg = setMessageResponse(res.data.paginated_messages, conversation_id);
-        setMessages(newMsg as Message[]);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  useEffect(() => {
+    scrollToTop(containerRef);
+  }, [scroll]);
 
   useEffect(() => {
     const fetchDataAndUpdateState = async () => {
@@ -215,20 +141,28 @@ const Pagination: React.FC<PaginationProps> = ({ pageSize }) => {
   };
 
   return (
-    conv?.length > 0 && (
-      <div className="mx-6">
-        <div className="text-lg mb-4 font-bold text-[#565656]">Recent</div>
-        <ul className="max-h-[calc(100vh-440px)] md:max-h-[calc(100vh-400px)] overflow-auto">
+    conv.length > 0 && (
+      <div className="mx-3">
+        <div className="text-lg mb-4 ml-3 font-bold text-[#565656]">Recent</div>
+        <ul
+          ref={containerRef}
+          className="max-h-[calc(100vh-440px)] md:max-h-[calc(100vh-450px)] py-1 overflow-auto"
+        >
           {conv.map((item, index) => (
             <li
-              onClick={() =>
+              onClick={() => {
                 openConversation(
                   item.conversation_id,
                   item.conversation_location,
                   item.conversation_language,
-                )
-              }
-              className="flex relative items-center max-w-52 mb-2 text-[#455a64] py-2 px-6 gap-2 chat-bg rounded-[40px]"
+                );
+                setScroll(!scroll);
+              }}
+              className={`flex relative items-center max-w-52 mb-2 text-[#455a64] py-2 px-6 mx-1 gap-2 chat-bg rounded-[40px] cursor-pointer ${
+                item.conversation_id === sessionId
+                  ? " ring-2 ring-[#ff725e]"
+                  : ""
+              }`}
               key={index}
             >
               <CiChat1 size={24} color="#455a64" />
@@ -241,7 +175,11 @@ const Pagination: React.FC<PaginationProps> = ({ pageSize }) => {
             </li>
           ))}
         </ul>
-        {loading && <p>Loading...</p>}
+        {loading && (
+          <div className="flex justify-center my-4">
+            <span>Loading...</span>
+          </div>
+        )}
         {!loading && (
           <button
             className={`text-red-saathi font-medium py-2 px-4 bg-[#dbdbdb] rounded-[40px] my-2 ${

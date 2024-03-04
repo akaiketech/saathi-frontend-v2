@@ -71,6 +71,7 @@ export const textToSpeech = (
   onStart: any,
   onEnd: any,
 ) => {
+  console.log(text)
   const speechKey = process.env.NEXT_PUBLIC_SPEECH_KEY as string;
   const serviceRegion = process.env.NEXT_PUBLIC_SPEECH_REGION as string;
 
@@ -223,31 +224,27 @@ export const translationOnceFromMic = ({
   );
 
   translationConfig.setProperty(sdk.PropertyId.Speech_SegmentationSilenceTimeoutMs, "3000");
-
   language = language.toLowerCase();
 
   switch (language) {
     case "hindi":
       translationConfig.speechRecognitionLanguage = "hi-IN";
-      translationConfig.addTargetLanguage("hi");
       break;
 
     case "kannada":
       translationConfig.speechRecognitionLanguage = "kn-IN";
-      translationConfig.addTargetLanguage("kn");
       break;
 
     case "tamil":
       translationConfig.speechRecognitionLanguage = "ta-IN";
-      translationConfig.addTargetLanguage("ta");
       break;
 
     default:
-      translationConfig.speechRecognitionLanguage = "en-US";
-      translationConfig.addTargetLanguage("en");
-      break;
+      translationConfig.speechRecognitionLanguage = "en-IN";
   }
 
+  // translationConfig.speechRecognitionLanguage = "en-US";
+  translationConfig.addTargetLanguage("en");
   // Set silence timeout in milliseconds
   // translationConfig.setProperty(
   //   sdk.PropertyId[
@@ -317,26 +314,32 @@ export const translationOnceFromMic = ({
           language_query: "",
         };
 
+        console.log(result)
+
         // Get question text based on language
         switch (language) {
           case "hindi":
-            message.question.hindiText = result.translations.get("hi");
-            reqBody.language_query = result.translations.get("hi");
+            message.question.hindiText = result.text
+            reqBody.language_query = result.text
             break;
 
           case "kannada":
-            message.question.kannadaText = result.translations.get("kn");
-            reqBody.language_query = result.translations.get("kn");
+            message.question.kannadaText = result.text
+            reqBody.language_query = result.text
             break;
 
           case "tamil":
-            message.question.tamilText = result.translations.get("ta");
-            reqBody.language_query = result.translations.get("ta");
+            message.question.tamilText = result.text
+            reqBody.language_query = result.text
             break;
+
+          default:
+            message.question.englishText = result.text
+            reqBody.language_query = result.text
         }
 
         // always get english text
-        message.question.englishText = result.translations.get("en");
+        // message.question.englishText = result.translations.get("en");
         message.isLoading = true;
 
         setMessages((prevMsgs) => [...prevMsgs, message]);
@@ -346,6 +349,7 @@ export const translationOnceFromMic = ({
         if (data) {
           message.answer = data.answer;
         }
+
         message.isLoading = false;
 
         setMessages((prevMsgs) => {
@@ -356,6 +360,8 @@ export const translationOnceFromMic = ({
         });
 
         const textToSpeak = message.answer;
+
+        console.log('called', message)
 
         const controller = textToSpeech(
           textToSpeak,

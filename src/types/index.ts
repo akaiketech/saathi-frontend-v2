@@ -23,3 +23,13 @@ export type QueryReqBody = {
   user_audio?: string;
   language_query?: string;
 };
+
+export interface Conversation {
+  conversation_id: string;
+  conversation_title: string;
+  conversation_location: string;
+  conversation_language: string;
+  created_at: string;
+  // Add other properties as needed
+}
+
