@@ -5,6 +5,8 @@ import { IoLocationOutline } from "react-icons/io5";
 
 import { Conversation } from "../../../types";
 import { useChatContext } from "../context/ChatContext";
+import animationData from "../../../lottie/loading.json";
+import Lottie from "react-lottie";
 
 type Props = {
   isNewUser: boolean;
@@ -13,6 +15,14 @@ type Props = {
 
 const NewConv = ({ isNewUser, conversations }: Props) => {
   const { isLoading, openConversation } = useChatContext();
+  const defaultOptionsForLoading = {
+    loop: true,
+    autoplay: true,
+    animationData: animationData,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+    },
+  };
 
   return !isLoading ? (
     <div className="flex flex-col md:ml-10 h-full text-2xl text-black bg-red">
@@ -71,7 +81,9 @@ const NewConv = ({ isNewUser, conversations }: Props) => {
       </div>
     </div>
   ) : (
-    <div>loading</div>
+    <div>
+      <Lottie options={defaultOptionsForLoading} height={200} width={200} />
+    </div>
   );
 };
 
