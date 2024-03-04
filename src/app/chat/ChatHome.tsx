@@ -35,6 +35,7 @@ const ChatPage = () => {
   const router = useRouter();
   const {
     language,
+    prefModal,
     location,
     sessionId,
     voice,
@@ -162,7 +163,7 @@ const ChatPage = () => {
   };
 
   return (
-    <main className="flex flex-col justify-end pt-6 pl-6 pr-6">
+    <main className={`flex transition-all duration-300 ease-in-out flex-col justify-end pt-6 pl-6 pr-6 ${prefModal && "blur pointer-events-none"}`}>
       <Sidebar />
       <header className="flex">
         <h2

@@ -24,7 +24,7 @@ const NewConv = ({ isNewUser, conversations }: Props) => {
     },
   };
 
-  return !isLoading ? (
+  return !isLoading && conversations.length ? (
     <div className="flex flex-col md:ml-10 h-full text-2xl text-black bg-red">
       <h1 className="chat-heading text-[24px] md:text-[46px]">
         Namaste, {isNewUser ? "Welcome to SAATHI" : "Welcome back!"}

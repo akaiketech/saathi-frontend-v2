@@ -7,10 +7,10 @@ import hamClose from "../assets/svgs/sidebarClose.svg";
 import logout from "../assets/svgs/logout.svg";
 import "../styles/sidebar.css";
 import { useGlobalContext } from "../hooks/context";
-import { getConversationMsgs, getConversations } from "../services";
+import { getConversations } from "../services";
 import { toast } from "react-toastify";
 import { useChatContext } from "../app/chat/context/ChatContext";
-import { Conversation, Message } from "../types";
+import { Conversation } from "../types";
 
 const fetchData = async (page: number, page_size: number) => {
   const conversations = await getConversations({ page, page_size });
@@ -50,12 +50,12 @@ const scrollToTop = (containerRef: any, options = {} as any) => {
   });
 };
 
-const handleNewChat = () => {
-  window.location.href = "/chat";
-};
-
 function Sidebar() {
-  const { sideBarOpen, setSideBarOpen } = useGlobalContext();
+  const { sideBarOpen, setPrefModal, setSideBarOpen } = useGlobalContext();
+  const handleNewChat = () => {
+    setPrefModal(true);
+    setSideBarOpen(false);
+  };
 
   const showSidebar = () => setSideBarOpen(!sideBarOpen);
 
@@ -107,9 +107,8 @@ const Pagination: React.FC<PaginationProps> = ({ pageSize }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [allFetched, setAllFetched] = useState(false);
-  const { sessionId, setSessionId, setSideBarOpen, setLocation, setLanguage } =
-    useGlobalContext();
-  const { conv, setConv, setMessages, openConversation } = useChatContext();
+  const { sessionId } = useGlobalContext();
+  const { conv, setConv, openConversation } = useChatContext();
   const [scroll, setScroll] = useState(false);
   const containerRef = useRef(null);
 
