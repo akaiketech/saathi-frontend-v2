@@ -27,7 +27,7 @@ const NewConv = ({ isNewUser, conversations }: Props) => {
   return !isLoading ? (
     <div className="flex flex-col md:ml-10 h-full text-2xl text-black bg-red">
       <h1 className="chat-heading text-[24px] md:text-[46px]">
-        Namaste, {isNewUser ? "Welcome to SAATHI" : "How can I help you?"}
+        Namaste, {isNewUser ? "Welcome to SAATHI" : "Welcome back!"}
       </h1>
       <h3 className="text-[#b3b3b3] mt-4 font-medium text-xl md:text-4xl">
         How can I help you today?
@@ -48,12 +48,12 @@ const NewConv = ({ isNewUser, conversations }: Props) => {
                   item.conversation_language,
                 );
               }}
-              className="md:w-1/2 mt-3 md:mt-6 bg-[#e9e9e9] rounded-2xl md:rounded-3xl px-2 md:px-4 pb-4"
+              className="md:w-[48%] mt-3 md:mt-6 bg-[#e9e9e9] rounded-2xl md:rounded-3xl px-2 md:px-4 pb-4"
             >
-              <p className="text-[8px] md:text-[10px] text-end text-[#455a64] mr-2 md:mr-4">
+              <p className="text-[8px] md:text-[10px] text-end text-[#455a64]">
                 {moment(item.created_at).format("DD MMMM YYYY")}
               </p>
-              <h2 className="text-2xl w-full text-[#ff725e] font-bold -mt-2 overflow-ellipsis whitespace-nowrap ">
+              <h2 className="text-2xl overflow-x-hidden w-full text-[#ff725e] font-bold -mt-2 overflow-ellipsis whitespace-nowrap ">
                 {item.conversation_title}
               </h2>
 
