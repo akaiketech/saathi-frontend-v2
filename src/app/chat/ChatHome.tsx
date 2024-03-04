@@ -379,7 +379,7 @@ const ChatPage = () => {
                           alt="avatar"
                           className="mr-1 w-4 h-4"
                         />
-                        {isAudioPlaying ? "playing" : "Replay"}
+                          Replay
                       </button>
                     </div>
                   </>
