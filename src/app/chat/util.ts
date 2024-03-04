@@ -239,10 +239,13 @@ export const translationOnceFromMic = ({
       translationConfig.speechRecognitionLanguage = "ta-IN";
       translationConfig.addTargetLanguage("ta");
       break;
+
+    default:
+      translationConfig.speechRecognitionLanguage = "en-US";
+      translationConfig.addTargetLanguage("en");
+      break;
   }
 
-  translationConfig.speechRecognitionLanguage = "en-US";
-  translationConfig.addTargetLanguage("en");
   // Set silence timeout in milliseconds
   // translationConfig.setProperty(
   //   sdk.PropertyId[
