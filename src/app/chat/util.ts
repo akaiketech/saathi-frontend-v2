@@ -222,6 +222,8 @@ export const translationOnceFromMic = ({
     serviceRegion,
   );
 
+  translationConfig.setProperty(sdk.PropertyId.Speech_SegmentationSilenceTimeoutMs, "3000");
+
   language = language.toLowerCase();
 
   switch (language) {
