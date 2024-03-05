@@ -10,6 +10,10 @@ import chatBot from "../../assets/svgs/chatBot.png";
 import avatar from "../../assets/svgs/avatar.svg";
 import replaySvg from "../../assets/svgs/replay.svg";
 import submitBtn from "../../assets/svgs/submitBtn.svg";
+import thumbsUp from "../../assets/svgs/thumb_up.svg";
+import thumbsDown from "../../assets/svgs/thumb_down.svg";
+import thumbsUpOutline from "../../assets/svgs/thumb_up_outline.svg";
+import thumbsDownOutline from "../../assets/svgs/thumb_down_outline.svg";
 import { IoMdThumbsDown, IoMdThumbsUp } from "react-icons/io";
 import { IoLanguage } from "react-icons/io5";
 import { IoLocationOutline } from "react-icons/io5";
@@ -145,9 +149,9 @@ const ChatPage = () => {
     inputRef.value = "";
   };
 
-  const handleUpVote = () => {
+  const handleUpVote = (id: string) => {
     setMessages((prevMsgs) => {
-      const index = prevMsgs.length - 1;
+      const index = messages.findIndex((message) => message.id === id);
       const newMsgs = [...prevMsgs];
       const currentMsg = newMsgs[index];
       voteApi(sessionId, currentMsg.id, 1);
@@ -156,9 +160,9 @@ const ChatPage = () => {
     });
   };
 
-  const handleDownVote = () => {
+  const handleDownVote = (id: string) => {
     setMessages((prevMsgs) => {
-      const index = prevMsgs.length - 1;
+      const index = messages.findIndex((message) => message.id === id);
       const newMsgs = [...prevMsgs];
       const currentMsg = newMsgs[index];
       voteApi(sessionId, currentMsg.id, -1);
@@ -352,12 +356,54 @@ const ChatPage = () => {
                       </div>
                     </div>
                     <div className="flex justify-end w-1/2 mt-1 md:ml-8">
-                      {messageObj.vote === 0 && (
-                        <div className="flex gap-3 text-red-saathi text-md md:text-2xl mr-4 items-center">
-                          <IoMdThumbsUp onClick={() => handleUpVote()} />
-                          <IoMdThumbsDown onClick={() => handleDownVote()} />
-                        </div>
-                      )}
+                      <div className="mt-1">
+                        {messageObj.vote === -1 ? (
+                          <div className="flex gap-3 text-red-saathi text-md md:text-2xl mr-4 items-center">
+                            <Image
+                              src={thumbsUpOutline}
+                              alt="thumbsUp"
+                              className="w-4 h-4 md:w-6 md:h-6"
+                              onClick={() => handleUpVote(messageObj.id)}
+                            />
+                            <Image
+                              src={thumbsDown}
+                              alt="thumbsDown"
+                              className="w-4 h-4 md:w-6 md:h-6"
+                              onClick={() => handleDownVote(messageObj.id)}
+                            />
+                          </div>
+                        ) : messageObj.vote === 1 ? (
+                          <div className="flex gap-3 text-red-saathi text-md md:text-2xl mr-4 items-center">
+                            <Image
+                              src={thumbsUp}
+                              alt="thumbsUp"
+                              className="w-4 h-4 md:w-6 md:h-6"
+                              onClick={() => handleUpVote(messageObj.id)}
+                            />
+                            <Image
+                              src={thumbsDownOutline}
+                              alt="thumbsDown"
+                              className="w-4 h-4 md:w-6 md:h-6"
+                              onClick={() => handleDownVote(messageObj.id)}
+                            />
+                          </div>
+                        ) : (
+                          <div className="flex gap-3 text-red-saathi text-md md:text-2xl mr-4 items-center">
+                            <Image
+                              src={thumbsUpOutline}
+                              alt="thumbsUp"
+                              className="w-4 h-4 md:w-6 md:h-6"
+                              onClick={() => handleUpVote(messageObj.id)}
+                            />
+                            <Image
+                              src={thumbsDownOutline}
+                              alt="thumbsDownOutline"
+                              className="w-4 h-4 md:w-6 md:h-6"
+                              onClick={() => handleDownVote(messageObj.id)}
+                            />
+                          </div>
+                        )}
+                      </div>
 
                       <button
                         className="flex items-center text-sm md:text-lg"
