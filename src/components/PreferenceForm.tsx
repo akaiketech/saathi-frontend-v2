@@ -27,8 +27,8 @@ const PreferenceForm = ({ isModal }: Props) => {
   const { language, location, setLanguage, setLocation, setSessionId } =
     useGlobalContext();
   const initVals: FormValues = {
-    language: "",
-    state: "",
+    language: language,
+    state: location,
   };
 
   useEffect(() => {
@@ -60,7 +60,14 @@ const PreferenceForm = ({ isModal }: Props) => {
     setLanguage(val);
   };
 
-  const validateInputs = (lang: string, location: string): boolean => {
+  const validateInputs = (lang: string, locat: string): boolean => {
+    if (lang === "" || locat === "") {
+      if (LANGUAGES.includes(language) && LOCATIONS.includes(location)) {
+        return true;
+      }
+
+      return false;
+    }
     if (LANGUAGES.includes(lang) && LOCATIONS.includes(location)) {
       return true;
     }

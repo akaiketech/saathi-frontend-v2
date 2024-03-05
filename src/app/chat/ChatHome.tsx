@@ -168,34 +168,34 @@ const ChatPage = () => {
   };
 
   const getMobileValues = () => {
-    let language = "Hi";
-    let location = "MP";
+    let lang = "hi";
+    let locat = "MP";
     switch (language.toLowerCase()) {
       case "english":
-        language = "en";
+        lang = "En";
         break;
 
       case "tamil":
-        language = "ta";
+        lang = "Ta";
         break;
 
       case "kannada":
-        language = "kn";
+        lang = "Kn";
         break;
     }
 
     switch (location.toLowerCase()) {
       case "Karnataka":
-        location = "KA";
+        locat = "KA";
         break;
 
       case "Tamil Nadu":
-        location = "TN";
+        locat = "TN";
         break;
     }
     return {
-      language,
-      location,
+      language: lang,
+      location: locat,
     };
   };
 
@@ -227,7 +227,6 @@ const ChatPage = () => {
                   color="#ff725e"
                   className="text-sm md:text-2xl"
                 />
-
                 <p className="block md:hidden">{getMobileValues().location}</p>
                 <p className="hidden md:block">{location}</p>
               </div>
@@ -379,7 +378,7 @@ const ChatPage = () => {
                           alt="avatar"
                           className="mr-1 w-4 h-4"
                         />
-                          Replay
+                        Replay
                       </button>
                     </div>
                   </>
@@ -408,7 +407,9 @@ const ChatPage = () => {
           ) : (
             <div
               className={`flex flex-col z-10 items-center gap-4 ${
-                isAudioPlaying ? "opacity-50" : ""
+                isAudioPlaying || isLoading
+                  ? "opacity-50 pointer-events-none"
+                  : ""
               }`}
               onClick={() => {
                 if (isAudioPlaying || isLoading) return;
@@ -454,7 +455,9 @@ const ChatPage = () => {
             >
               <Image
                 src={submitBtn}
-                className="cursor-pointer active:scale-90 transition-all duration-150"
+                className={`cursor-pointer active:scale-90 transition-all duration-150 ${
+                  isLoading ? "opacity-50 pointer-events-none" : ""
+                }`}
                 alt="submitBtn"
                 height={30}
                 width={30}

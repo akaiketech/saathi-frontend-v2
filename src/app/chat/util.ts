@@ -71,7 +71,6 @@ export const textToSpeech = (
   onStart: any,
   onEnd: any,
 ) => {
-  console.log(text)
   const speechKey = process.env.NEXT_PUBLIC_SPEECH_KEY as string;
   const serviceRegion = process.env.NEXT_PUBLIC_SPEECH_REGION as string;
 
@@ -223,7 +222,10 @@ export const translationOnceFromMic = ({
     serviceRegion,
   );
 
-  translationConfig.setProperty(sdk.PropertyId.Speech_SegmentationSilenceTimeoutMs, "3000");
+  translationConfig.setProperty(
+    sdk.PropertyId.Speech_SegmentationSilenceTimeoutMs,
+    "3000",
+  );
   language = language.toLowerCase();
 
   switch (language) {
@@ -314,33 +316,32 @@ export const translationOnceFromMic = ({
           language_query: "",
         };
 
-        console.log(result)
-
         // Get question text based on language
         switch (language) {
           case "hindi":
-            message.question.hindiText = result.text
-            reqBody.language_query = result.text
+            message.question.hindiText = result.text;
+            reqBody.language_query = result.text;
             break;
 
           case "kannada":
-            message.question.kannadaText = result.text
-            reqBody.language_query = result.text
+            message.question.kannadaText = result.text;
+            reqBody.language_query = result.text;
             break;
 
           case "tamil":
-            message.question.tamilText = result.text
-            reqBody.language_query = result.text
+            message.question.tamilText = result.text;
+            reqBody.language_query = result.text;
             break;
 
           default:
-            message.question.englishText = result.text
-            reqBody.language_query = result.text
+            message.question.englishText = result.text;
+            reqBody.language_query = result.text;
         }
 
         // always get english text
         // message.question.englishText = result.translations.get("en");
         message.isLoading = true;
+        setIsLoading(true);
 
         setMessages((prevMsgs) => [...prevMsgs, message]);
         setIsRecording(false);
@@ -350,6 +351,7 @@ export const translationOnceFromMic = ({
           message.answer = data.answer;
         }
 
+        setIsLoading(false);
         message.isLoading = false;
 
         setMessages((prevMsgs) => {
@@ -360,8 +362,6 @@ export const translationOnceFromMic = ({
         });
 
         const textToSpeak = message.answer;
-
-        console.log('called', message)
 
         const controller = textToSpeech(
           textToSpeak,
