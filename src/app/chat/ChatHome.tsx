@@ -349,7 +349,7 @@ const ChatPage = () => {
                           width={36}
                         />
                       </div>
-                      <div className="w-1/2 p-3 rounded-[30px_30px_30px_0px] bg-[#FFCBC366] text-gray-700">
+                      <div className="w-[70%] md:w-1/2 p-3 rounded-[30px_30px_30px_0px] bg-[#FFCBC366] text-gray-700">
                         <div className="text-sm md:text-2xl not-italic font-medium leading-[normal] break-words">
                           {messageObj.answer}
                         </div>
