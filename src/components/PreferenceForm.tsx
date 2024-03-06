@@ -65,6 +65,7 @@ const PreferenceForm = ({ isModal }: Props) => {
       if (LANGUAGES.includes(language) && LOCATIONS.includes(location)) {
         return true;
       }
+      return false;
     }
     if (LANGUAGES.includes(lang) && LOCATIONS.includes(location)) {
       return true;
