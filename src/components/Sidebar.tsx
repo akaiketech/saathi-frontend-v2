@@ -73,7 +73,7 @@ function Sidebar() {
       </div>
       <div
         onClick={() => router.replace("/preferences")}
-        className="z-50 absolute top-24 left-6 hidden cursor-pointer md:block"
+        className="z-50 absolute top-24 left-6 hidden cursor-pointer md:block active:scale-95 transition-all duration-150"
       >
         <Image src={homeBtn} alt="homeBtn" />
       </div>
@@ -83,9 +83,8 @@ function Sidebar() {
       >
         <FaPlus size={20} color="#7b7b7b" />
         <span
-          className={`overflow-ellipsis whitespace-nowrap overflow-x-hidden ${
-            sideBarOpen ? "block" : "hidden"
-          }`}
+          className={`overflow-ellipsis whitespace-nowrap overflow-x-hidden ${sideBarOpen ? "block" : "hidden"
+            }`}
         >
           New Chat
         </span>
@@ -105,12 +104,11 @@ function Sidebar() {
       </nav>
       <div
         onClick={() => (window.location.href = "/api/auth/logout")}
-        className={`absolute flex gap-3 items-center z-50 cursor-pointer bottom-10 left-6 ${
-          sideBarOpen ? "logout active" : "logout"
-        }`}
+        className={`absolute flex gap-3 items-center z-50 rounded-full cursor-pointer bottom-10 left-6 bg-[#dbdbdb] active:bg-[#bebcbc] transition-all duration-300 ${sideBarOpen ? "logout active" : "logout"
+          }`}
       >
-        <Image className="w-auto h-12" src={logout} alt="logout" />
-        <span className="flex md:hidden text-[16px] text-[#7b7b7b] font-medium">
+        <Image className="w-auto h-10" src={logout} alt="logout" />
+        <span className="flex overflow-ellipsis overflow-x-hidden text-[16px] text-[#7b7b7b] font-medium">
           Logout
         </span>
       </div>
@@ -139,19 +137,19 @@ const Pagination: React.FC<PaginationProps> = ({ pageSize }) => {
     const fetchDataAndUpdateState = async () => {
       try {
         setLoading(true);
-        setIsLoading(true)
+        setIsLoading(true);
         const data = await fetchData(currentPage, pageSize);
         if (data.data.conversations.length === 0) {
           setAllFetched(true);
         }
         setConv([...conv, ...(data.data.conversations as Conversation[])]);
         setLoading(false);
-        setIsLoading(false)
+        setIsLoading(false);
       } catch (error) {
         console.log(error);
       } finally {
         setLoading(false);
-        setIsLoading(false)
+        setIsLoading(false);
       }
     };
 
@@ -180,11 +178,8 @@ const Pagination: React.FC<PaginationProps> = ({ pageSize }) => {
                 );
                 setScroll(!scroll);
               }}
-              className={`flex relative items-center max-w-52 mb-2 text-[#455a64] py-2 px-6 mx-1 gap-2 chat-bg rounded-[40px] cursor-pointer ${
-                item.conversation_id === sessionId
-                  ? " ring-2 ring-[#ff725e]"
-                  : ""
-              }`}
+              className={`flex relative items-center max-w-52 mb-2 ring-2 text-[#455a64] ring-[#ff725e] py-2 px-6 mx-1 gap-2 rounded-[40px] cursor-pointer ${item.conversation_id === sessionId ? "chat-bg" : ""
+                }`}
               key={index}
             >
               <CiChat1 size={24} color="#455a64" />
@@ -204,9 +199,8 @@ const Pagination: React.FC<PaginationProps> = ({ pageSize }) => {
         )}
         {!loading && (
           <button
-            className={`text-red-saathi font-medium py-2 px-4 bg-[#dbdbdb] rounded-[40px] my-2 ${
-              allFetched ? "pointer-events-none opacity-50" : ""
-            }`}
+            className={`text-[#7b7b7b] font-medium py-2 px-4 bg-[#dbdbdb] rounded-[40px] my-2 ${allFetched ? "pointer-events-none opacity-50" : ""
+              }`}
             onClick={handleLoadMore}
             disabled={loading || allFetched}
           >

@@ -31,9 +31,23 @@
   transition: 350ms;
 }
 
+.newChat:active {
+  background-color: #bebcbc;
+}
+
+
 .newChat span {
   font-size: 16px;
   color: #7b7b7b;
+}
+
+.logout {
+  width: 40px;
+  height: 40px;
+}
+
+.logout.active {
+  width: 130px;
 }
 
 .newChat.active {

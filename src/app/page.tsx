@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import illustration from "../assets/svgs/illustration.svg";
 import illustrationMobile from "../assets/svgs/illustrationMobile.svg";
-import akaikaLogo from "../assets/images/akaikeLogo.png";
+import akaikaLogo from "../assets/svgs/akaikeLogo.svg";
 import iisc from "../assets/images/iicsLogo.webp";
 import Navbar from "../components/Navbar";
 import { useUser } from "@auth0/nextjs-auth0/client";
@@ -78,7 +78,7 @@ const Headings = () => {
         Welcome to SAATHI
       </div>
       <div className="text-[18px] md:text-[32px] font-medium text-center mt-2">
-        Learn all about the government schemes today
+        Learn all about the schemes today
       </div>
     </div>
   );
@@ -92,7 +92,7 @@ const GetStarted = () => {
       </div>
       <Link
         href="/api/auth/login"
-        className="shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] rounded-3xl md:rounded-[60px] bg-[#ff725e] text-white text-[20px] md:text-[32px] font-medium  px-6 py-3 md:py-4 md:px-8"
+        className="shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] rounded-3xl md:rounded-[60px] bg-[#ff725e] text-white text-[20px] md:text-[32px] font-medium  px-6 py-3 md:py-4 md:px-8 active:scale-95 transition-all duration-100"
       >
         Log in
       </Link>

@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { TranslationRecognizer } from "microsoft-cognitiveservices-speech-sdk";
 import Lottie from "react-lottie";
 import chatMicrophone from "../../assets/svgs/chatMicrophone.svg";
-import chatBot from "../../assets/svgs/chatBot.png";
+import chatBot from "../../assets/svgs/robot1.svg";
 import profile from "../../assets/svgs/profile.svg";
 import replaySvg from "../../assets/svgs/replay.svg";
 import submitBtn from "../../assets/svgs/submitBtn.svg";
@@ -21,7 +21,6 @@ import { IoLocationOutline } from "react-icons/io5";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import {
   feedBackApi,
-  textToSpeech,
   translateFromInput,
   translationOnceFromMic,
   voteApi,
@@ -328,7 +327,7 @@ const ChatPage = () => {
             <div key={index} className="flex flex-col w-full py-4 px-1">
               <div className="flex items-end ml-auto mb-4 max-w-[80%] md:max-w-[70%]">
                 <div className="p-3 rounded-[30px_30px_0px_30px] bg-[#ff725e]">
-                  <div className="text-white text-sm md:text-2xl not-italic font-medium leading-[normal]">
+                  <div className="text-white text-sm md:text-xl not-italic font-medium leading-[normal]">
                     {showQuestion(messageObj)}
                   </div>
                 </div>
@@ -358,12 +357,12 @@ const ChatPage = () => {
                         <Image
                           src={chatBot}
                           alt="chatBot"
-                          height={36}
-                          width={36}
+                          height={40}
+                          width={40}
                         />
                       </div>
                       <div className="w-[70%] md:w-1/2 p-3 rounded-[30px_30px_30px_0px] bg-[#FFCBC366] text-gray-700">
-                        <div className="text-sm md:text-2xl not-italic font-medium leading-[normal] break-words">
+                        <div className="text-sm md:text-xl not-italic font-medium leading-[normal] break-words">
                           {messageObj.answer}
                         </div>
                       </div>
@@ -425,7 +424,7 @@ const ChatPage = () => {
                         >
                           <Image
                             src={stopSvg}
-                            alt="replaySvg"
+                            alt="stopSvg"
                             className="mr-1 w-4 h-4"
                           />
                             Stop

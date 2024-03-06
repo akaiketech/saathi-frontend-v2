@@ -158,7 +158,7 @@ const Start = ({
       <button
         type="submit"
         onClick={onClick}
-        className="flex justify-center items-center shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] rounded-[50px] md:rounded-[60px] bg-[#ff725e] text-white text-2xl md:text-[64px] font-medium px-6 py-3 md:py-8 md:px-8"
+        className="flex justify-center items-center shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] rounded-[50px] md:rounded-[60px] bg-[#ff725e] text-white text-2xl md:text-[64px] font-medium px-6 py-3 md:py-8 md:px-8 active:scale-95 transition-all duration-100"
       >
         {startNowLang}
         <span className="w-8 md:w-16 ml-2">
