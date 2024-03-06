@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import axiosInstance from "../../../../client/client";
 import { getAccessToken } from "@auth0/nextjs-auth0";
 
-export async function POST(req: NextRequest, res: NextApiResponse) {
+export async function GET(req: NextRequest, res: NextApiResponse) {
   const { accessToken } = await getAccessToken({
     authorizationParams: {
       audience: process.env.AUTH0_AUDIENCE,
@@ -11,11 +11,15 @@ export async function POST(req: NextRequest, res: NextApiResponse) {
     },
   });
 
-  console.log("Called POST /api/v1/terms-update");
+  const searchParams = req.nextUrl.searchParams;
+  const conversation_id = searchParams.get("conversation_id");
+  const page = searchParams.get("page");
+  const page_size = searchParams.get("page_size");
+
+  console.log("Called POST /api/v2/get-conv-msgs");
   try {
-    const res = await axiosInstance.post(
-      "/api/v1/user/accept-terms",
-      {},
+    const res = await axiosInstance.get(
+      `/api/v2/user/conversation/${conversation_id}/messages/?page=${page}&page_size=${page_size}`,
       { headers: { Authorization: `Bearer ${accessToken}` } },
     );
 

@@ -1,8 +1,9 @@
+import { NextApiResponse } from "next";
 import { NextRequest, NextResponse } from "next/server";
 import axiosInstance from "../../../../client/client";
 import { getAccessToken } from "@auth0/nextjs-auth0";
 
-export const PUT = async (req: NextRequest) => {
+export async function POST(req: NextRequest, res: NextApiResponse) {
   const { accessToken } = await getAccessToken({
     authorizationParams: {
       audience: process.env.AUTH0_AUDIENCE,
@@ -10,13 +11,11 @@ export const PUT = async (req: NextRequest) => {
     },
   });
 
-  console.log("\nEntering PUT /api/v1/feedback");
-
+  console.log("Called POST /api/v2/terms-update");
   try {
-    const reqBody = await req.json();
-    const res = await axiosInstance.put(
-      "/api/v1/user/conversation/message/feedback",
-      reqBody,
+    const res = await axiosInstance.post(
+      "/api/v2/user/terms-and-condition/acknowledge/",
+      {},
       { headers: { Authorization: `Bearer ${accessToken}` } },
     );
 
@@ -27,6 +26,7 @@ export const PUT = async (req: NextRequest) => {
       return NextResponse.json({ error: errorText });
     }
   } catch (error: any) {
+    console.log(error)
     if (error.response) {
       const errorText = `Failed to fetch the result.`;
       return NextResponse.json({ error: errorText });
@@ -37,4 +37,4 @@ export const PUT = async (req: NextRequest) => {
       );
     }
   }
-};
+}

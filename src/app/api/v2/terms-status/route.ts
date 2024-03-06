@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import axiosInstance from "../../../../client/client";
 import { getAccessToken } from "@auth0/nextjs-auth0";
 
-export async function POST(req: NextRequest, res: NextApiResponse) {
+export async function GET(req: NextRequest, res: NextApiResponse) {
   const { accessToken } = await getAccessToken({
     authorizationParams: {
       audience: process.env.AUTH0_AUDIENCE,
@@ -11,13 +11,11 @@ export async function POST(req: NextRequest, res: NextApiResponse) {
     },
   });
 
-  const reqBody = await req.json();
+  console.log("Called POST /api/v2/terms-status");
 
-  console.log("Called POST /api/v1/get-conv");
   try {
-    const res = await axiosInstance.post(
-      "/api/v1/user/conversations",
-      reqBody,
+    const res = await axiosInstance.get(
+      "/api/v2/user/terms-and-condition/status/",
       { headers: { Authorization: `Bearer ${accessToken}` } },
     );
 

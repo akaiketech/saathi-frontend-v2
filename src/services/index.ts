@@ -1,7 +1,7 @@
 import { toast } from "react-toastify";
 
 export const acceptUserTnC = async () => {
-  const res = await fetch("/api/v1/terms-update", { method: "POST" });
+  const res = await fetch("/api/v2/terms-update", { method: "POST" });
 
   if (!res.ok) {
     const errorText = `Failed to fetch the result.`;
@@ -17,7 +17,7 @@ export const acceptUserTnC = async () => {
 };
 
 export const checkUserTnCStatus = async () => {
-  const res = await fetch("/api/v1/terms-status", { method: "POST" });
+  const res = await fetch("/api/v2/terms-status", { method: "GET" });
 
   if (!res.ok) {
     const errorText = `Failed to fetch the result.`;
@@ -39,10 +39,12 @@ export const getConversations = async ({
   page: number;
   page_size: number;
 }) => {
-  const res = await fetch("/api/v1/get-conv", {
-    method: "POST",
-    body: JSON.stringify({ page, page_size }),
-  });
+  const res = await fetch(
+    `/api/v2/get-conv?page=${page}&page_size=${page_size}`,
+    {
+      method: "GET",
+    },
+  );
   if (!res.ok) {
     const errorText = `Failed to fetch the result.`;
     return { data: null, error: errorText };
@@ -56,7 +58,7 @@ export const getConversations = async ({
 
 export const createUser = async () => {
   try {
-    const res = await fetch("/api/v1/create-user", { method: "POST" });
+    const res = await fetch("/api/v2/create-user", { method: "POST" });
     if (!res.ok) {
       const errorText = `Failed to fetch the result.`;
       return { data: null, error: errorText };
@@ -79,10 +81,12 @@ export const getConversationMsgs = async ({
   page,
   page_size,
 }: any) => {
-  const res = await fetch("/api/v1/get-conv-msgs", {
-    method: "POST",
-    body: JSON.stringify({ conversation_id, page, page_size }),
-  });
+  const res = await fetch(
+    `/api/v2/get-conv-msgs?conversation_id=${conversation_id}&page=${page}&page_size=${page_size}`,
+    {
+      method: "GET",
+    },
+  );
 
   if (!res.ok) {
     const errorText = `Failed to fetch the result.`;

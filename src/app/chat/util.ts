@@ -33,7 +33,7 @@ export const queryApi = async ({
   };
 
   try {
-    const res = await axios.post("/api/v1/user_query/", reqData);
+    const res = await axios.post("/api/v2/user_query/", reqData);
 
     if (res.data.error) {
       toast.error(res.data.error, {
@@ -491,7 +491,7 @@ export const voteApi = async (
   };
 
   try {
-    const res = await axios.put("/api/v1/feedback", reqBody);
+    const res = await axios.put("/api/v2/feedback", reqBody);
 
     if (res.data.error) {
       toast.error(res.data.error, {

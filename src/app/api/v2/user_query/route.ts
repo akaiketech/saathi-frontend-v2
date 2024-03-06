@@ -1,9 +1,9 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextApiResponse } from "next";
 import { NextRequest, NextResponse } from "next/server";
 import axiosInstance from "../../../../client/client";
 import { getAccessToken } from "@auth0/nextjs-auth0";
 
-export async function POST(req: NextRequest, res: NextApiResponse) {
+export async function POST(req: NextRequest, _: NextApiResponse) {
   const reqBody = await req.json();
   const { accessToken } = await getAccessToken({
     authorizationParams: {
@@ -13,7 +13,7 @@ export async function POST(req: NextRequest, res: NextApiResponse) {
   });
 
   try {
-    const response = await axiosInstance.post("/api/v1/query", reqBody, {
+    const response = await axiosInstance.post("/api/v2/chat/query/", reqBody, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },

@@ -11,13 +11,14 @@ export async function POST(req: NextRequest, res: NextApiResponse) {
     },
   });
 
-  console.log("Called POST /api/v1/terms-status");
-
+  console.log("Called POST /api/v2/create-user");
   try {
     const res = await axiosInstance.post(
-      "/api/v1/users/terms-and-conditions/status",
+      "/api/v2/user",
       {},
-      { headers: { Authorization: `Bearer ${accessToken}` } },
+      {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      },
     );
 
     if (res.status === 200) {
