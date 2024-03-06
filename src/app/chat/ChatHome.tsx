@@ -14,7 +14,6 @@ import thumbsUp from "../../assets/svgs/thumb_up.svg";
 import thumbsDown from "../../assets/svgs/thumb_down.svg";
 import thumbsUpOutline from "../../assets/svgs/thumb_up_outline.svg";
 import thumbsDownOutline from "../../assets/svgs/thumb_down_outline.svg";
-import { IoMdThumbsDown, IoMdThumbsUp } from "react-icons/io";
 import { IoLanguage } from "react-icons/io5";
 import { IoLocationOutline } from "react-icons/io5";
 
@@ -58,6 +57,9 @@ const ChatPage = () => {
     isLoading,
     isRecording,
     isAudioPlaying,
+    ttsController,
+    stopPlayingAudio,
+    replayAudio,
     setMessages,
     setIsLoading,
     setIsRecording,
@@ -102,6 +104,13 @@ const ChatPage = () => {
   const handleRatingClick = (rating: number) => {
     setStarRating(rating);
   };
+
+  const handleStopReplay = () => {
+    ttsController?.pause();
+  };
+
+  const handleReplayClick = (index: number) =>
+    replayAudio(index, language, voice);
 
   const showQuestion = (messageObj: Message) => {
     let question = "";
@@ -158,6 +167,8 @@ const ChatPage = () => {
       currentMsg.vote = 1;
       return newMsgs;
     });
+
+    toast.success("Thank you for your feedback!");
   };
 
   const handleDownVote = (id: string) => {
@@ -169,6 +180,8 @@ const ChatPage = () => {
       currentMsg.vote = -1;
       return newMsgs;
     });
+
+    toast.success("Thank you for your feedback!");
   };
 
   const getMobileValues = () => {
@@ -362,13 +375,13 @@ const ChatPage = () => {
                             <Image
                               src={thumbsUpOutline}
                               alt="thumbsUp"
-                              className="w-4 h-4 md:w-6 md:h-6"
+                              className="w-4 h-4 md:w-6 md:h-6 cursor-pointer"
                               onClick={() => handleUpVote(messageObj.id)}
                             />
                             <Image
                               src={thumbsDown}
                               alt="thumbsDown"
-                              className="w-4 h-4 md:w-6 md:h-6"
+                              className="w-4 h-4 md:w-6 md:h-6 cursor-pointer"
                               onClick={() => handleDownVote(messageObj.id)}
                             />
                           </div>
@@ -377,13 +390,13 @@ const ChatPage = () => {
                             <Image
                               src={thumbsUp}
                               alt="thumbsUp"
-                              className="w-4 h-4 md:w-6 md:h-6"
+                              className="w-4 h-4 md:w-6 md:h-6 cursor-pointer"
                               onClick={() => handleUpVote(messageObj.id)}
                             />
                             <Image
                               src={thumbsDownOutline}
                               alt="thumbsDown"
-                              className="w-4 h-4 md:w-6 md:h-6"
+                              className="w-4 h-4 md:w-6 md:h-6 cursor-pointer"
                               onClick={() => handleDownVote(messageObj.id)}
                             />
                           </div>
@@ -392,13 +405,13 @@ const ChatPage = () => {
                             <Image
                               src={thumbsUpOutline}
                               alt="thumbsUp"
-                              className="w-4 h-4 md:w-6 md:h-6"
+                              className="w-4 h-4 md:w-6 md:h-6 cursor-pointer"
                               onClick={() => handleUpVote(messageObj.id)}
                             />
                             <Image
                               src={thumbsDownOutline}
                               alt="thumbsDownOutline"
-                              className="w-4 h-4 md:w-6 md:h-6"
+                              className="w-4 h-4 md:w-6 md:h-6 cursor-pointer"
                               onClick={() => handleDownVote(messageObj.id)}
                             />
                           </div>

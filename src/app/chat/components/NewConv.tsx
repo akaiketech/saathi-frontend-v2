@@ -48,7 +48,7 @@ const NewConv = ({ isNewUser, conversations }: Props) => {
                   item.conversation_language,
                 );
               }}
-              className="md:w-[48%] mt-3 md:mt-6 bg-[#e9e9e9] rounded-2xl md:rounded-3xl px-2 md:px-4 pb-4"
+              className="md:w-[48%] cursor-pointer mt-3 md:mt-6 bg-[#e9e9e9] rounded-2xl md:rounded-3xl px-2 md:px-4 pb-4"
             >
               <p className="text-[8px] md:text-[10px] text-end text-[#455a64]">
                 {moment(item.created_at).format("DD MMMM YYYY")}

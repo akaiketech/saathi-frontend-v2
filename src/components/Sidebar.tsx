@@ -67,13 +67,13 @@ function Sidebar() {
     <>
       <div
         onClick={showSidebar}
-        className="z-50 absolute top-6 md:top-8 left-6"
+        className="z-50 absolute top-6 md:top-8 left-6 cursor-pointer"
       >
         <Image src={sideBarOpen ? hamClose : hamOpen} alt="hamburger" />
       </div>
       <div
         onClick={() => router.replace("/preferences")}
-        className="z-50 absolute top-24 left-6 hidden md:block"
+        className="z-50 absolute top-24 left-6 hidden cursor-pointer md:block"
       >
         <Image src={homeBtn} alt="homeBtn" />
       </div>
