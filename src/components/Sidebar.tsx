@@ -82,7 +82,13 @@ function Sidebar() {
         className={sideBarOpen ? "newChat active" : "newChat"}
       >
         <FaPlus size={20} color="#7b7b7b" />
-        <span className={`overflow-ellipsis whitespace-nowrap overflow-x-hidden ${sideBarOpen ? "block" : "hidden"}`}>New Chat</span>
+        <span
+          className={`overflow-ellipsis whitespace-nowrap overflow-x-hidden ${
+            sideBarOpen ? "block" : "hidden"
+          }`}
+        >
+          New Chat
+        </span>
       </div>
       <nav className={sideBarOpen ? "sidebar active" : "sidebar"}>
         <div className="flex flex-col items-center mt-48 md:mt-64">
@@ -121,7 +127,7 @@ const Pagination: React.FC<PaginationProps> = ({ pageSize }) => {
   const [loading, setLoading] = useState(false);
   const [allFetched, setAllFetched] = useState(false);
   const { sessionId } = useGlobalContext();
-  const { conv, setConv, openConversation } = useChatContext();
+  const { setIsLoading, conv, setConv, openConversation } = useChatContext();
   const [scroll, setScroll] = useState(false);
   const containerRef = useRef(null);
 
@@ -133,15 +139,19 @@ const Pagination: React.FC<PaginationProps> = ({ pageSize }) => {
     const fetchDataAndUpdateState = async () => {
       try {
         setLoading(true);
+        setIsLoading(true)
         const data = await fetchData(currentPage, pageSize);
         if (data.data.conversations.length === 0) {
           setAllFetched(true);
         }
         setConv([...conv, ...(data.data.conversations as Conversation[])]);
+        setLoading(false);
+        setIsLoading(false)
       } catch (error) {
         console.log(error);
       } finally {
         setLoading(false);
+        setIsLoading(false)
       }
     };
 

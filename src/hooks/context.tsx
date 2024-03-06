@@ -24,7 +24,7 @@ const GlobalContext = createContext<GlobalContextProps | undefined>(undefined);
 export const useGlobalContext = () => {
   const context = useContext(GlobalContext);
   if (!context) {
-    throw new Error("useGlobalContext must be used within a GlobalProvider");
+    throw new Error("useGlobalContext must bee used within a GlobalProvider");
   }
   return context;
 };
@@ -35,7 +35,7 @@ interface GlobalProviderProps {
 
 export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
   // initial values
-  const [language, setLanguage] = useState<string>("hindi");
+  const [language, setLanguage] = useState<string>("Hindi");
   const [voice, setVoice] = useState<string>("female");
   const [sessionId, setSessionId] = useState<string>("");
   const [location, setLocation] = useState<string>("");

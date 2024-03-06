@@ -119,7 +119,8 @@ export const textToSpeech = (
       break;
   }
 
-  const audioConfig = AudioConfig.fromDefaultSpeakerOutput();
+  const player = new SpeakerAudioDestination();
+  const audioConfig = sdk.AudioConfig.fromSpeakerOutput(player);
   const synthesizer = new SpeechSynthesizer(speechConfig, audioConfig);
 
   // synthesizer.synthesisStarted = (_s, _e) => {
@@ -130,8 +131,6 @@ export const textToSpeech = (
   //   onEnd();
   //   synthesizer.close();
   // };
-
-  const player = new SpeakerAudioDestination();
 
   let estimatedDuration = text.length * 90;
 
@@ -309,7 +308,10 @@ export const translationOnceFromMic = ({
         const reqBody = {
           conversation_id: sessionId,
           query_id: message.id,
-          english_query: result.translations.get("en"),
+          english_query:
+            language.toLowerCase() === "english"
+              ? result.text
+              : result.translations.get("en"),
           conversation_location: location,
           conversation_language: language,
           user_audio: sentAudio,

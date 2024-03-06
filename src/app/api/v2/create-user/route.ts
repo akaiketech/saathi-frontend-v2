@@ -14,7 +14,7 @@ export async function POST(req: NextRequest, res: NextApiResponse) {
   console.log("Called POST /api/v2/create-user");
   try {
     const res = await axiosInstance.post(
-      "/api/v2/user",
+      "/api/v2/user/",
       {},
       {
         headers: { Authorization: `Bearer ${accessToken}` },

@@ -7,7 +7,7 @@ import { TranslationRecognizer } from "microsoft-cognitiveservices-speech-sdk";
 import Lottie from "react-lottie";
 import chatMicrophone from "../../assets/svgs/chatMicrophone.svg";
 import chatBot from "../../assets/svgs/chatBot.png";
-import avatar from "../../assets/svgs/avatar.svg";
+import profile from "../../assets/svgs/profile.svg";
 import replaySvg from "../../assets/svgs/replay.svg";
 import submitBtn from "../../assets/svgs/submitBtn.svg";
 import thumbsUp from "../../assets/svgs/thumb_up.svg";
@@ -81,7 +81,7 @@ const ChatPage = () => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
     }
-  }, [messages]);
+  }, [messages.length]);
 
   const defaultOptions = {
     loop: true,
@@ -105,9 +105,7 @@ const ChatPage = () => {
     setStarRating(rating);
   };
 
-  const handleStopReplay = () => {
-    ttsController?.pause();
-  };
+  const handleStopReplay = () => stopPlayingAudio();
 
   const handleReplayClick = (index: number) =>
     replayAudio(index, language, voice);
@@ -136,7 +134,8 @@ const ChatPage = () => {
     return question;
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e?: React.FormEvent) => {
+    e?.preventDefault();
     const inputRef = document.getElementById("question") as HTMLInputElement;
     // get input value
     const inputValue = inputRef.value;
@@ -185,7 +184,7 @@ const ChatPage = () => {
   };
 
   const getMobileValues = () => {
-    let lang = "hi";
+    let lang = "Hi";
     let locat = "MP";
     switch (language.toLowerCase()) {
       case "english":
@@ -325,7 +324,7 @@ const ChatPage = () => {
       >
         {messages.length ? (
           messages.map((messageObj, index) => (
-            <div key={index} className="flex flex-col w-full py-4">
+            <div key={index} className="flex flex-col w-full py-4 px-1">
               <div className="flex items-end ml-auto mb-4 max-w-[80%] md:max-w-[70%]">
                 <div className="p-3 rounded-[30px_30px_0px_30px] bg-[#ff725e]">
                   <div className="text-white text-sm md:text-2xl not-italic font-medium leading-[normal]">
@@ -334,9 +333,9 @@ const ChatPage = () => {
                 </div>
                 <div className="hidden ml-1 md:block">
                   <Image
-                    src={avatar}
+                    src={profile}
                     className="min-w-10"
-                    alt="avatar"
+                    alt="profile"
                     height={36}
                     width={36}
                   />
@@ -381,7 +380,7 @@ const ChatPage = () => {
                             <Image
                               src={thumbsDown}
                               alt="thumbsDown"
-                              className="w-4 h-4 md:w-6 md:h-6 cursor-pointer"
+                              className="w-5 h-5 md:w-7 md:h-7 cursor-pointer"
                               onClick={() => handleDownVote(messageObj.id)}
                             />
                           </div>
@@ -390,7 +389,7 @@ const ChatPage = () => {
                             <Image
                               src={thumbsUp}
                               alt="thumbsUp"
-                              className="w-4 h-4 md:w-6 md:h-6 cursor-pointer"
+                              className="w-5 h-5 md:w-7 md:h-7 cursor-pointer"
                               onClick={() => handleUpVote(messageObj.id)}
                             />
                             <Image
@@ -418,27 +417,21 @@ const ChatPage = () => {
                         )}
                       </div>
 
-                      <button
-                        className="flex items-center text-sm md:text-lg"
-                        onClick={() => {
-                          const currentMesssage = messages[index];
-                          isAudioPlaying ||
-                            textToSpeech(
-                              currentMesssage.answer,
-                              language,
-                              voice,
-                              () => setIsAudioPlaying(true),
-                              () => setIsAudioPlaying(false),
-                            );
-                        }}
-                      >
-                        <Image
-                          src={replaySvg}
-                          alt="avatar"
-                          className="mr-1 w-4 h-4"
-                        />
-                        Replay
-                      </button>
+                      {isAudioPlaying ? (
+                        <button onClick={handleStopReplay}>close</button>
+                      ) : (
+                        <button
+                          className="flex items-center text-sm md:text-lg"
+                          onClick={() => handleReplayClick(index)}
+                        >
+                          <Image
+                            src={replaySvg}
+                            alt="replaySvg"
+                            className="mr-1 w-4 h-4"
+                          />
+                          Replay
+                        </button>
+                      )}
                     </div>
                   </>
                 )
@@ -499,7 +492,13 @@ const ChatPage = () => {
               </div>
             </div>
           )}
-          <div className="relative flex justify-center items-center gap-2 w-full max-w-[740px] pl-4 md:pl-8 pr-2 md:pr-6 pt-6 md:pt-9 pb-4 -mt-9 bg-[#f1f1f1] rounded-[20px]">
+          <form
+            onSubmit={(e) => {
+              if (isLoading) return;
+              handleSubmit(e);
+            }}
+            className="relative flex justify-center items-center gap-2 w-full max-w-[740px] pl-4 md:pl-8 pr-2 md:pr-6 pt-6 md:pt-9 pb-4 -mt-9 bg-[#f1f1f1] rounded-[20px]"
+          >
             <input
               id="question"
               type="text"
@@ -522,7 +521,7 @@ const ChatPage = () => {
                 width={30}
               />
             </div>
-          </div>
+          </form>
         </div>
       </footer>
     </main>

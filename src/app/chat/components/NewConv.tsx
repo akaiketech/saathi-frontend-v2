@@ -24,7 +24,7 @@ const NewConv = ({ isNewUser, conversations }: Props) => {
     },
   };
 
-  return !isLoading && conversations.length ? (
+  return !isLoading ? (
     <div className="flex flex-col md:ml-10 h-full text-2xl text-black bg-red">
       <h1 className="chat-heading text-[24px] md:text-[46px]">
         Namaste, {isNewUser ? "Welcome to SAATHI" : "Welcome back!"}
@@ -34,9 +34,11 @@ const NewConv = ({ isNewUser, conversations }: Props) => {
       </h3>
 
       <div className="mt-6 md:mt-10">
-        <p className="text-[#455a64] text-sm md:text-xl">
-          Want to continue your last conversation?
-        </p>
+        {conversations.length > 0 && (
+          <p className="text-[#455a64] text-sm md:text-xl">
+            Want to continue your last conversation?
+          </p>
+        )}
         <div className="flex flex-col md:flex-row gap-2">
           {conversations.map((item, index) => (
             <div

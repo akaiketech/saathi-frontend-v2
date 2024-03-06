@@ -95,8 +95,8 @@ const Navbar = ({ isStart }: Props) => {
       {!isStart && (
         <div className="flex text-black justify-center font-medium w-full text-[14px] md:text-[28px]">
           {tabs.map((tab, index) => (
-            <div key={index}>
-              <Link href={tab.link}>{tab.name}</Link>
+            <div className="flex md:gap-2 md:ml-2" key={index}>
+              <div>{tab.name}</div>
               {tabs.length - 1 > index && <span className="mx-1">|</span>}
             </div>
           ))}

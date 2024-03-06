@@ -27,7 +27,6 @@ export const PUT = async (req: NextRequest) => {
       return NextResponse.json({ error: errorText });
     }
   } catch (error: any) {
-    console.log(error);
     if (error.response) {
       const errorText = `Failed to fetch the result.`;
       return NextResponse.json({ error: errorText });

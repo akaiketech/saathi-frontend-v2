@@ -46,7 +46,8 @@ const Terms = () => {
   const [loading, setLoading] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [ttsController, setTtsController] = useState<SpeakerAudioDestination>();
-  const { replayAudio, isAudioPlaying, setIsAudioPlaying, stopPlayingAudio } = useChatContext();
+  const { replayAudio, isAudioPlaying, setIsAudioPlaying, stopPlayingAudio } =
+    useChatContext();
 
   useEffect(() => {
     (async () => {
@@ -87,6 +88,7 @@ const Terms = () => {
 
   const handleStopReplay = () => {
     ttsController?.pause();
+    setIsPlaying(false);
 
     ttsController?.close(() => {
       setIsAudioPlaying(false);

@@ -65,8 +65,6 @@ const PreferenceForm = ({ isModal }: Props) => {
       if (LANGUAGES.includes(language) && LOCATIONS.includes(location)) {
         return true;
       }
-
-      return false;
     }
     if (LANGUAGES.includes(lang) && LOCATIONS.includes(location)) {
       return true;
@@ -82,7 +80,7 @@ const PreferenceForm = ({ isModal }: Props) => {
       }}
     >
       {({ values, setFieldValue }) => (
-        <Form className="flex flex-col items-center justify-center gap-10 md:gap-0">
+        <Form className="flex flex-col items-center justify-center gap-10 md:gap-0 mt-4 md:mt-8">
           <div className="flex flex-col items-center gap-10 md:gap-5 md:flex-row md:mb-20 md:mt-24">
             <Dropdown
               label="Select Location"
