@@ -10,6 +10,7 @@ import chatBot from "../../assets/svgs/chatBot.png";
 import profile from "../../assets/svgs/profile.svg";
 import replaySvg from "../../assets/svgs/replay.svg";
 import submitBtn from "../../assets/svgs/submitBtn.svg";
+import stopSvg from "../../assets/svgs/stop_tnc.svg";
 import thumbsUp from "../../assets/svgs/thumb_up.svg";
 import thumbsDown from "../../assets/svgs/thumb_down.svg";
 import thumbsUpOutline from "../../assets/svgs/thumb_up_outline.svg";
@@ -57,7 +58,7 @@ const ChatPage = () => {
     isLoading,
     isRecording,
     isAudioPlaying,
-    ttsController,
+    currentPlayingIndex,
     stopPlayingAudio,
     replayAudio,
     setMessages,
@@ -417,8 +418,18 @@ const ChatPage = () => {
                         )}
                       </div>
 
-                      {isAudioPlaying ? (
-                        <button onClick={handleStopReplay}>close</button>
+                      {isAudioPlaying && index === currentPlayingIndex ? (
+                        <button
+                          className="flex items-center text-sm md:text-lg"
+                          onClick={handleStopReplay}
+                        >
+                          <Image
+                            src={stopSvg}
+                            alt="replaySvg"
+                            className="mr-1 w-4 h-4"
+                          />
+                            Stop
+                        </button>
                       ) : (
                         <button
                           className="flex items-center text-sm md:text-lg"
