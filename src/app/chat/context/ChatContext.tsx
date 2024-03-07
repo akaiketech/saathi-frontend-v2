@@ -70,8 +70,13 @@ export const ChatProvider: FC<Props> = ({ children }) => {
     useState<sdk.SpeakerAudioDestination | null>(null);
   const [isCancelled, setIsCancelled] = useState(false);
   const [conv, setConv] = useState<Conversation[]>([]);
-  const { setLanguage, setLocation, setSideBarOpen, setSessionId } =
-    useGlobalContext();
+  const {
+    setIsChatLoading,
+    setLanguage,
+    setLocation,
+    setSideBarOpen,
+    setSessionId,
+  } = useGlobalContext();
 
   const replayAudio = (index: number, language: string, voice: string) => {
     if (currentPlayingIndex !== null || isAudioPlaying) {
@@ -176,13 +181,15 @@ export const ChatProvider: FC<Props> = ({ children }) => {
   ) => {
     try {
       setIsLoading(true);
+      setIsChatLoading(true);
+      setSideBarOpen(false);
+
       const res = await getConversationMsgs({
         conversation_id,
         page: 1,
         page_size: 10,
       });
 
-      setSideBarOpen(false);
       setSessionId(conversation_id);
       setLocation(conversationLocation);
       setLanguage(conversationLanguage);
@@ -226,6 +233,7 @@ export const ChatProvider: FC<Props> = ({ children }) => {
         );
         setMessages(newMsg as Message[]);
       }
+      setIsChatLoading(false);
     } catch (error) {
       console.log(error);
     }

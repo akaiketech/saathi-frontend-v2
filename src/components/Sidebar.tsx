@@ -124,8 +124,8 @@ const Pagination: React.FC<PaginationProps> = ({ pageSize }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [allFetched, setAllFetched] = useState(false);
-  const { sessionId } = useGlobalContext();
-  const { setIsLoading, conv, setConv, openConversation } = useChatContext();
+  const { sessionId, setIsChatLoading } = useGlobalContext();
+  const { conv, setConv, openConversation } = useChatContext();
   const [scroll, setScroll] = useState(false);
   const containerRef = useRef(null);
 
@@ -136,19 +136,16 @@ const Pagination: React.FC<PaginationProps> = ({ pageSize }) => {
   const fetchDataAndUpdateState = async () => {
     try {
       setLoading(true);
-      setIsLoading(true);
       const data = await fetchData(currentPage, pageSize);
       if (data.data.conversations.length === 0) {
         setAllFetched(true);
       }
       setConv([...conv, ...(data.data.conversations as Conversation[])]);
       setLoading(false);
-      setIsLoading(false);
     } catch (error) {
       console.log(error);
     } finally {
       setLoading(false);
-      setIsLoading(false);
     }
   };
 
@@ -176,7 +173,7 @@ const Pagination: React.FC<PaginationProps> = ({ pageSize }) => {
                   item.conversation_location,
                   item.conversation_language,
                 );
-                fetchDataAndUpdateState()
+                fetchDataAndUpdateState();
                 setScroll(!scroll);
               }}
               className={`flex relative items-center max-w-52 mb-2 ring-2 text-[#455a64] ring-[#ff725e] py-2 px-6 mx-1 gap-2 rounded-[40px] cursor-pointer active:scale-95 transition-all duration-150 ${item.conversation_id === sessionId ? "chat-bg" : ""

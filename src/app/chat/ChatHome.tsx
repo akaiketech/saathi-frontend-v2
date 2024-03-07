@@ -30,6 +30,7 @@ import { useGlobalContext } from "../../hooks/context";
 
 import animationData from "./mike-animation.json";
 import loadingData from "../../lottie/loading.json";
+import chatAnimationData from "../../lottie/chatAnimation.json";
 import Sidebar from "../../components/Sidebar";
 import { useChatContext } from "./context/ChatContext";
 import { Message } from "../../types";
@@ -47,6 +48,7 @@ const ChatPage = () => {
     sessionId,
     isNewUser,
     sideBarOpen,
+    isChatLoading,
     setPrefModal,
     setSessionId,
     setSideBarOpen,
@@ -96,6 +98,15 @@ const ChatPage = () => {
     loop: true,
     autoplay: true,
     animationData: loadingData,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+    },
+  };
+
+  const defaultOptionsForChatLoading = {
+    loop: true,
+    autoplay: true,
+    animationData: chatAnimationData,
     rendererSettings: {
       preserveAspectRatio: "xMidYMid slice",
     },
@@ -222,16 +233,14 @@ const ChatPage = () => {
 
   return (
     <main
-      className={`flex transition-all duration-300 ease-in-out flex-col justify-end pt-6 pl-6 pr-6 ${
-        prefModal && "blur pointer-events-none"
-      }`}
+      className={`flex transition-all duration-300 ease-in-out flex-col justify-end pt-6 pl-6 pr-6 ${prefModal && "blur pointer-events-none"
+        }`}
     >
       <Sidebar />
       <header className="flex gap-2 md:justify-between">
         <h2
-          className={`text-red-saathi text-[24px] mt-2 md:mt-0 md:text-[48px] not-italic ml-12 md:ml-20 z-50 font-bold leading-[normal] transition-all duration-500 ease-in-out ${
-            sideBarOpen && "md:ml-[240px]"
-          }`}
+          className={`text-red-saathi text-[24px] mt-2 md:mt-0 md:text-[48px] not-italic ml-12 md:ml-20 z-50 font-bold leading-[normal] transition-all duration-500 ease-in-out ${sideBarOpen && "md:ml-[240px]"
+            }`}
         >
           SAATHI
         </h2>
@@ -270,9 +279,8 @@ const ChatPage = () => {
                 {[1, 2, 3, 4, 5].map((rating) => (
                   <button
                     key={rating}
-                    className={`p-2 text-4xl  ${
-                      starRating >= rating ? "text-yellow-500" : "text-gray-300"
-                    }`}
+                    className={`p-2 text-4xl  ${starRating >= rating ? "text-yellow-500" : "text-gray-300"
+                      }`}
                     onClick={() => handleRatingClick(rating)}
                   >
                     ★
@@ -317,12 +325,19 @@ const ChatPage = () => {
         )}
       </header>
       <div
-        className={`h-[calc(100vh-280px)] md:h-[calc(100vh-400px)] ml-0 mt-10 overflow-auto transition-all duration-500 ${
-          sideBarOpen ? "md:ml-[240px]" : "md:ml-20"
-        }`}
+        className={`h-[calc(100vh-280px)] md:h-[calc(100vh-400px)] ml-0 mt-10 overflow-auto transition-all duration-500 ${sideBarOpen ? "md:ml-[240px]" : "md:ml-20"
+          }`}
         ref={messagesEndRef}
       >
-        {messages.length ? (
+        {isChatLoading ? (
+          <div>
+            <Lottie
+              options={defaultOptionsForChatLoading}
+              height={250}
+              width={250}
+            />
+          </div>
+        ) : messages.length ? (
           messages.map((messageObj, index) => (
             <div key={index} className="flex flex-col w-full py-4 px-1">
               <div className="flex items-end ml-auto mb-4 max-w-[80%] md:max-w-[70%]">
@@ -427,7 +442,7 @@ const ChatPage = () => {
                             alt="stopSvg"
                             className="mr-1 w-4 h-4"
                           />
-                            Stop
+                          Stop
                         </button>
                       ) : (
                         <button
@@ -455,9 +470,8 @@ const ChatPage = () => {
 
       <footer>
         <div
-          className={`flex flex-col items-center z-10 md:ml-20 justify-center transition-all duration-500 ease-in-out ${
-            sideBarOpen && "md:ml-[240px]"
-          }`}
+          className={`flex flex-col items-center z-10 md:ml-20 justify-center transition-all duration-500 ease-in-out ${sideBarOpen && "md:ml-[240px]"
+            }`}
         >
           {isRecording ? (
             <div
@@ -468,11 +482,10 @@ const ChatPage = () => {
             </div>
           ) : (
             <div
-              className={`flex flex-col z-10 items-center gap-4 ${
-                isAudioPlaying || isLoading
+              className={`flex flex-col z-10 items-center gap-4 ${isAudioPlaying || isLoading
                   ? "opacity-50 pointer-events-none"
                   : ""
-              }`}
+                }`}
               onClick={() => {
                 if (isAudioPlaying || isLoading) return;
                 setIsRecording(true);
@@ -524,9 +537,8 @@ const ChatPage = () => {
             >
               <Image
                 src={submitBtn}
-                className={`cursor-pointer active:scale-90 transition-all duration-150 ${
-                  isLoading ? "opacity-50 pointer-events-none" : ""
-                }`}
+                className={`cursor-pointer active:scale-90 transition-all duration-150 ${isLoading ? "opacity-50 pointer-events-none" : ""
+                  }`}
                 alt="submitBtn"
                 height={30}
                 width={30}

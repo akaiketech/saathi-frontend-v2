@@ -17,6 +17,8 @@ type GlobalContextProps = {
   setLocation: React.Dispatch<React.SetStateAction<string>>;
   sideBarOpen: boolean;
   setSideBarOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isChatLoading: boolean;
+  setIsChatLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const GlobalContext = createContext<GlobalContextProps | undefined>(undefined);
@@ -42,6 +44,7 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
   const [sideBarOpen, setSideBarOpen] = useState<boolean>(false);
   const [isNewUser, setNewUser] = useState<boolean>(false);
   const [prefModal, setPrefModal] = useState<boolean>(false);
+  const [isChatLoading, setIsChatLoading] = useState<boolean>(false);
 
   useEffect(() => {
     // get the language from localstorage
@@ -58,6 +61,8 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
   return (
     <GlobalContext.Provider
       value={{
+        isChatLoading,
+        setIsChatLoading,
         language,
         setLanguage,
         prefModal,
