@@ -133,26 +133,26 @@ const Pagination: React.FC<PaginationProps> = ({ pageSize }) => {
     scrollToTop(containerRef);
   }, [scroll]);
 
-  useEffect(() => {
-    const fetchDataAndUpdateState = async () => {
-      try {
-        setLoading(true);
-        setIsLoading(true);
-        const data = await fetchData(currentPage, pageSize);
-        if (data.data.conversations.length === 0) {
-          setAllFetched(true);
-        }
-        setConv([...conv, ...(data.data.conversations as Conversation[])]);
-        setLoading(false);
-        setIsLoading(false);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-        setIsLoading(false);
+  const fetchDataAndUpdateState = async () => {
+    try {
+      setLoading(true);
+      setIsLoading(true);
+      const data = await fetchData(currentPage, pageSize);
+      if (data.data.conversations.length === 0) {
+        setAllFetched(true);
       }
-    };
+      setConv([...conv, ...(data.data.conversations as Conversation[])]);
+      setLoading(false);
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+      setIsLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchDataAndUpdateState();
   }, [currentPage, pageSize]);
 
@@ -176,9 +176,10 @@ const Pagination: React.FC<PaginationProps> = ({ pageSize }) => {
                   item.conversation_location,
                   item.conversation_language,
                 );
+                fetchDataAndUpdateState()
                 setScroll(!scroll);
               }}
-              className={`flex relative items-center max-w-52 mb-2 ring-2 text-[#455a64] ring-[#ff725e] py-2 px-6 mx-1 gap-2 rounded-[40px] cursor-pointer ${item.conversation_id === sessionId ? "chat-bg" : ""
+              className={`flex relative items-center max-w-52 mb-2 ring-2 text-[#455a64] ring-[#ff725e] py-2 px-6 mx-1 gap-2 rounded-[40px] cursor-pointer active:scale-95 transition-all duration-150 ${item.conversation_id === sessionId ? "chat-bg" : ""
                 }`}
               key={index}
             >

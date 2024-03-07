@@ -504,6 +504,7 @@ const ChatPage = () => {
           )}
           <form
             onSubmit={(e) => {
+              e.preventDefault();
               if (isLoading) return;
               handleSubmit(e);
             }}

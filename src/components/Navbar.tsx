@@ -1,12 +1,11 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
 import userImage from "../assets/svgs/user_profile.svg";
 import { useEffect, useRef, useState } from "react";
 import logout from "../assets/svgs/logout.svg";
-import { useGlobalContext } from "../hooks/context";
 import { useUser } from "@auth0/nextjs-auth0/client";
+import { LuDot } from "react-icons/lu";
 
 type Props = {
   isStart?: boolean;
@@ -93,11 +92,11 @@ const Navbar = ({ isStart }: Props) => {
         </div>
       )}
       {!isStart && (
-        <div className="flex text-black justify-center font-medium w-full text-[14px] md:text-[28px]">
+        <div className="flex text-black justify-center font-medium w-full text-[14px] md:text-[24px]">
           {tabs.map((tab, index) => (
-            <div className="flex md:gap-2 md:ml-2" key={index}>
+            <div className="flex" key={index}>
               <div>{tab.name}</div>
-              {tabs.length - 1 > index && <span className="mx-1">|</span>}
+              {tabs.length - 1 > index && <LuDot className="mt-1 md:mt-2" />}
             </div>
           ))}
         </div>

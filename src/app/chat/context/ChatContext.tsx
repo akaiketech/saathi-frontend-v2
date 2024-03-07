@@ -14,7 +14,7 @@ import * as sdk from "microsoft-cognitiveservices-speech-sdk";
 import { textToSpeech } from "../util";
 import { Conversation, Message } from "../../../types";
 import { useGlobalContext } from "../../../hooks/context";
-import { getConversationMsgs } from "../../../services";
+import { getConversationMsgs, getConversations } from "../../../services";
 import { toast } from "react-toastify";
 
 interface ChatContextType {
@@ -193,11 +193,22 @@ export const ChatProvider: FC<Props> = ({ children }) => {
       );
 
       if (selectedConv) {
-        const filteredConv = conv.filter(
-          (conv) => conv.conversation_id !== conversation_id,
+        const conversations = await getConversations({
+          page: 1,
+          page_size: 10,
+        });
+        const newConv = [...conversations.data.conversations];
+
+        // delete selectedConv
+        newConv.splice(
+          newConv.findIndex(
+            (c) => c.conversation_id === selectedConv.conversation_id,
+          ),
+          1,
         );
 
-        setConv([selectedConv, ...filteredConv]);
+        newConv.unshift(selectedConv);
+        setConv(newConv);
       }
 
       if (res.error) {
