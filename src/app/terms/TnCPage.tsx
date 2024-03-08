@@ -46,8 +46,7 @@ const Terms = () => {
   const [loading, setLoading] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [ttsController, setTtsController] = useState<SpeakerAudioDestination>();
-  const { replayAudio, isAudioPlaying, setIsAudioPlaying, stopPlayingAudio } =
-    useChatContext();
+  const { replayAudio, setIsAudioPlaying } = useChatContext();
 
   useEffect(() => {
     (async () => {
@@ -59,6 +58,7 @@ const Terms = () => {
         router.replace("/chat");
       } else {
         setLoading(false);
+        router.replace("/");
       }
     })();
   }, []);
