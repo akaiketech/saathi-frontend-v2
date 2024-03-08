@@ -91,13 +91,7 @@ function Sidebar() {
       </div>
       <nav className={sideBarOpen ? "sidebar active" : "sidebar"}>
         <div className="flex flex-col items-center mt-48 md:mt-64">
-          <div
-            className={
-              sideBarOpen
-                ? "opacity-100 transition-all duration-150"
-                : "opacity-0 transition-all duration-150"
-            }
-          >
+          <div className={sideBarOpen ? "opacity-100" : "hidden"}>
             <Pagination pageSize={5} />
           </div>
         </div>
@@ -124,7 +118,7 @@ const Pagination: React.FC<PaginationProps> = ({ pageSize }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [allFetched, setAllFetched] = useState(false);
-  const { sessionId, setIsChatLoading } = useGlobalContext();
+  const { sessionId } = useGlobalContext();
   const { conv, setConv, openConversation } = useChatContext();
   const [scroll, setScroll] = useState(false);
   const containerRef = useRef(null);

@@ -212,11 +212,11 @@ const ChatPage = () => {
     }
 
     switch (location.toLowerCase()) {
-      case "Karnataka":
+      case "karnataka":
         locat = "KA";
         break;
 
-      case "Tamil Nadu":
+      case "tamil nadu":
         locat = "TN";
         break;
     }
