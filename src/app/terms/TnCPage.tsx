@@ -11,7 +11,7 @@ import checkSvg from "../../assets/svgs/check.svg";
 import crossSvg from "../../assets/svgs/cross.svg";
 import speakerSvg from "../../assets/svgs/speaker_tnc.svg";
 import stopSvg from "../../assets/svgs/stop_tnc.svg";
-import { acceptUserTnC, checkUserTnCStatus } from "../../services";
+import { checkUserTnCStatus, updateUserTnC } from "../../services";
 import { toast } from "react-toastify";
 import { generateSessionId } from "../../utils/utils";
 import { textToSpeech } from "../chat/util";
@@ -45,20 +45,23 @@ const Terms = () => {
   const [optionLang, setOptionLang] = useState({ accept: "", decline: "" });
   const [loading, setLoading] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isAccepted, setIsAccepted] = useState(false);
   const [ttsController, setTtsController] = useState<SpeakerAudioDestination>();
   const { replayAudio, setIsAudioPlaying } = useChatContext();
 
   useEffect(() => {
     (async () => {
-      setLoading(true);
-      const res = await checkUserTnCStatus();
-      if (res.data.terms_and_conditions_status) {
-        const newSessionId = generateSessionId();
-        setSessionId(newSessionId);
-        router.replace("/chat");
-      } else {
+      try {
+        setLoading(true);
+        const {
+          data: { terms_and_conditions_status },
+        } = await checkUserTnCStatus();
+        setIsAccepted(terms_and_conditions_status);
+      } catch (error) {
+        console.error("Error checking TnC status:", error);
+        toast.error("Something went wrong. Please try again later");
+      } finally {
         setLoading(false);
-        router.replace("/");
       }
     })();
   }, []);
@@ -71,19 +74,32 @@ const Terms = () => {
   }, [language]);
 
   const handleAccept = async () => {
-    setLoading(true);
-    const res = await acceptUserTnC();
+    if (isAccepted) {
+      const newSessionId = generateSessionId();
+      setSessionId(newSessionId);
+      router.replace("/chat");
+      return;
+    }
 
+    setLoading(true);
+    const res = await updateUserTnC({ status_input: 1 });
+
+    console.log(res);
     if (res.error) {
       toast.error(res.error);
-    } else if (res.data.message === "Terms and conditions accepted") {
+    } else if (res.data.message === "Terms and conditions status updated") {
       const newSessionId = generateSessionId();
       setSessionId(newSessionId);
       router.replace("/chat");
     }
   };
-  const handleDecline = () => {
-    router.replace("/");
+  const handleDecline = async () => {
+    setLoading(true);
+    const res = await updateUserTnC({ status_input: 0 });
+    if (res.error) {
+      return toast.error(res.error);
+    }
+    window.location.href = "/api/auth/logout";
   };
 
   const handleStopReplay = () => {

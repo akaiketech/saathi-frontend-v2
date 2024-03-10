@@ -1,16 +1,23 @@
 import { toast } from "react-toastify";
 
-export const acceptUserTnC = async () => {
-  const res = await fetch("/api/v2/terms-update", { method: "POST" });
+export const updateUserTnC = async ({
+  status_input,
+}: {
+  status_input: number;
+}) => {
+  const res = await fetch("/api/v2/terms-update", {
+    method: "PUT",
+    body: JSON.stringify({ status_input }),
+  });
 
   if (!res.ok) {
     const errorText = `Failed to fetch the result.`;
-    return { data: null, error: errorText };
+    return { data: null, error: errorText, status: res.status };
   }
 
   if (res.status === 200) {
     const data = await res.json();
-    return { data, error: null };
+    return { data, error: null, status: res.status };
   }
 
   return { data: null, error: "Unknown error occurred" };
