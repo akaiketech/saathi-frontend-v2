@@ -17,6 +17,7 @@ import thumbsUpOutline from "../../assets/svgs/thumb_up_outline.svg";
 import thumbsDownOutline from "../../assets/svgs/thumb_down_outline.svg";
 import { IoLanguage } from "react-icons/io5";
 import { IoLocationOutline } from "react-icons/io5";
+import Markdown from "react-markdown";
 
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import {
@@ -232,16 +233,14 @@ const ChatPage = () => {
 
   return (
     <main
-      className={`flex transition-all duration-300 ease-in-out flex-col justify-end pt-6 pl-6 pr-6 ${
-        prefModal && "blur pointer-events-none"
-      }`}
+      className={`flex transition-all duration-300 ease-in-out flex-col justify-end pt-6 pl-6 pr-6 ${prefModal && "blur pointer-events-none"
+        }`}
     >
       <Sidebar />
       <header className="flex gap-2 md:justify-between">
         <h2
-          className={`text-red-saathi text-[24px] mt-2 md:mt-0 md:text-[48px] not-italic ml-12 md:ml-20 z-50 font-bold leading-[normal] transition-all duration-500 ease-in-out ${
-            sideBarOpen && "md:ml-[240px]"
-          }`}
+          className={`text-red-saathi text-[24px] mt-2 md:mt-0 md:text-[48px] not-italic ml-12 md:ml-20 z-50 font-bold leading-[normal] transition-all duration-500 ease-in-out ${sideBarOpen && "md:ml-[240px]"
+            }`}
         >
           SAATHI
         </h2>
@@ -280,9 +279,8 @@ const ChatPage = () => {
                 {[1, 2, 3, 4, 5].map((rating) => (
                   <button
                     key={rating}
-                    className={`p-2 text-4xl  ${
-                      starRating >= rating ? "text-yellow-500" : "text-gray-300"
-                    }`}
+                    className={`p-2 text-4xl  ${starRating >= rating ? "text-yellow-500" : "text-gray-300"
+                      }`}
                     onClick={() => handleRatingClick(rating)}
                   >
                     ★
@@ -327,9 +325,8 @@ const ChatPage = () => {
         )}
       </header>
       <div
-        className={`h-[calc(100vh-280px)] md:h-[calc(100vh-400px)] ml-0 mt-10 overflow-auto transition-all duration-500 ${
-          sideBarOpen ? "md:ml-[240px]" : "md:ml-20"
-        }`}
+        className={`h-[calc(100vh-280px)] md:h-[calc(100vh-400px)] ml-0 mt-10 overflow-auto transition-all duration-500 ${sideBarOpen ? "md:ml-[240px]" : "md:ml-20"
+          }`}
         ref={messagesEndRef}
       >
         {isChatLoading ? (
@@ -381,7 +378,7 @@ const ChatPage = () => {
                       </div>
                       <div className="w-[70%] md:w-1/2 p-3 rounded-[30px_30px_30px_0px] bg-[#FFCBC366] text-gray-700">
                         <div className="text-sm md:text-xl not-italic font-medium leading-[normal] break-words">
-                          {messageObj.answer}
+                          <Markdown>{messageObj.answer}</Markdown>
                         </div>
                       </div>
                     </div>
@@ -473,9 +470,8 @@ const ChatPage = () => {
 
       <footer>
         <div
-          className={`flex flex-col items-center z-10 md:ml-20 justify-center transition-all duration-500 ease-in-out ${
-            sideBarOpen && "md:ml-[240px]"
-          }`}
+          className={`flex flex-col items-center z-10 md:ml-20 justify-center transition-all duration-500 ease-in-out ${sideBarOpen && "md:ml-[240px]"
+            }`}
         >
           {isRecording ? (
             <div
@@ -486,11 +482,10 @@ const ChatPage = () => {
             </div>
           ) : (
             <div
-              className={`flex flex-col z-10 items-center gap-4 ${
-                isAudioPlaying || isLoading
+              className={`flex flex-col z-10 items-center gap-4 ${isAudioPlaying || isLoading
                   ? "opacity-50 pointer-events-none"
                   : ""
-              }`}
+                }`}
               onClick={() => {
                 if (isAudioPlaying || isLoading) return;
                 setIsRecording(true);
@@ -542,9 +537,8 @@ const ChatPage = () => {
             >
               <Image
                 src={submitBtn}
-                className={`cursor-pointer active:scale-90 transition-all duration-150 ${
-                  isLoading ? "opacity-50 pointer-events-none" : ""
-                }`}
+                className={`cursor-pointer active:scale-90 transition-all duration-150 ${isLoading ? "opacity-50 pointer-events-none" : ""
+                  }`}
                 alt="submitBtn"
                 height={30}
                 width={30}
