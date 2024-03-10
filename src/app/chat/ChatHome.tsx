@@ -145,8 +145,7 @@ const ChatPage = () => {
     return question;
   };
 
-  const handleSubmit = async (e?: React.FormEvent) => {
-    e?.preventDefault();
+  const handleSubmit = async () => {
     const inputRef = document.getElementById("question") as HTMLInputElement;
     // get input value
     const inputValue = inputRef.value;
@@ -233,14 +232,16 @@ const ChatPage = () => {
 
   return (
     <main
-      className={`flex transition-all duration-300 ease-in-out flex-col justify-end pt-6 pl-6 pr-6 ${prefModal && "blur pointer-events-none"
-        }`}
+      className={`flex transition-all duration-300 ease-in-out flex-col justify-end pt-6 pl-6 pr-6 ${
+        prefModal && "blur pointer-events-none"
+      }`}
     >
       <Sidebar />
       <header className="flex gap-2 md:justify-between">
         <h2
-          className={`text-red-saathi text-[24px] mt-2 md:mt-0 md:text-[48px] not-italic ml-12 md:ml-20 z-50 font-bold leading-[normal] transition-all duration-500 ease-in-out ${sideBarOpen && "md:ml-[240px]"
-            }`}
+          className={`text-red-saathi text-[24px] mt-2 md:mt-0 md:text-[48px] not-italic ml-12 md:ml-20 z-50 font-bold leading-[normal] transition-all duration-500 ease-in-out ${
+            sideBarOpen && "md:ml-[240px]"
+          }`}
         >
           SAATHI
         </h2>
@@ -279,8 +280,9 @@ const ChatPage = () => {
                 {[1, 2, 3, 4, 5].map((rating) => (
                   <button
                     key={rating}
-                    className={`p-2 text-4xl  ${starRating >= rating ? "text-yellow-500" : "text-gray-300"
-                      }`}
+                    className={`p-2 text-4xl  ${
+                      starRating >= rating ? "text-yellow-500" : "text-gray-300"
+                    }`}
                     onClick={() => handleRatingClick(rating)}
                   >
                     ★
@@ -325,8 +327,9 @@ const ChatPage = () => {
         )}
       </header>
       <div
-        className={`h-[calc(100vh-280px)] md:h-[calc(100vh-400px)] ml-0 mt-10 overflow-auto transition-all duration-500 ${sideBarOpen ? "md:ml-[240px]" : "md:ml-20"
-          }`}
+        className={`h-[calc(100vh-280px)] md:h-[calc(100vh-400px)] ml-0 mt-10 overflow-auto transition-all duration-500 ${
+          sideBarOpen ? "md:ml-[240px]" : "md:ml-20"
+        }`}
         ref={messagesEndRef}
       >
         {isChatLoading ? (
@@ -470,8 +473,9 @@ const ChatPage = () => {
 
       <footer>
         <div
-          className={`flex flex-col items-center z-10 md:ml-20 justify-center transition-all duration-500 ease-in-out ${sideBarOpen && "md:ml-[240px]"
-            }`}
+          className={`flex flex-col items-center z-10 md:ml-20 justify-center transition-all duration-500 ease-in-out ${
+            sideBarOpen && "md:ml-[240px]"
+          }`}
         >
           {isRecording ? (
             <div
@@ -482,10 +486,11 @@ const ChatPage = () => {
             </div>
           ) : (
             <div
-              className={`flex flex-col z-10 items-center gap-4 ${isAudioPlaying || isLoading
+              className={`flex flex-col z-10 items-center gap-4 ${
+                isAudioPlaying || isLoading
                   ? "opacity-50 pointer-events-none"
                   : ""
-                }`}
+              }`}
               onClick={() => {
                 if (isAudioPlaying || isLoading) return;
                 setIsRecording(true);
@@ -519,7 +524,7 @@ const ChatPage = () => {
             onSubmit={(e) => {
               e.preventDefault();
               if (isLoading) return;
-              handleSubmit(e);
+              handleSubmit();
             }}
             className="relative flex justify-center items-center gap-2 w-full max-w-[740px] pl-4 md:pl-8 pr-2 md:pr-6 pt-6 md:pt-9 pb-4 -mt-9 bg-[#f1f1f1] rounded-[20px]"
           >
@@ -537,8 +542,9 @@ const ChatPage = () => {
             >
               <Image
                 src={submitBtn}
-                className={`cursor-pointer active:scale-90 transition-all duration-150 ${isLoading ? "opacity-50 pointer-events-none" : ""
-                  }`}
+                className={`cursor-pointer active:scale-90 transition-all duration-150 ${
+                  isLoading ? "opacity-50 pointer-events-none" : ""
+                }`}
                 alt="submitBtn"
                 height={30}
                 width={30}

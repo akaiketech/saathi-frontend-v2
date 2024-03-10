@@ -84,7 +84,6 @@ const Terms = () => {
     setLoading(true);
     const res = await updateUserTnC({ status_input: 1 });
 
-    console.log(res);
     if (res.error) {
       toast.error(res.error);
     } else if (res.data.message === "Terms and conditions status updated") {
