@@ -7,6 +7,7 @@ import { Conversation } from "../../../types";
 import { useChatContext } from "../context/ChatContext";
 import animationData from "../../../lottie/loading.json";
 import Lottie from "react-lottie";
+import { useGlobalContext } from "../../../hooks/context";
 
 type Props = {
   isNewUser: boolean;
@@ -15,6 +16,39 @@ type Props = {
 
 const NewConv = ({ isNewUser, conversations }: Props) => {
   const { isLoading, openConversation } = useChatContext();
+  const { language } = useGlobalContext();
+
+  const getGreetingMessage = () => {
+    let welcomeMsg = "Welcome to SAATHI";
+    let greeting = "How can I help you today?";
+
+    if (!isNewUser) {
+      welcomeMsg = "Welcome back!";
+    }
+
+    switch (language.toLowerCase()) {
+      case "hindi":
+        welcomeMsg = "आपका स्वागत है";
+        greeting =
+          "साथी में आपका स्वागत है, मैं एक ध्वनि एवं लेखन आधारित वित्तीय योजना सलाहकार हूं। कृपया कोई भी सवाल पूछें, और मैं आपको स्पष्ट उत्तर दूंगा!";
+        break;
+
+      case "tamil":
+        welcomeMsg = "மீண்டும் வருக";
+        greeting =
+          "SAATHI க்கு வரவேற்கிறோம். குரல் மற்றும் உரை மூலம் பொருத்தமான நிதி உதவித் திட்டத்தைப் பெற உங்கள் நட்பு ஆலோசகர். கேள்விகளுக்கு தெளிவான பதில்களைப் பெறலாம்!";
+        break;
+
+      case "kannada":
+        welcomeMsg = "ಮರಳಿ ಸ್ವಾಗತ";
+        greeting =
+          "ಧ್ವನಿ ಮತ್ತು ಪಠ್ಯದ ಮೂಲಕ ನಿಮ್ಮ ಸ್ನೇಹಪರ ಹಣಕಾಸು ಯೋಜನೆ ಸಲಹೆಗಾರ ಸಾಥಿಗೆ ಸುಸ್ವಾಗತ. ಯಾವುದೇ ಪ್ರಶ್ನೆಗಳನ್ನು ಕೇಳಲು ಹಿಂಜರಿಯಬೇಡಿ ಮತ್ತು ನಾನು ನಿಮಗೆ ಸ್ಪಷ್ಟ ಉತ್ತರಗಳನ್ನು ನೀಡುತ್ತೇನೆ!";
+        break;
+    }
+
+    return { welcomeMsg, greeting };
+  };
+
   const defaultOptionsForLoading = {
     loop: true,
     autoplay: true,
@@ -27,10 +61,10 @@ const NewConv = ({ isNewUser, conversations }: Props) => {
   return !isLoading ? (
     <div className="flex flex-col md:ml-10 h-full text-2xl text-black bg-red">
       <h1 className="chat-heading text-[24px] md:text-[46px]">
-        Namaste, {isNewUser ? "Welcome to SAATHI" : "Welcome back!"}
+        Namaste, {getGreetingMessage().welcomeMsg}
       </h1>
-      <h3 className="text-[#b3b3b3] mt-4 font-medium text-xl md:text-4xl">
-        How can I help you today?
+      <h3 className="text-[#b3b3b3] mt-4 font-medium text-lg md:text-2xl">
+        {getGreetingMessage().greeting}
       </h3>
 
       <div className="mt-6 md:mt-10">

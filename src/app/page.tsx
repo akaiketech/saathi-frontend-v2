@@ -77,8 +77,8 @@ const Headings = () => {
       <div className="text-3xl md:text-[40px] font-medium text-red-saathi">
         Welcome to SAATHI
       </div>
-      <div className="text-[18px] md:text-[32px] font-medium text-center mt-2">
-        Learn all about the schemes today
+      <div className="text-[18px] md:text-[28px] font-medium text-center mt-2">
+        Voice and text based friendly multilingual financial scheme advisor.
       </div>
     </div>
   );
