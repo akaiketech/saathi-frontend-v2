@@ -28,7 +28,7 @@ export const queryApi = async ({
     english_query,
     conversation_location,
     conversation_language,
-    user_audio: user_audio !== "" ? uint8ArrayToBase64(user_audio) : "",
+    user_audio: user_audio !== "" ? uint8ArrayToBase64(user_audio) : undefined,
     language_query,
   };
 
