@@ -20,22 +20,28 @@ import { useChatContext } from "../chat/context/ChatContext";
 
 const TERMS_AND_CONDITIONS = {
   hindi: [
-    "● SAATHI का उद्देश्य आपके प्रश्नों के लिए आपको उत्तर प्रदानकरना है",
-    "● SAATHI आपके प्रश्नों और उसके द्वारा प्रदान किए गए उत्तरों को संग्रहित करता है ताकि हम यह सत्यापित कर सकें कि उत्तर आपके प्रश्न के लिए उपयुक्त और संबंधित थे।",
-    "● SAATHI आपकी व्यक्तिगत जानकारी का संग्रहित नहीं करता है।",
-    "● SAATHI एक बहुत ही सहायक उपकरण बनने का उद्देश्य रखता है और उत्तर में किसी भी प्रकार की पक्षपात की अनजाने में कोई भी चाह कर नहीं किया जाता है।",
-    "SAATHI से प्रश्न पूछकर आप उपरोक्त नियमों और शर्तों से सहमत हो रहे हैं।",
-    "यह परियोजना बिल एंड मेलिंडा गेट्स फाउंडेशन द्वारा वित्त पोषित है",
+    "SAATHI को भारतीय विज्ञान संस्थान, ऑक्सफोर्ड ब्रूक्स यूनिवर्सिटी, अकाइके टेक्नोलॉजीज़ और कोटक महिंद्रा बैंक के विशेषज्ञों द्वारा विकसित किया गया है। यह परियोजना बिल एंड मेलिंडा गेट्स फाउंडेशन द्वारा वित्त पोषित है।",
+    "● SAATHI आपको आपके प्रश्नों के उत्तर प्रदान करता है।",
+    "● SAATHI सत्यापन उद्देश्यों के लिए बातचीत को संग्रहित करता है।",
+    "● SAATHI आपके लॉगिन को सुविधाजनक बनाने के लिए आपका फ़ोन नंबर संग्रहित करता है। हालांकि, इसका उपयोग अन्य उद्देश्यों के लिए नहीं किया जाएगा।",
+    "● SAATHI का लक्ष्य एक सहायक उपकरण बनना है और उत्तर में कोई भी पूर्वाग्रह अनजाने में है।",
+    "SAATHI से प्रश्न पूछकर, आप उपरोक्त नियमों और शर्तों से सहमत होते हैं।",
   ],
   english: [
-    "SAATHI User Consent Terms and Conditions",
-    "SAATHI is developed by a consortium of researchers (Indian Institute of Science, Bangalore, and Oxford Brookes University, UK), technical experts from Akaike Technologies and the banking professionals from Kotak Mahindra Bank.",
-    "● SAATHI aims to provide you with answers for your queries.",
-    "● SAATHI stores your questions and the answers that it provides so that we can validate and verify if the answers were appropriate and relevant to your question.",
-    "● SAATHI does not ask or store your personal information.",
-    "● SAATHI aims to be a very helpful tool and any bias in the answer is unintentional.",
-    "By asking a query to SAATHI you are agreeing to the above terms and conditions.",
-    "This project is funded by the Bill & Melinda Gates Foundation",
+    "SAATHI is developed by experts from the Indian Institute of Science, Oxford Brookes University, Akaike Technologies, and Kotak Mahindra Bank. This project is funded by the Bill and Melinda Gates Foundation.",
+    "● SAATHI provides you with answers to your queries.",
+    "● SAATHI stores conversation for validation purposes.",
+    "● SAATHI stores your phone number to facilitate your login. However, it will not be used for other purposes.",
+    "● SAATHI aims to be a helpful tool and any bias in the answer is unintentional.",
+    "By asking a query to SAATHI, you agree to the above terms and conditions. ",
+  ],
+  kannada: [
+    "SAATHI ನಿಯಮಗಳು ಮತ್ತು ಷರತ್ತುಗಳು (SAATHI Terms and Conditions)",
+    "● SAATHI ನಿಮ್ಮ ಪ್ರಶ್ನೆಗಳಿಗೆ ಉತ್ತರಗಳನ್ನು ಒದಗಿಸುತ್ತದೆ.",
+    "● SAATHI ಮೌಲ್ಯೀಕರಣ ಉದ್ದೇಶಗಳಿಗಾಗಿ ಸಂಭಾಷಣೆಗಳನ್ನು ಸಂಗ್ರಹಿಸುತ್ತದೆ.",
+    "● ನಿಮ್ಮ ಲಾಗಿನ್ ಅನ್ನು ಸುಲಭಗೊಳಿಸಲು SAATHI ನಿಮ್ಮ ಫೋನ್ ಸಂಖ್ಯೆಯನ್ನು ಸಂಗ್ರಹಿಸುತ್ತದೆ. ಆದಾಗ್ಯೂ, ಇದನ್ನು ಇತರ ಉದ್ದೇಶಗಳಿಗಾಗಿ ಬಳಸಲಾಗುವುದಿಲ್ಲ.",
+    "● SAATHI ಒಂದು ಸಹಾಯಕ ಸಾಧನವಾಗಲು ಗುರಿ ಹೊಂದಿದೆ ಮತ್ತು ಉತ್ತರದಲ್ಲಿ ಯಾವುದೇ ಪಕ್ಷಪಾತವು ಉದ್ದೇಶಪೂರ್ವಕವಲ್ಲ.",
+    "SAATHI ಗೆ ಪ್ರಶ್ನೆಯನ್ನು ಕೇಳುವ ಮೂಲಕ, ನೀವು ಮೇಲಿನ ನಿಯಮಗಳು ಮತ್ತು ಷರತ್ತುಗಳಿಗೆ ಸಮ್ಮತಿಸುತ್ತೀರಿ.",
   ],
 };
 
@@ -67,9 +73,23 @@ const Terms = () => {
   }, []);
 
   useEffect(() => {
+    const accept = {
+      kannada: "ಸುಲಭ",
+      hindi: "स्वीकार",
+      english: "ACCEPT",
+      tamil: "ACCEPT",
+    };
+
+    const decline = {
+      kannada: "ಅಸುಲಭ",
+      hindi: "अस्वीकार",
+      english: "DECLINE",
+      tamil: "DECLINE",
+    };
+
     setOptionLang({
-      accept: language.toLowerCase() === "hindi" ? "स्वीकार" : "ACCEPT",
-      decline: language.toLowerCase() === "hindi" ? "अस्वीकार" : "DECLINE",
+      accept: accept[language.toLowerCase() as keyof typeof accept],
+      decline: decline[language.toLowerCase() as keyof typeof decline],
     });
   }, [language]);
 
@@ -110,15 +130,12 @@ const Terms = () => {
     });
   };
 
-  const handleReplayClick = (index: number) =>
-    replayAudio(index, language, voice);
-
   const termsAndConditions = () => {
     switch (language.toLowerCase()) {
       case "hindi":
         return TERMS_AND_CONDITIONS["hindi"];
-      case "english":
-        return TERMS_AND_CONDITIONS["english"];
+      case "kannada":
+        return TERMS_AND_CONDITIONS["kannada"];
       default:
         return TERMS_AND_CONDITIONS["english"];
     }
@@ -153,9 +170,8 @@ const Terms = () => {
               }}
               src={speakerSvg}
               alt="avatar"
-              className={`ml-2 w-8 h-8 ${
-                loading ? "opacity-50 pointer-events-none" : ""
-              } `}
+              className={`ml-2 w-8 h-8 ${loading ? "opacity-50 pointer-events-none" : ""
+                } `}
             />
           ) : (
             <Image
@@ -181,9 +197,8 @@ const Terms = () => {
       <footer className="mt-8 flex justify-evenly items-center w-full">
         <div
           onClick={handleAccept}
-          className={`${
-            loading ? "opacity-50 pointer-events-none" : "" // Disable button when loading
-          } shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] rounded-[60px] bg-[#ff725e] text-white text-xl md:text-[50px] not-italic font-bold leading-[normal] flex justify-center gap-4 items-center w-[40%] py-4 px-2`}
+          className={`${loading ? "opacity-50 pointer-events-none" : "" // Disable button when loading
+            } shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] rounded-[60px] bg-[#ff725e] text-white text-xl md:text-[50px] not-italic font-bold leading-[normal] flex justify-center gap-4 items-center w-[40%] py-4 px-2`}
         >
           <div>{optionLang.accept}</div>
           <Image
@@ -194,9 +209,8 @@ const Terms = () => {
         </div>
         <div
           onClick={handleDecline}
-          className={`${
-            loading ? "opacity-50 pointer-events-none" : "" // Disable button when loading
-          } border shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] rounded-[60px] border-solid border-[#D6D6D6] cursor-pointer text-[#302B27] text-xl md:text-[50px] not-italic font-bold leading-[normal] px-3 py-4 flex justify-center items-center w-[40%] gap-4`}
+          className={`${loading ? "opacity-50 pointer-events-none" : "" // Disable button when loading
+            } border shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] rounded-[60px] border-solid border-[#D6D6D6] cursor-pointer text-[#302B27] text-xl md:text-[50px] not-italic font-bold leading-[normal] px-3 py-4 flex justify-center items-center w-[40%] gap-4`}
         >
           <div>{optionLang.decline}</div>
           <Image
