@@ -244,31 +244,31 @@ const ChatPage = () => {
         >
           SAATHI
         </h2>
-        {messages.length > 0 ? (
-          <div className="flex w-full justify-between md:justify-end">
-            <div className="flex flex-col text-sm text-[#455a64]">
-              <div className="flex gap-1 md:gap-2 items-center">
-                <IoLocationOutline
-                  color="#ff725e"
-                  className="text-sm md:text-2xl"
-                />
-                <p className="block md:hidden">{getMobileValues().location}</p>
-                <p className="hidden md:block">{location}</p>
-              </div>
-              <div className="flex gap-1 md:gap-2 items-center">
-                <IoLanguage color="#ff725e" className="text-sm md:text-2xl" />
-                <p className="block md:hidden">{getMobileValues().language}</p>
-                <p className="hidden md:block">{language}</p>
-              </div>
+        <div className="flex w-full justify-between md:justify-end">
+          <div className="flex flex-col text-sm text-[#455a64]">
+            <div className="flex gap-1 md:gap-2 items-center">
+              <IoLocationOutline
+                color="#ff725e"
+                className="text-sm md:text-2xl"
+              />
+              <p className="block md:hidden">{getMobileValues().location}</p>
+              <p className="hidden md:block">{location}</p>
             </div>
+            <div className="flex gap-1 md:gap-2 items-center">
+              <IoLanguage color="#ff725e" className="text-sm md:text-2xl" />
+              <p className="block md:hidden">{getMobileValues().language}</p>
+              <p className="hidden md:block">{language}</p>
+            </div>
+          </div>
+          {messages.length > 0 ? (
             <div
               onClick={handleNewChat}
               className="flex md:hidden items-center justify-center bg-[#dbdbdb] h-8 w-8 rounded-full"
             >
               <FaPlus size={20} color="#7b7b7b" />
             </div>
-          </div>
-        ) : null}
+          ) : null}
+        </div>
         {isFeedbackDialogOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
             <div className="p-8 bg-white rounded-lg w-96">
@@ -325,7 +325,7 @@ const ChatPage = () => {
         )}
       </header>
       <div
-        className={`h-[calc(100vh-280px)] md:h-[calc(100vh-400px)] ml-0 mt-10 overflow-auto transition-all duration-500 ${sideBarOpen ? "md:ml-[240px]" : "md:ml-20"
+        className={`h-[calc(100vh-280px)] md:h-[calc(100vh-400px)] lg:h-[calc(100vh-350px)] ml-0 mt-10 overflow-auto transition-all duration-500 ${sideBarOpen ? "md:ml-[240px]" : "md:ml-20"
           }`}
         ref={messagesEndRef}
       >
@@ -342,7 +342,7 @@ const ChatPage = () => {
             <div key={index} className="flex flex-col w-full py-4 px-1">
               <div className="flex items-end ml-auto mb-4 max-w-[80%] md:max-w-[70%]">
                 <div className="p-3 rounded-[30px_30px_0px_30px] bg-[#ff725e]">
-                  <div className="text-white text-sm md:text-xl not-italic font-medium leading-[normal]">
+                  <div className="text-white text-sm md:text-xl lg:text-lg not-italic font-medium leading-[normal]">
                     {showQuestion(messageObj)}
                   </div>
                 </div>
@@ -377,7 +377,7 @@ const ChatPage = () => {
                         />
                       </div>
                       <div className="w-[70%] md:w-1/2 p-3 rounded-[30px_30px_30px_0px] bg-[#FFCBC366] text-gray-700">
-                        <div className="text-sm md:text-xl not-italic font-medium leading-[normal] break-words">
+                        <div className="text-sm md:text-xl lg:text-lg not-italic font-medium leading-[normal] break-words">
                           <Markdown>{messageObj.answer}</Markdown>
                         </div>
                       </div>
