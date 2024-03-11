@@ -20,7 +20,8 @@ const NewConv = ({ isNewUser, conversations }: Props) => {
 
   const getGreetingMessage = () => {
     let namaste = "Namaste!";
-    let greeting = "How can I help you today?";
+    let greeting =
+      "Welcome to Saathi, your friendly financial scheme advisor through voice and text. Feel free to ask any questions, and I'll provide you with clear answers!";
 
     switch (language.toLowerCase()) {
       case "hindi":
@@ -36,7 +37,7 @@ const NewConv = ({ isNewUser, conversations }: Props) => {
         break;
 
       case "kannada":
-        namaste = "ಹಲೋ!!";
+        namaste = "ಹಲೋ!";
         greeting =
           "ಧ್ವನಿ ಮತ್ತು ಪಠ್ಯದ ಮೂಲಕ ನಿಮ್ಮ ಸ್ನೇಹಪರ ಹಣಕಾಸು ಯೋಜನೆ ಸಲಹೆಗಾರ ಸಾಥಿಗೆ ಸುಸ್ವಾಗತ. ಯಾವುದೇ ಪ್ರಶ್ನೆಗಳನ್ನು ಕೇಳಲು ಹಿಂಜರಿಯಬೇಡಿ ಮತ್ತು ನಾನು ನಿಮಗೆ ಸ್ಪಷ್ಟ ಉತ್ತರಗಳನ್ನು ನೀಡುತ್ತೇನೆ!";
         break;
