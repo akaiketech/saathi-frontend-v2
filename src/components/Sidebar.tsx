@@ -83,8 +83,9 @@ function Sidebar() {
       >
         <FaPlus size={20} color="#7b7b7b" />
         <span
-          className={`overflow-ellipsis whitespace-nowrap overflow-x-hidden ${sideBarOpen ? "block" : "hidden"
-            }`}
+          className={`overflow-ellipsis whitespace-nowrap overflow-x-hidden ${
+            sideBarOpen ? "block" : "hidden"
+          }`}
         >
           New Chat
         </span>
@@ -98,8 +99,9 @@ function Sidebar() {
       </nav>
       <div
         onClick={() => (window.location.href = "/api/auth/logout")}
-        className={`absolute flex gap-3 items-center z-50 rounded-full cursor-pointer bottom-10 left-6 bg-[#dbdbdb] active:bg-[#bebcbc] transition-all duration-300 ${sideBarOpen ? "logout active" : "logout"
-          }`}
+        className={`absolute flex gap-3 items-center z-50 rounded-full cursor-pointer bottom-10 left-6 bg-[#dbdbdb] active:bg-[#bebcbc] transition-all duration-300 ${
+          sideBarOpen ? "logout active" : "logout"
+        }`}
       >
         <Image className="w-auto h-10" src={logout} alt="logout" />
         <span className="flex overflow-ellipsis overflow-x-hidden text-[16px] text-[#7b7b7b] font-medium">
@@ -119,7 +121,8 @@ const Pagination: React.FC<PaginationProps> = ({ pageSize }) => {
   const [loading, setLoading] = useState(false);
   const [allFetched, setAllFetched] = useState(false);
   const { sessionId } = useGlobalContext();
-  const { conv, setConv, openConversation } = useChatContext();
+  const { conv, setConv, setIsRecentConv, setPageNumber, openConversation } =
+    useChatContext();
   const [scroll, setScroll] = useState(false);
   const containerRef = useRef(null);
 
@@ -169,9 +172,12 @@ const Pagination: React.FC<PaginationProps> = ({ pageSize }) => {
                 );
                 fetchDataAndUpdateState();
                 setScroll(!scroll);
+                setIsRecentConv(true);
+                setPageNumber(1);
               }}
-              className={`flex relative items-center max-w-52 mb-2 ring-2 text-[#455a64] ring-[#ff725e] py-2 px-6 mx-1 gap-2 rounded-[40px] cursor-pointer active:scale-95 transition-all duration-150 ${item.conversation_id === sessionId ? "chat-bg" : ""
-                }`}
+              className={`flex relative items-center max-w-52 mb-2 ring-2 text-[#455a64] ring-[#ff725e] py-2 px-6 mx-1 gap-2 rounded-[40px] cursor-pointer active:scale-95 transition-all duration-150 ${
+                item.conversation_id === sessionId ? "chat-bg" : ""
+              }`}
               key={index}
             >
               <CiChat1 size={24} color="#455a64" />
@@ -191,8 +197,9 @@ const Pagination: React.FC<PaginationProps> = ({ pageSize }) => {
         )}
         {!loading && (
           <button
-            className={`text-[#7b7b7b] font-medium py-2 px-4 bg-[#dbdbdb] rounded-[40px] my-2 ${allFetched ? "pointer-events-none opacity-50" : ""
-              }`}
+            className={`text-[#7b7b7b] font-medium py-2 px-4 bg-[#dbdbdb] rounded-[40px] my-2 ${
+              allFetched ? "pointer-events-none opacity-50" : ""
+            }`}
             onClick={handleLoadMore}
             disabled={loading || allFetched}
           >

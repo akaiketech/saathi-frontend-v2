@@ -7,6 +7,7 @@ import {
   SetStateAction,
   createContext,
   useContext,
+  useEffect,
   useState,
 } from "react";
 import * as sdk from "microsoft-cognitiveservices-speech-sdk";
@@ -18,7 +19,13 @@ import { getConversationMsgs, getConversations } from "../../../services";
 import { toast } from "react-toastify";
 
 interface ChatContextType {
+  fetchedAllChats: boolean;
+  setFetchedAllChats: Dispatch<SetStateAction<boolean>>;
+  isRecentConv: boolean;
+  setIsRecentConv: Dispatch<SetStateAction<boolean>>;
   isLoading: boolean;
+  pageNumber: number;
+  setPageNumber: Dispatch<SetStateAction<number>>;
   isRecording: boolean;
   isAudioPlaying: boolean;
   messages: Message[];
@@ -70,7 +77,11 @@ export const ChatProvider: FC<Props> = ({ children }) => {
     useState<sdk.SpeakerAudioDestination | null>(null);
   const [isCancelled, setIsCancelled] = useState(false);
   const [conv, setConv] = useState<Conversation[]>([]);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [isRecentConv, setIsRecentConv] = useState(false);
+  const [fetchedAllChats, setFetchedAllChats] = useState(false);
   const {
+    sessionId,
     setIsChatLoading,
     setLanguage,
     setLocation,
@@ -174,6 +185,47 @@ export const ChatProvider: FC<Props> = ({ children }) => {
     return newMessages;
   };
 
+  useEffect(() => {
+    if (pageNumber > 1) {
+      getChatConv(sessionId);
+    }
+  }, [pageNumber]);
+
+  const getChatConv = async (conversation_id: string) => {
+    const res = await getConversationMsgs({
+      conversation_id,
+      page: pageNumber,
+      page_size: 5,
+    });
+
+    if (res.data.paginated_messages.length < 4) {
+      setFetchedAllChats(true);
+    } else {
+      setFetchedAllChats(false);
+    }
+    if (res.error) {
+      toast.error(res.error, {
+        autoClose: 5000,
+        position: "top-right",
+      });
+      return;
+    }
+
+    if (res.data.paginated_messages) {
+      const newMsg = setMessageResponse(
+        res.data.paginated_messages,
+        conversation_id,
+      );
+      if (conversation_id === sessionId) {
+        setMessages([...newMsg, ...messages]);
+      } else {
+        setMessages([...newMsg]);
+      }
+    }
+
+    return res;
+  };
+
   const openConversation = async (
     conversation_id: string,
     conversationLocation: string,
@@ -183,14 +235,9 @@ export const ChatProvider: FC<Props> = ({ children }) => {
       setIsLoading(true);
       setIsChatLoading(true);
       setSideBarOpen(false);
-
-      const res = await getConversationMsgs({
-        conversation_id,
-        page: 1,
-        page_size: 10,
-      });
-
       setSessionId(conversation_id);
+      await getChatConv(conversation_id);
+
       setLocation(conversationLocation);
       setLanguage(conversationLanguage);
       setIsLoading(false);
@@ -218,21 +265,6 @@ export const ChatProvider: FC<Props> = ({ children }) => {
         setConv(newConv);
       }
 
-      if (res.error) {
-        toast.error(res.error, {
-          autoClose: 5000,
-          position: "top-right",
-        });
-        return;
-      }
-
-      if (res.data.paginated_messages) {
-        const newMsg = setMessageResponse(
-          res.data.paginated_messages,
-          conversation_id,
-        );
-        setMessages(newMsg as Message[]);
-      }
       setIsChatLoading(false);
     } catch (error) {
       console.log(error);
@@ -242,6 +274,12 @@ export const ChatProvider: FC<Props> = ({ children }) => {
   return (
     <ChatContext.Provider
       value={{
+        fetchedAllChats,
+        setFetchedAllChats,
+        isRecentConv,
+        setIsRecentConv,
+        pageNumber,
+        setPageNumber,
         isRecording,
         isAudioPlaying,
         isLoading,

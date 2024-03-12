@@ -15,7 +15,8 @@ type Props = {
 };
 
 const NewConv = ({ isNewUser, conversations }: Props) => {
-  const { isLoading, openConversation } = useChatContext();
+  const { isLoading, setIsRecentConv, setPageNumber, openConversation } =
+    useChatContext();
   const { language } = useGlobalContext();
 
   const getGreetingMessage = () => {
@@ -80,6 +81,8 @@ const NewConv = ({ isNewUser, conversations }: Props) => {
                   item.conversation_location,
                   item.conversation_language,
                 );
+                setIsRecentConv(true);
+                setPageNumber(1);
               }}
               className="md:w-[48%] cursor-pointer mt-3 md:mt-6 bg-[#e9e9e9] rounded-2xl md:rounded-3xl px-2 md:px-4 pb-4"
             >
