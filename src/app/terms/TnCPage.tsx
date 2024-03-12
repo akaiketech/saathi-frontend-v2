@@ -102,6 +102,9 @@ const Terms = () => {
   }, [language]);
 
   const handleAccept = async () => {
+
+    handleStopReplay(); // stop tts
+
     if (isAccepted) {
       const newSessionId = generateSessionId();
       setSessionId(newSessionId);
@@ -121,6 +124,9 @@ const Terms = () => {
     }
   };
   const handleDecline = async () => {
+
+    handleStopReplay(); // stop tts
+
     setLoading(true);
     const res = await updateUserTnC({ status_input: 0 });
     if (res.error) {
