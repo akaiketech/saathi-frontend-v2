@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "src/app/api/v2/user_query/route.ts": {
+      "maxDuration": 30
+    }
+  }
+}
