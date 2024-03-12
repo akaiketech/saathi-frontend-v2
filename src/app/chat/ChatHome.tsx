@@ -406,7 +406,7 @@ const ChatPage = () => {
                       </div>
                       <div className="w-[70%] md:w-1/2 p-3 rounded-[30px_30px_30px_0px] bg-[#FFCBC366] text-gray-700">
                         <div className="text-sm md:text-xl lg:text-lg not-italic font-medium leading-[normal] break-words">
-                          <Markdown>{messageObj.answer}</Markdown>
+                          <Markdown className="markdown-res">{messageObj.answer}</Markdown>
                         </div>
                       </div>
                     </div>
