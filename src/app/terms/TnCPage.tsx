@@ -43,6 +43,14 @@ const TERMS_AND_CONDITIONS = {
     "● SAATHI ಒಂದು ಸಹಾಯಕ ಸಾಧನವಾಗಲು ಗುರಿ ಹೊಂದಿದೆ ಮತ್ತು ಉತ್ತರದಲ್ಲಿ ಯಾವುದೇ ಪಕ್ಷಪಾತವು ಉದ್ದೇಶಪೂರ್ವಕವಲ್ಲ.",
     "SAATHI ಗೆ ಪ್ರಶ್ನೆಯನ್ನು ಕೇಳುವ ಮೂಲಕ, ನೀವು ಮೇಲಿನ ನಿಯಮಗಳು ಮತ್ತು ಷರತ್ತುಗಳಿಗೆ ಸಮ್ಮತಿಸುತ್ತೀರಿ.",
   ],
+  tamil: [
+    "SAATHI ஆனது இந்திய அறிவியல் கழகம், ஆக்ஸ்போர்டு புரூக்ஸ் பல்கலைக்கழகம், அகைகே டெக்னாலஜிஸ் மற்றும் கோடக் மஹிந்திரா வங்கி ஆகியவற்றின் நிபுணர்களால் உருவாக்கப்பட்டது. இந்த திட்டத்திற்கு பில் மற்றும் மெலிண்டா கேட்ஸ் அறக்கட்டளை நிதியளிக்கிறது.",
+    "● உங்கள் கேள்விகளுக்கான பதில்களை SAATHI உங்களுக்கு வழங்குகிறது.",
+    "● சரிபார்ப்பு நோக்கங்களுக்காக SAATHI உரையாடலைச் சேமிக்கிறது.",
+    "● உங்கள் உள்நுழைவை எளிதாக்க, SAATHI உங்கள் தொலைபேசி எண்ணைச் சேமிக்கிறது. இருப்பினும், இது மற்ற நோக்கங்களுக்காக பயன்படுத்தப்படாது.",
+    "● SAATHI ஒரு பயனுள்ள கருவியாக இருப்பதை நோக்கமாகக் கொண்டுள்ளது மற்றும் ஒருசார்பு அற்ற பதில்களை அளிக்கக்கூடியது.",
+    "SAATHI யிடம் வினவல் கேட்பதன் மூலம், மேலே உள்ள விதிமுறைகள் மற்றும் நிபந்தனைகளை ஏற்கிறீர்கள்.",
+  ],
 };
 
 const Terms = () => {
@@ -53,7 +61,7 @@ const Terms = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isAccepted, setIsAccepted] = useState(false);
   const [ttsController, setTtsController] = useState<SpeakerAudioDestination>();
-  const { replayAudio, setIsAudioPlaying } = useChatContext();
+  const { setIsAudioPlaying } = useChatContext();
 
   useEffect(() => {
     (async () => {
@@ -136,6 +144,8 @@ const Terms = () => {
         return TERMS_AND_CONDITIONS["hindi"];
       case "kannada":
         return TERMS_AND_CONDITIONS["kannada"];
+      case "tamil":
+        return TERMS_AND_CONDITIONS["tamil"];
       default:
         return TERMS_AND_CONDITIONS["english"];
     }
@@ -170,8 +180,9 @@ const Terms = () => {
               }}
               src={speakerSvg}
               alt="avatar"
-              className={`ml-2 w-8 h-8 ${loading ? "opacity-50 pointer-events-none" : ""
-                } `}
+              className={`ml-2 w-8 h-8 ${
+                loading ? "opacity-50 pointer-events-none" : ""
+              } `}
             />
           ) : (
             <Image
@@ -197,8 +208,9 @@ const Terms = () => {
       <footer className="mt-8 flex justify-evenly items-center w-full">
         <div
           onClick={handleAccept}
-          className={`${loading ? "opacity-50 pointer-events-none" : "" // Disable button when loading
-            } shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] rounded-[60px] bg-[#ff725e] text-white text-xl md:text-[50px] not-italic font-bold leading-[normal] flex justify-center gap-4 items-center w-[40%] py-4 px-2`}
+          className={`${
+            loading ? "opacity-50 pointer-events-none" : "" // Disable button when loading
+          } shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] rounded-[60px] bg-[#ff725e] text-white text-xl md:text-[50px] not-italic font-bold leading-[normal] flex justify-center gap-4 items-center w-[40%] py-4 px-2`}
         >
           <div>{optionLang.accept}</div>
           <Image
@@ -209,8 +221,9 @@ const Terms = () => {
         </div>
         <div
           onClick={handleDecline}
-          className={`${loading ? "opacity-50 pointer-events-none" : "" // Disable button when loading
-            } border shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] rounded-[60px] border-solid border-[#D6D6D6] cursor-pointer text-[#302B27] text-xl md:text-[50px] not-italic font-bold leading-[normal] px-3 py-4 flex justify-center items-center w-[40%] gap-4`}
+          className={`${
+            loading ? "opacity-50 pointer-events-none" : "" // Disable button when loading
+          } border shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] rounded-[60px] border-solid border-[#D6D6D6] cursor-pointer text-[#302B27] text-xl md:text-[50px] not-italic font-bold leading-[normal] px-3 py-4 flex justify-center items-center w-[40%] gap-4`}
         >
           <div>{optionLang.decline}</div>
           <Image
