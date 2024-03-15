@@ -415,13 +415,13 @@ const ChatPage = () => {
                             <Image
                               src={thumbsUpOutline}
                               alt="thumbsUp"
-                              className="w-4 h-4 md:w-6 md:h-6 cursor-pointer"
+                              className="w-5 h-5 md:w-6 md:h-6 cursor-pointer"
                               onClick={() => handleUpVote(messageObj.id)}
                             />
                             <Image
                               src={thumbsDown}
                               alt="thumbsDown"
-                              className="w-5 h-5 md:w-7 md:h-7 cursor-pointer"
+                              className="w-6 h-6 md:w-7 md:h-7 cursor-pointer"
                               onClick={() => handleDownVote(messageObj.id)}
                             />
                           </div>
@@ -430,13 +430,13 @@ const ChatPage = () => {
                             <Image
                               src={thumbsUp}
                               alt="thumbsUp"
-                              className="w-5 h-5 md:w-7 md:h-7 cursor-pointer"
+                              className="w-6 h-6 md:w-7 md:h-7 cursor-pointer"
                               onClick={() => handleUpVote(messageObj.id)}
                             />
                             <Image
                               src={thumbsDownOutline}
                               alt="thumbsDown"
-                              className="w-4 h-4 md:w-6 md:h-6 cursor-pointer"
+                              className="w-5 h-5 md:w-6 md:h-6 cursor-pointer"
                               onClick={() => handleDownVote(messageObj.id)}
                             />
                           </div>
@@ -445,13 +445,13 @@ const ChatPage = () => {
                             <Image
                               src={thumbsUpOutline}
                               alt="thumbsUp"
-                              className="w-4 h-4 md:w-6 md:h-6 cursor-pointer"
+                              className="w-5 h-5 md:w-6 md:h-6 cursor-pointer"
                               onClick={() => handleUpVote(messageObj.id)}
                             />
                             <Image
                               src={thumbsDownOutline}
                               alt="thumbsDownOutline"
-                              className="w-4 h-4 md:w-6 md:h-6 cursor-pointer"
+                              className="w-5 h-5 md:w-6 md:h-6 cursor-pointer"
                               onClick={() => handleDownVote(messageObj.id)}
                             />
                           </div>
