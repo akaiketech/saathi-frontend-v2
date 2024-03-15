@@ -2,6 +2,46 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  h1 {
+    @apply text-2xl;
+  }
+
+  h2 {
+    @apply text-xl;
+  }
+
+  h3 {
+    @apply text-lg;
+  }
+
+  h4 {
+    @apply text-base;
+  }
+
+  h5 {
+    @apply text-sm;
+  }
+
+  h6 {
+    @apply text-xs;
+  }
+}
+
+.markdown-res ol {
+  list-style: decimal;
+  padding-left: 1.5rem;
+}
+
+.markdown-res ul {
+  list-style: disc;
+  padding-left: 1.5rem;
+}
+
+.markdown-res li {
+  margin-bottom: 1rem;
+}
+
 * {
   padding: 0;
   margin: 0;
@@ -11,6 +51,30 @@
   .saathi-btn {
     @apply shadow-[0px_4px_4px_0px_rgba(0, 0, 0, 0.25)] rounded-[60px] bg-[#ff725e] text-white text-[64px] not-italic font-bold leading-[normal] px-16 py-4 flex justify-between items-center;
   }
+}
+
+.home-bg {
+  background: linear-gradient(
+    144deg,
+    rgba(220, 73, 58, 0.5) -6.82%,
+    rgba(220, 73, 58, 0) 108.07%
+  );
+
+  box-shadow: 2px 4px 4px 0px rgba(183, 183, 183, 0.25);
+}
+
+.chat-heading {
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  background: linear-gradient(
+    91deg,
+    #2e78e7 -13.35%,
+    rgba(220, 73, 58, 0.7) 108.49%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 /* :root { */

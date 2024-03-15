@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
-import Image from "next/image";
+import React, { useEffect, useRef, useState } from "react";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { IoLanguage } from "react-icons/io5";
 import { IoLocationOutline } from "react-icons/io5";
@@ -23,6 +22,30 @@ const Dropdown = ({
 }: DropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isChanged, setIsChanged] = useState(false);
+  const dropdownRef = useRef<any>(null);
+  const optionsRef = useRef<any>(null);
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target) &&
+      optionsRef.current &&
+      !optionsRef.current.contains(event.target)
+    ) {
+      setIsOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [dropdownRef]);
+
+  useEffect(() => {
+    if (value !== "") {
+      setIsChanged(true);
+    }
+  }, [value]);
 
   const handleSelect = (option: string) => {
     onChange(option);
@@ -33,8 +56,9 @@ const Dropdown = ({
     <div className="dropdown">
       <div className="max-w-96 min-w-40">
         <a
+          ref={dropdownRef}
           onClick={() => setIsOpen(!isOpen)}
-          className="flex justify-between items-center px-3 text-gray-saathi-2 py-2 md:px-6 md:py-4 w-40 md:w-96 min-h-10 font-bold bg-gray-saathi-1 md:text-4xl text-sm rounded-xl md:rounded-2xl hover:bg-gray-200 focus:outline-none"
+          className="flex items-center cursor-pointer justify-between w-48 px-3 py-2 text-sm font-bold text-gray-saathi-2 md:px-6 md:py-4 md:w-[380px] min-h-10 bg-gray-saathi-1 md:text-3xl rounded-xl md:rounded-2xl hover:bg-gray-200 focus:outline-none"
         >
           {isChanged ? (
             <>
@@ -42,22 +66,29 @@ const Dropdown = ({
                 {type === "language" ? <IoLanguage /> : <IoLocationOutline />}
               </div>
               <div className="text-red-saathi">{value}</div>
-              <IoMdArrowDropdown className="text-sm md:text-3xl" />
+              <IoMdArrowDropdown className="text-sm md:text-2xl" />
             </>
           ) : (
             <>
+              <div>
+                {type === "language" ? <IoLanguage /> : <IoLocationOutline />}
+              </div>
               {label}
-              <IoMdArrowDropdown className="text-sm md:text-3xl" />
+              <IoMdArrowDropdown className="text-sm md:text-2xl" />
             </>
           )}
         </a>
         {isOpen && (
-          <ul className="absolute z-50 bg-gray-saathi-1 rounded-2xl w-40 md:w-96 overflow-hidden mt-1 shadow-[inset_0px_0px_3px_0px_#00000024]">
+          <ul
+            ref={optionsRef}
+            className="absolute z-50 bg-gray-saathi-1 rounded-2xl w-48 md:w-[380px] overflow-hidden mt-1 shadow-[inset_0px_0px_3px_0px_#00000024]"
+          >
             {options.map((option) => (
               <li
                 key={option}
                 onClick={() => handleSelect(option)}
-                className="px-4 py-2 hover:text-red-saathi text-gray-saathi-2 cursor-pointer"
+                className={`px-4 py-2 cursor-pointer hover:text-white hover:bg-red-saathi text-gray-saathi-2 md:text-2xl ${option === value ? "bg-red-saathi text-white" : ""
+                  }`}
               >
                 {option}
               </li>
