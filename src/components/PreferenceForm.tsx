@@ -51,7 +51,9 @@ const PreferenceForm = ({ isModal }: Props) => {
     localStorage.setItem("location", val);
     localStorage.setItem("language", loc2lang[val]);
     setLocation(val);
-    setLanguage(loc2lang[val]);
+    if (!isModal) {
+      setLanguage(loc2lang[val]);
+    }
   };
 
   const onLanguageChange = (val: string) => {
@@ -90,9 +92,7 @@ const PreferenceForm = ({ isModal }: Props) => {
               onChange={(val) => {
                 setFieldValue("state", val);
                 setFieldValue("language", loc2lang[val]);
-                if (!isModal) {
-                  onLocationChange(val);
-                }
+                onLocationChange(val);
               }}
               type="location"
             />
@@ -116,7 +116,6 @@ const PreferenceForm = ({ isModal }: Props) => {
                 setSessionId(newSessionId);
                 if (isModal) {
                   onLanguageChange(values.language);
-                  onLocationChange(values.state);
                   window.location.reload();
                 } else {
                   router.push(nextRoute);
