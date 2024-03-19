@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 
 import { useGlobalContext } from "../../hooks/context";
@@ -60,8 +60,7 @@ const Terms = () => {
   const [loading, setLoading] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isAccepted, setIsAccepted] = useState(false);
-  const [ttsController, setTtsController] = useState<SpeakerAudioDestination>();
-  const { setIsAudioPlaying } = useChatContext();
+  const { ttsController, setTtsController, setIsAudioPlaying } = useChatContext();
 
   useEffect(() => {
     (async () => {

@@ -42,13 +42,13 @@ export default function Home() {
           <Headings />
         </div>
         <GetStarted />
-        <div className="flex flex-col items-center gap-2">
+        <div className="flex flex-col items-center mt-16 gap-2">
           <Image
             className="w-[80%]"
             src={illustrationMobile}
             alt="illustration"
           />
-          <PoweredBy />
+          {/* <PoweredBy /> */} 
         </div>
       </main>
       <main className="flex-row items-center justify-between hidden min-h-screen md:flex">
@@ -63,7 +63,7 @@ export default function Home() {
         <div className="flex flex-col items-center justify-between w-1/2">
           <GetStarted />
           <div className="absolute bottom-5">
-            <PoweredBy />
+            {/* <PoweredBy /> */}
           </div>
         </div>
       </main>
