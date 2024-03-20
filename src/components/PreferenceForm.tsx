@@ -51,7 +51,9 @@ const PreferenceForm = ({ isModal }: Props) => {
     localStorage.setItem("location", val);
     localStorage.setItem("language", loc2lang[val]);
     setLocation(val);
-    setLanguage(loc2lang[val]);
+    if (!isModal) {
+      setLanguage(loc2lang[val]);
+    }
   };
 
   const onLanguageChange = (val: string) => {
@@ -100,17 +102,20 @@ const PreferenceForm = ({ isModal }: Props) => {
               value={values.language === "" ? language : values.language}
               onChange={(val) => {
                 setFieldValue("language", val);
-                onLanguageChange(val);
+                if (!isModal) {
+                  onLanguageChange(val);
+                }
               }}
             />
           </div>
           <Start
-            language={language}
+            language={values.language}
             onClick={() => {
               if (validateInputs(values.language, values.state)) {
                 const newSessionId = generateSessionId();
                 setSessionId(newSessionId);
                 if (isModal) {
+                  onLanguageChange(values.language);
                   window.location.reload();
                 } else {
                   router.push(nextRoute);
