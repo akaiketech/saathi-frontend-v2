@@ -568,7 +568,7 @@ const ChatPage = () => {
             >
               <Image
                 src={submitBtn}
-                className={`cursor-pointer active:scale-90 transition-all duration-150 ${isLoading ? "opacity-50 pointer-events-none" : ""
+                className={`cursor-pointer active:scale-90 transition-all duration-150 ${isLoading || isRecording ? "opacity-50 pointer-events-none" : ""
                   }`}
                 alt="submitBtn"
                 height={30}
